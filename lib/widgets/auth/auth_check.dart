@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../screens/home_screen.dart';
-import '../../../screens/splash_screen.dart';
+import '../../screens/home_screen.dart';
+// import '../../screens/splash_screen.dart';
+import '../../screens/auth_screen.dart';
 
 class AuthCheck extends StatelessWidget {
   @override
@@ -14,8 +15,8 @@ class AuthCheck extends StatelessWidget {
           // 認証ずみ
           return HomeScreen();
         } else {
-          // スプラッシュスクリーン
-          return SplashScreen();
+          // 認証画面へ変更
+          return AuthScreen();
         }
       },
     );

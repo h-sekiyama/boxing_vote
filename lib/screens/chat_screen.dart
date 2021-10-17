@@ -1,9 +1,10 @@
+import 'package:boxing_vote/widgets/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../widgets/bouts_list.dart';
+import '../widgets/chat.dart';
 
-class HomeScreen extends StatelessWidget {
+class ChatScreen extends StatelessWidget {
   Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
   }
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BoutsList(),
+      body: Chat(),
     );
   }
 }

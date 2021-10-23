@@ -18,6 +18,8 @@ class _MyFirestorePageState extends State<BoutsList> {
 
   @override
   Widget build(BuildContext context) {
+    String boutName = '';
+    String boutTime = '';
     return Scaffold(
       body: Center(
         child: Column(
@@ -28,15 +30,23 @@ class _MyFirestorePageState extends State<BoutsList> {
                 DateTime fight_date = DateTime.now();
                 if (document['fight_date'] is Timestamp) {
                   fight_date = document["fight_date"].toDate();
+                  boutTime = Functions.dateToString(fight_date);
                 }
+                boutName = '${document['fighter1']} VS ${document['fighter2']}';
                 return Card(
                   child: Column(children: [
                     ListTile(
                       leading: Image.asset('images/cat.png'),
-                      title: Text(
-                          '${document['fighter1']} VS ${document['fighter2']}'),
+                      title: Text(boutName),
                       subtitle: Text('${document['event_name']}'),
-                      trailing: Text(Functions.dateToString(fight_date)),
+                      trailing: Text(boutTime),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(boutName),
+                            ));
+                      },
                     ),
                     ListTile(
                       title: Text(

@@ -1,4 +1,5 @@
 import 'package:boxing_vote/screens/bout_vote_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Functions.dart';
@@ -29,7 +30,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
   // 選手2の判定勝利予想数
   int vote2_2 = 0;
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
-  String myVote = "";
+  String myVoteText = "";
 
   void initState() {
     fetchBoutData();
@@ -59,19 +60,22 @@ class _MyFirestorePageState extends State<BoutDetail> {
               ]),
               Container(
                   margin: EdgeInsets.all(20),
-                  child: Column(children: [Text("あなたの予想"), Text("${myVote}")])),
+                  child: Column(
+                      children: [Text("あなたの予想"), Text("${myVoteText}")])),
               ElevatedButton(
                 child: const Text('投票する'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.orange,
                   onPrimary: Colors.white,
                 ),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  // 投票画面から戻ったら再度試合情報を読み込む
+                  await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => BoutVoteScreen(widget.id),
                       ));
+                  fetchBoutData();
                 },
               ),
               Container(
@@ -121,25 +125,25 @@ class _MyFirestorePageState extends State<BoutDetail> {
   void getMyVote() {
     FirebaseFirestore.instance
         .collection('users')
-        .doc("bmfVCGaDsRah7bcqIa5D")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((ref) {
       setState(() {
         switch (ref.get("votes")[widget.id]) {
           case 1:
-            myVote = "${fighter1}のKO勝ち";
+            myVoteText = "${fighter1}のKO勝ち";
             break;
           case 2:
-            myVote = "${fighter1}の判定勝ち";
+            myVoteText = "${fighter1}の判定勝ち";
             break;
           case 3:
-            myVote = "${fighter2}のKO勝ち";
+            myVoteText = "${fighter2}のKO勝ち";
             break;
           case 4:
-            myVote = "${fighter2}の判定勝ち";
+            myVoteText = "${fighter2}の判定勝ち";
             break;
           default:
-            myVote = "勝敗予想していません";
+            myVoteText = "勝敗予想していません";
             break;
         }
       });

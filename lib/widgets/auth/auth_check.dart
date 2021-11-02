@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -8,17 +9,26 @@ import '../../screens/auth_screen.dart';
 class AuthCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (ctx, userSnapshot) {
-        if (userSnapshot.hasData) {
-          // 認証ずみ
-          return HomeScreen();
-        } else {
-          // 認証画面へ変更
-          return AuthScreen();
-        }
-      },
-    );
+    void _showErrorFlash(String message) {
+      Flushbar(
+        message: message,
+        backgroundColor: Colors.red,
+        margin: EdgeInsets.all(8),
+        borderRadius: 8,
+        duration: Duration(seconds: 3),
+      )..show(context);
+    }
+
+    final auth = FirebaseAuth.instance.currentUser;
+    if (auth != null) {
+      final isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      if (isVerified) {
+        return HomeScreen();
+      } else {
+        return AuthScreen();
+      }
+    } else {
+      return AuthScreen();
+    }
   }
 }

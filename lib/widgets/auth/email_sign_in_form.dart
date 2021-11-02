@@ -4,6 +4,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/services.dart';
 import 'package:flushbar/flushbar.dart';
 
+import 'auth_check.dart';
+
 class EmailSignInForm extends StatefulWidget {
   @override
   _EmailSignInFormState createState() => _EmailSignInFormState();
@@ -36,9 +38,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           // 変更部分！サインインを実行
           UserCredential authResult = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
-
-          // 登録に成功したユーザ情情報も取得可能
-          print(authResult.user?.uid);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AuthCheck(),
+              ));
+          setState(() {
+            _isLoading = false;
+          });
         } on PlatformException catch (err) {
           var message = 'エラーが発生しました。認証情報を確認してください。';
           if (err.message != null) {
@@ -50,6 +57,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           });
         } catch (err) {
           print(err);
+          if (err.toString().contains("no user record")) {
+            _showErrorFlash("ユーザー情報が見つかりません");
+          }
           setState(() {
             _isLoading = false;
           });

@@ -17,17 +17,7 @@ class BoutVoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          FlatButton(
-            onPressed: _signOut,
-            child: Text(
-              "サインアウト",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
+        actions: [],
       ),
       body: BoutVote(id),
     );

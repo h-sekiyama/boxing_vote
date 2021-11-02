@@ -1,3 +1,5 @@
+import 'package:boxing_vote/screens/bout_detail_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Functions.dart';
@@ -28,10 +30,13 @@ class _MyFirestorePageState extends State<BoutVote> {
   // 選手2の判定勝利予想数
   int vote2_2 = 0;
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
-  String myVote = "";
+  int myVote = 0;
+  // 自分の予想結果テキスト
+  String myVoteText = "";
 
   void initState() {
     fetchBoutData();
+    getMyVote();
   }
 
   @override
@@ -40,10 +45,11 @@ class _MyFirestorePageState extends State<BoutVote> {
     void voteBoutForecast(int voteResult, String boutId) {
       FirebaseFirestore.instance
           .collection("users")
-          .doc("bmfVCGaDsRah7bcqIa5D")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({
         "votes.${boutId}": voteResult,
       }).then((_) {
+        Navigator.pop(context);
         Navigator.pop(context);
       });
     }
@@ -79,7 +85,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ),
               FlatButton(
                 child: Text("投票する"),
-                onPressed: () => voteBoutForecast(voteResult, boutId),
+                onPressed: () => {voteBoutForecast(voteResult, boutId)},
               ),
             ],
           );
@@ -103,7 +109,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ElevatedButton(
                 child: Text("${fighter1}のKO/TKO/一本勝ち"),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
+                  primary: myVote == 1 ? Colors.orange : Colors.grey,
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
@@ -113,7 +119,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ElevatedButton(
                 child: Text("${fighter1}の判定勝ち"),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
+                  primary: myVote == 2 ? Colors.orange : Colors.grey,
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
@@ -123,7 +129,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ElevatedButton(
                 child: Text("${fighter2}のKO/TKO/一本勝ち"),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
+                  primary: myVote == 3 ? Colors.orange : Colors.grey,
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
@@ -133,7 +139,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ElevatedButton(
                 child: Text("${fighter2}の判定勝ち"),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.grey,
+                  primary: myVote == 4 ? Colors.orange : Colors.grey,
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
@@ -167,21 +173,50 @@ class _MyFirestorePageState extends State<BoutVote> {
         fighter2 = ref.get("fighter2");
         switch (ref.get("my_vote")) {
           case 1:
-            myVote = "${fighter1}のKO勝ち";
+            myVoteText = "${fighter1}のKO勝ち";
             break;
           case 2:
-            myVote = "${fighter1}の判定勝ち";
+            myVoteText = "${fighter1}の判定勝ち";
             break;
           case 3:
-            myVote = "${fighter2}のKO勝ち";
+            myVoteText = "${fighter2}のKO勝ち";
             break;
           case 4:
-            myVote = "${fighter2}の判定勝ち";
+            myVoteText = "${fighter2}の判定勝ち";
             break;
         }
       });
       setState(() {
         fightDate = ref.get("fight_date");
+      });
+    });
+  }
+
+  // 自分の勝敗予想を取得する処理
+  void getMyVote() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((ref) {
+      setState(() {
+        switch (ref.get("votes")[widget.id]) {
+          case 1:
+            myVote = 1;
+            break;
+          case 2:
+            myVote = 2;
+            break;
+          case 3:
+            myVote = 3;
+            break;
+          case 4:
+            myVote = 4;
+            break;
+          default:
+            myVote = 0;
+            break;
+        }
       });
     });
   }

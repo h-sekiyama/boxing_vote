@@ -1,20 +1,21 @@
+import 'package:boxing_vote/widgets/auth/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/bouts_list.dart';
 
 class HomeScreen extends StatelessWidget {
-  Future<void> _signOut() async {
-    FirebaseAuth.instance.signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           FlatButton(
-            onPressed: _signOut,
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pop(context);
+            },
             child: Text(
               "サインアウト",
               style: TextStyle(

@@ -8,25 +8,11 @@ class BoutDetailScreen extends StatelessWidget {
   BoutDetailScreen(this.id);
   String id;
 
-  Future<void> _signOut() async {
-    FirebaseAuth.instance.signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          FlatButton(
-            onPressed: _signOut,
-            child: Text(
-              "サインアウト",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
+        actions: [],
       ),
       body: BoutDetail(id),
     );

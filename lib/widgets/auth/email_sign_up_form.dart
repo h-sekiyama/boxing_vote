@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
@@ -40,12 +41,35 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           _showErrorFlash("パスワードが一致しません");
           return;
         }
+
+        final _auth = FirebaseAuth.instance;
         // サインアップを実行
-        UserCredential authResult = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _email, password: _password1);
-        // 登録に成功したユーザ情情報も取得可能
-        print(authResult.user!.uid);
+        try {
+          UserCredential authResult = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: _email, password: _password1);
+          _showMessageFlash("認証メールを送りました");
+          setState(() {
+            _isLoading = false;
+          });
+
+          // ユーザー情報をDBに追加
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc(authResult.user!.uid)
+              .set({
+            "name": "名無し",
+          }).then((_) {});
+        } catch (e) {
+          if (e.toString().contains("already in use")) {
+            _showErrorFlash("既に登録済みのメールアドレスです");
+          }
+          setState(() {
+            _isLoading = false;
+          });
+        }
+
+        await _auth.currentUser!.sendEmailVerification();
       } on PlatformException catch (err) {
         var message = 'エラーが発生しました。認証情報を確認してください。';
         if (err.message != null) {
@@ -68,6 +92,16 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
     Flushbar(
       message: message,
       backgroundColor: Colors.red,
+      margin: EdgeInsets.all(8),
+      borderRadius: 8,
+      duration: Duration(seconds: 3),
+    )..show(context);
+  }
+
+  void _showMessageFlash(String message) {
+    Flushbar(
+      message: message,
+      backgroundColor: Colors.blue,
       margin: EdgeInsets.all(8),
       borderRadius: 8,
       duration: Duration(seconds: 3),

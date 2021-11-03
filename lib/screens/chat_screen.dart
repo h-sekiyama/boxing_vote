@@ -1,6 +1,7 @@
 import 'package:boxing_vote/widgets/bout_list/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../Tabs.dart';
 import '../widgets/bout_list/chat.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -14,22 +15,10 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [],
-      ),
-      body: Chat(boutId),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          actions: [],
+        ),
+        body: Chat(boutId),
+        bottomNavigationBar: Tabs());
   }
 }

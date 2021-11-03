@@ -6,11 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../Tabs.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text("試合結果一覧"),
           automaticallyImplyLeading: false,
           actions: [],
         ),

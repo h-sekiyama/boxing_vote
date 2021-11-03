@@ -1,7 +1,7 @@
 import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:boxing_vote/screens/other_screen.dart';
-import 'package:boxing_vote/screens/result_screen.dart';
+import 'package:boxing_vote/screens/result_list_screen.dart';
 import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,7 +41,7 @@ class _MyFirestorePageState extends State<Tabs> {
             break;
           case 1:
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ResultScreen()));
+                MaterialPageRoute(builder: (context) => ResultListScreen()));
             currentIndex = index;
             break;
           case 2:

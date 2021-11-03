@@ -10,6 +10,7 @@ class MyVoteResultListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text("予想結果一覧"),
           actions: [],
         ),
         body: MyVoteResultList(),

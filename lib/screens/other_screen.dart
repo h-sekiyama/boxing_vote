@@ -14,6 +14,7 @@ class OtherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text("その他"),
           automaticallyImplyLeading: false,
           actions: [],
         ),

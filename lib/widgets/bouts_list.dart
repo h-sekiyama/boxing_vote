@@ -62,8 +62,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                      '${document['fighter1']} VS ${document['fighter2']}'),
+                                  builder: (context) => ChatScreen(document.id),
                                 ));
                           },
                         ),

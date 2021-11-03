@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/chat.dart';
 
 class ChatScreen extends StatelessWidget {
-  ChatScreen(this.boutName);
-  String boutName;
+  ChatScreen(this.boutId);
+  String boutId;
 
   Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
@@ -17,7 +17,19 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [],
       ),
-      body: Chat(boutName),
+      body: Chat(boutId),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+        ],
+      ),
     );
   }
 }

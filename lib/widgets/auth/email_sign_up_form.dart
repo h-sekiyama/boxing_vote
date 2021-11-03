@@ -14,6 +14,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   final _formKey = GlobalKey<FormState>();
 
   var _isLoading = false;
+  var _name = "名無しの予想師";
   var _email = "";
   var _password1 = "";
   var _password2 = "";
@@ -58,8 +59,12 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
               .collection("users")
               .doc(authResult.user!.uid)
               .set({
-            "name": "名無し",
-          }).then((_) {});
+            "name": _name,
+          }).then((_) {
+            // 表示名も更新
+            FirebaseAuth.instance.currentUser!
+                .updateProfile(displayName: _name);
+          });
         } catch (e) {
           if (e.toString().contains("already in use")) {
             _showErrorFlash("既に登録済みのメールアドレスです");
@@ -116,6 +121,15 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           key: _formKey,
           child: Column(
             children: [
+              // ユーザー名の入力フィールド
+              TextFormField(
+                key: ValueKey("name"),
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(labelText: "なまえ"),
+                onSaved: (value) {
+                  _name = value!;
+                },
+              ),
               // メールアドレスの入力フィールド
               TextFormField(
                 key: ValueKey("email"),

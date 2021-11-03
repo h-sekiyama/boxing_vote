@@ -26,6 +26,18 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: BoutsList(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+        ],
+      ),
     );
   }
 }

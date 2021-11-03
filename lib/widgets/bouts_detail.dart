@@ -6,8 +6,8 @@ import '../Functions.dart';
 import '../screens/chat_screen.dart';
 
 class BoutDetail extends StatefulWidget {
-  BoutDetail(this.id);
-  String id;
+  BoutDetail(this.boutId);
+  String boutId;
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }
@@ -73,7 +73,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BoutVoteScreen(widget.id),
+                        builder: (context) => BoutVoteScreen(widget.boutId),
                       ));
                   fetchBoutData();
                 },
@@ -94,11 +94,11 @@ class _MyFirestorePageState extends State<BoutDetail> {
     );
   }
 
-// 試合情報取得処理
+  // 試合情報取得処理
   void fetchBoutData() {
     FirebaseFirestore.instance
         .collection('bouts')
-        .doc(widget.id)
+        .doc(widget.boutId)
         .get()
         .then((ref) {
       getMyVote();
@@ -129,7 +129,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
         .get()
         .then((ref) {
       setState(() {
-        switch (ref.get("votes")[widget.id]) {
+        switch (ref.get("votes")[widget.boutId]) {
           case 1:
             myVoteText = "${fighter1}のKO勝ち";
             break;

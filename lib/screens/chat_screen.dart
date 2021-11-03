@@ -1,7 +1,7 @@
-import 'package:boxing_vote/widgets/chat.dart';
+import 'package:boxing_vote/widgets/bout_list/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../widgets/chat.dart';
+import '../widgets/bout_list/chat.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen(this.boutId);

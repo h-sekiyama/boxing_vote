@@ -1,13 +1,10 @@
-import 'package:boxing_vote/widgets/bout_list/bouts_vote.dart';
+import 'package:boxing_vote/widgets/other/other.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../Tabs.dart';
-import '../widgets/bout_list/bouts_list.dart';
 
-class BoutVoteScreen extends StatelessWidget {
-  BoutVoteScreen(this.id);
-  String id;
+class OtherScreen extends StatelessWidget {
+  OtherScreen();
 
   Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
@@ -17,9 +14,10 @@ class BoutVoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           actions: [],
         ),
-        body: BoutVote(id),
+        body: Other(),
         bottomNavigationBar: Tabs());
   }
 }

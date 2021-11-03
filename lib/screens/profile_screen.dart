@@ -1,10 +1,9 @@
-import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
+import 'package:boxing_vote/widgets/other/profile.dart';
 import 'package:flutter/material.dart';
 import '../Tabs.dart';
 
-class BoutDetailScreen extends StatelessWidget {
-  BoutDetailScreen(this.id);
-  String id;
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +11,7 @@ class BoutDetailScreen extends StatelessWidget {
         appBar: AppBar(
           actions: [],
         ),
-        body: BoutDetail(id),
+        body: Profile(),
         bottomNavigationBar: Tabs());
   }
 }

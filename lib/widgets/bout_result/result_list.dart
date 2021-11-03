@@ -1,16 +1,16 @@
 import 'package:boxing_vote/screens/bout_detail_screen.dart';
-import 'package:boxing_vote/widgets/bouts_detail.dart';
+import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Functions.dart';
-import '../screens/chat_screen.dart';
+import '../../Functions.dart';
+import '../../screens/chat_screen.dart';
 
-class BoutsList extends StatefulWidget {
+class ResultList extends StatefulWidget {
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }
 
-class _MyFirestorePageState extends State<BoutsList> {
+class _MyFirestorePageState extends State<ResultList> {
   // ドキュメント情報を入れる箱を用意
   List<DocumentSnapshot> documentList = [];
 
@@ -78,7 +78,10 @@ class _MyFirestorePageState extends State<BoutsList> {
 
   void fetchBoutData() async {
     // 指定コレクションのドキュメント一覧を取得
-    final snapshot = await FirebaseFirestore.instance.collection('bouts').get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection('bouts')
+        .orderBy('fight_date', descending: true)
+        .get();
     // ドキュメント一覧を配列で格納
     setState(() {
       documentList = snapshot.docs;

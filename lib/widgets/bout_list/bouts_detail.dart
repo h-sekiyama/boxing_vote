@@ -2,8 +2,7 @@ import 'package:boxing_vote/screens/bout_vote_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Functions.dart';
-import '../screens/chat_screen.dart';
+import '../../Functions.dart';
 
 class BoutDetail extends StatefulWidget {
   BoutDetail(this.boutId);
@@ -30,7 +29,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
   // 選手2の判定勝利予想数
   int vote2_2 = 0;
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
-  String myVoteText = "";
+  String myVoteText = "勝敗予想していません";
 
   void initState() {
     fetchBoutData();

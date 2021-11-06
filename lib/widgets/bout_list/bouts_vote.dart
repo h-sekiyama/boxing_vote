@@ -1,9 +1,7 @@
-import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../Functions.dart';
-import '../../screens/chat_screen.dart';
+import '../../common/Functions.dart';
 
 class BoutVote extends StatefulWidget {
   BoutVote(this.id);

@@ -1,6 +1,6 @@
 import 'package:boxing_vote/widgets/other/profile.dart';
 import 'package:flutter/material.dart';
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen();

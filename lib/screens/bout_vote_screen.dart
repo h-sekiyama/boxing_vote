@@ -2,7 +2,7 @@ import 'package:boxing_vote/widgets/bout_list/bouts_vote.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 import '../widgets/bout_list/bouts_list.dart';
 
 class BoutVoteScreen extends StatelessWidget {

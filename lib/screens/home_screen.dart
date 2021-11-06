@@ -1,6 +1,6 @@
 import 'package:boxing_vote/screens/add_bout_info_screen.dart';
 import 'package:flutter/material.dart';
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 import '../widgets/bout_list/bouts_list.dart';
 
 class HomeScreen extends StatelessWidget {

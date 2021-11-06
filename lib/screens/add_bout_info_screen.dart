@@ -1,7 +1,7 @@
 import 'package:boxing_vote/widgets/bout_list/add_bout_info.dart';
 import 'package:boxing_vote/widgets/other/profile.dart';
 import 'package:flutter/material.dart';
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 
 class AddBoutInfoScreen extends StatelessWidget {
   AddBoutInfoScreen();

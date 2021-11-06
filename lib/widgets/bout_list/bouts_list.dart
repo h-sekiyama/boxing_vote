@@ -2,7 +2,7 @@ import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../Functions.dart';
+import '../../common/Functions.dart';
 import '../../screens/chat_screen.dart';
 
 class BoutsList extends StatefulWidget {
@@ -41,7 +41,8 @@ class _MyFirestorePageState extends State<BoutsList> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BoutDetailScreen(document.id),
+                            builder: (context) =>
+                                BoutDetailScreen(document.id, widget.isList),
                           ));
                     },
                     child: Card(

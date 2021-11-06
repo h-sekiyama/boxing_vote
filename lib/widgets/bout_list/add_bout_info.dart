@@ -1,7 +1,7 @@
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../Functions.dart';
+import '../../common/Functions.dart';
 
 class AddBoutInfo extends StatefulWidget {
   @override

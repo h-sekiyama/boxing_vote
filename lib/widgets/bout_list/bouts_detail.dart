@@ -1,12 +1,15 @@
+import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/bout_vote_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../Functions.dart';
+import '../../common/Functions.dart';
 
 class BoutDetail extends StatefulWidget {
-  BoutDetail(this.boutId);
+  BoutDetail(this.boutId, this.isDetail);
   String boutId;
+  bool isDetail;
+
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }
@@ -61,21 +64,24 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   margin: EdgeInsets.all(20),
                   child: Column(
                       children: [Text("あなたの予想"), Text("${myVoteText}")])),
-              ElevatedButton(
-                child: const Text('投票する'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
+              Visibility(
+                visible: widget.isDetail,
+                child: ElevatedButton(
+                  child: const Text('投票する'),
+                  style: ElevatedButton.styleFrom(
+                    primary: HexColor('ff0099'),
+                    onPrimary: Colors.white,
+                  ),
+                  onPressed: () async {
+                    // 投票画面から戻ったら再度試合情報を読み込む
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BoutVoteScreen(widget.boutId),
+                        ));
+                    fetchBoutData();
+                  },
                 ),
-                onPressed: () async {
-                  // 投票画面から戻ったら再度試合情報を読み込む
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BoutVoteScreen(widget.boutId),
-                      ));
-                  fetchBoutData();
-                },
               ),
               Container(
                   margin: EdgeInsets.all(20),
@@ -86,6 +92,25 @@ class _MyFirestorePageState extends State<BoutDetail> {
                     Text("${fighter2}のKO勝ち：${vote2_1}"),
                     Text("${fighter2}の判定勝ち：${vote2_2}"),
                   ])),
+              Visibility(
+                visible: widget.isDetail,
+                child: ElevatedButton(
+                  child: const Text('試合情報が間違っている'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red[300],
+                    onPrimary: Colors.white,
+                  ),
+                  onPressed: () async {
+                    // 投票画面から戻ったら再度試合情報を読み込む
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BoutVoteScreen(widget.boutId),
+                        ));
+                    fetchBoutData();
+                  },
+                ),
+              )
             ])
           ],
         ),

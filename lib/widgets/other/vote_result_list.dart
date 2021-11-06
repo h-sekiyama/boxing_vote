@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class VoteResultList extends StatefulWidget {
-  VoteResultList(this.own);
-  bool own;
+  VoteResultList(this.isOwn);
+  bool isOwn;
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }

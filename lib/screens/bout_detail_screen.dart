@@ -1,10 +1,11 @@
 import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
 import 'package:flutter/material.dart';
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 
 class BoutDetailScreen extends StatelessWidget {
-  BoutDetailScreen(this.id);
-  String id;
+  BoutDetailScreen(this.boutId, this.isDetail);
+  String boutId;
+  bool isDetail; // 勝敗予想詳細画面か否か
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class BoutDetailScreen extends StatelessWidget {
         appBar: AppBar(
           actions: [],
         ),
-        body: BoutDetail(id),
+        body: BoutDetail(boutId, isDetail),
         bottomNavigationBar: Tabs());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:boxing_vote/widgets/bout_list/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Tabs.dart';
+import '../common/Tabs.dart';
 import '../widgets/bout_list/chat.dart';
 
 class ChatScreen extends StatelessWidget {

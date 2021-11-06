@@ -1,4 +1,4 @@
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,7 +14,6 @@ class AuthCheck extends StatelessWidget {
         message: message,
         backgroundColor: Colors.red,
         margin: EdgeInsets.all(8),
-        borderRadius: 8,
         duration: Duration(seconds: 3),
       )..show(context);
     }

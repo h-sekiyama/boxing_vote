@@ -105,7 +105,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                   lastDate: DateTime(DateTime.now().year + 1),
                 ))!;
                 setState(() {
-                  _eventDate = Functions.dateToString(_selectedDate!);
+                  _eventDate = Functions.dateToString(_selectedDate);
                 });
                 FocusManager.instance.primaryFocus!.unfocus();
               },

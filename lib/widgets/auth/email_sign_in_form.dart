@@ -1,8 +1,8 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/services.dart';
-import 'package:flushbar/flushbar.dart';
 
 import 'auth_check.dart';
 
@@ -73,7 +73,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       message: message,
       backgroundColor: Colors.red,
       margin: EdgeInsets.all(8),
-      borderRadius: 8,
       duration: Duration(seconds: 3),
     )..show(context);
   }
@@ -92,7 +91,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: "メールアドレス"),
                 validator: (value) {
-                  if (!EmailValidator.validate(value)) {
+                  if (!EmailValidator.validate(value!)) {
                     return "正しいメールアドレスを入力してください";
                   }
                   return null;

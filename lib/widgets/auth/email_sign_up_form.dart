@@ -1,9 +1,9 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/services.dart';
-import 'package:flushbar/flushbar.dart';
 
 class EmailSignUpForm extends StatefulWidget {
   @override
@@ -98,7 +98,6 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
       message: message,
       backgroundColor: Colors.red,
       margin: EdgeInsets.all(8),
-      borderRadius: 8,
       duration: Duration(seconds: 3),
     )..show(context);
   }
@@ -108,7 +107,6 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
       message: message,
       backgroundColor: Colors.blue,
       margin: EdgeInsets.all(8),
-      borderRadius: 8,
       duration: Duration(seconds: 3),
     )..show(context);
   }
@@ -136,7 +134,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: "メールアドレス"),
                 validator: (value) {
-                  if (!EmailValidator.validate(value)) {
+                  if (!EmailValidator.validate(value!)) {
                     return "正しいメールアドレスを入力してください";
                   }
                   return null;

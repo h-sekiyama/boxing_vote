@@ -133,9 +133,6 @@ class _MyFirestorePageState extends State<Chat> {
     ));
   }
 
-  // チャットを送る処理
-  void sendChat(String text) {}
-
   // 試合情報取得処理
   void fetchBoutData() {
     FirebaseFirestore.instance

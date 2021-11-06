@@ -1,10 +1,11 @@
 import 'package:boxing_vote/widgets/bout_list/chat.dart';
-import 'package:boxing_vote/widgets/other/my_vote_result_list.dart';
+import 'package:boxing_vote/widgets/other/vote_result_list.dart';
 import 'package:flutter/material.dart';
 import '../Tabs.dart';
 
-class MyVoteResultListScreen extends StatelessWidget {
-  MyVoteResultListScreen();
+class VoteResultListScreen extends StatelessWidget {
+  VoteResultListScreen(this.own);
+  bool own; // 自分の勝敗予想リストか
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class MyVoteResultListScreen extends StatelessWidget {
           title: Text("予想結果一覧"),
           actions: [],
         ),
-        body: MyVoteResultList(),
+        body: VoteResultList(own),
         bottomNavigationBar: Tabs());
   }
 }

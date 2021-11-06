@@ -1,5 +1,6 @@
 import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../Functions.dart';
@@ -83,8 +84,29 @@ class _MyFirestorePageState extends State<ResultList> {
         .orderBy('fight_date', descending: true)
         .get();
     // ドキュメント一覧を配列で格納
-    setState(() {
-      documentList = snapshot.docs;
-    });
+    documentList = snapshot.docs;
+
+    var serverTime;
+    var serverTimeSnapshot;
+    FirebaseFirestore.instance
+        .collection("server_time")
+        .doc("0")
+        .set(({"serverTimeStamp": FieldValue.serverTimestamp()}))
+        .then((value) async => {
+              serverTimeSnapshot = await FirebaseFirestore.instance
+                  .collection('server_time')
+                  .doc("0")
+                  .get(),
+              serverTime =
+                  (serverTimeSnapshot['serverTimeStamp'] as Timestamp).toDate(),
+              documentList.removeWhere((document) => document["fight_date"]
+                  .toDate()
+                  .isAfter(serverTime.add(Duration(days: -1)))),
+
+              // ドキュメント一覧を配列で格納
+              setState(() {
+                documentList = documentList;
+              })
+            });
   }
 }

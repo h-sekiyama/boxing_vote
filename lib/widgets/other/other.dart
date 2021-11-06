@@ -1,4 +1,4 @@
-import 'package:boxing_vote/screens/my_vote_result_list_screen.dart';
+import 'package:boxing_vote/screens/vote_result_list_screen.dart';
 import 'package:boxing_vote/screens/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class _MyFirestorePageState extends State<Other> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyVoteResultListScreen()));
+                          builder: (context) => VoteResultListScreen(true)));
                 },
               ),
               ElevatedButton(

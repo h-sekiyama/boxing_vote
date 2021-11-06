@@ -1,12 +1,6 @@
-import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:boxing_vote/screens/other_screen.dart';
-import 'package:boxing_vote/screens/result_list_screen.dart';
-import 'package:boxing_vote/widgets/bout_list/bouts_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Functions.dart';
-import '../screens/chat_screen.dart';
 
 class Tabs extends StatefulWidget {
   @override
@@ -35,13 +29,13 @@ class _MyFirestorePageState extends State<Tabs> {
       onTap: (int index) {
         switch (index) {
           case 0:
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomeScreen(true)));
             currentIndex = index;
             break;
           case 1:
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ResultListScreen()));
+                MaterialPageRoute(builder: (context) => HomeScreen(false)));
             currentIndex = index;
             break;
           case 2:

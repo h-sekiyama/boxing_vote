@@ -6,6 +6,9 @@ import '../../Functions.dart';
 import '../../screens/chat_screen.dart';
 
 class BoutsList extends StatefulWidget {
+  BoutsList(this.isList);
+  bool isList;
+
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }
@@ -99,9 +102,18 @@ class _MyFirestorePageState extends State<BoutsList> {
                   .get(),
               serverTime =
                   (serverTimeSnapshot['serverTimeStamp'] as Timestamp).toDate(),
-              documentList.removeWhere((document) => document["fight_date"]
-                  .toDate()
-                  .isBefore(serverTime.add(Duration(days: -1)))),
+              if (widget.isList)
+                {
+                  documentList.removeWhere((document) => document["fight_date"]
+                      .toDate()
+                      .isBefore(serverTime.add(Duration(days: -1))))
+                }
+              else
+                {
+                  documentList.removeWhere((document) => document["fight_date"]
+                      .toDate()
+                      .isAfter(serverTime.add(Duration(days: -1))))
+                },
 
               // ドキュメント一覧を配列で格納
               setState(() {

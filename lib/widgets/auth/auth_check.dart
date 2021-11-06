@@ -23,7 +23,7 @@ class AuthCheck extends StatelessWidget {
     if (auth != null) {
       final isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
       if (isVerified) {
-        return HomeScreen();
+        return HomeScreen(true);
       } else {
         return AuthScreen();
       }

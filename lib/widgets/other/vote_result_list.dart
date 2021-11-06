@@ -20,6 +20,8 @@ class _MyFirestorePageState extends State<VoteResultList> {
   var votedBoutsList;
   // 投票済み試合で結果が出ている試合リスト
   var votedResultList;
+  // 称号
+  String title = "";
 
   void initState() {
     fetchBoutResultsData();
@@ -36,7 +38,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                   leading: Image.asset('images/cat.png'),
                   title:
                       Text('${FirebaseAuth.instance.currentUser!.displayName}'),
-                  subtitle: Text('神の予想師')),
+                  subtitle: Text('${title}')),
               Text(
                   '予想試合数：${totalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate}%')
             ]),
@@ -69,7 +71,64 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 totalVoteBoutCount = votedBoutsList.length;
                 wonBoutCount = wonBoutCount;
                 wonBoutRate = wonBoutCount / totalVoteBoutCount * 100;
+                title = getTitle(totalVoteBoutCount, wonBoutCount, wonBoutRate);
               })
             });
+  }
+
+  // 称号を割り当てる処理
+  String getTitle(totalVoteBoutCount, wonBoutCount, wonBoutRate) {
+    if (totalVoteBoutCount == 0) {
+      title = "ひよっこ予想師";
+    } else if (totalVoteBoutCount == 1 && wonBoutRate == 100) {
+      title = "期待のルーキー";
+    } else if (totalVoteBoutCount == 1 && wonBoutRate == 0) {
+      title = "出だし不調な予想師";
+    } else if (totalVoteBoutCount == 2 && wonBoutRate == 50) {
+      title = "これからに期待";
+    } else if (totalVoteBoutCount == 2 && wonBoutRate == 0) {
+      title = "カス予備軍";
+    } else if (totalVoteBoutCount == 3 && wonBoutRate == 100) {
+      title = "神の予感";
+    } else if (totalVoteBoutCount == 3 && wonBoutRate > 66) {
+      title = "優秀な予想師・・・かも？";
+    } else if (totalVoteBoutCount == 3 &&
+        wonBoutRate > 33 &&
+        wonBoutRate < 66) {
+      title = "平凡な予想師";
+    } else if (totalVoteBoutCount == 3 && wonBoutRate == 0) {
+      title = "カス予想師一歩手前";
+    } else if (totalVoteBoutCount == 4 && wonBoutRate == 100) {
+      title = "神予想師予備軍";
+    } else if (totalVoteBoutCount == 4 &&
+        wonBoutRate >= 25 &&
+        wonBoutRate < 50) {
+      title = "平凡な予想師";
+    } else if (totalVoteBoutCount == 4 &&
+        wonBoutRate >= 50 &&
+        wonBoutRate < 75) {
+      title = "そこそこな予想師";
+    } else if (totalVoteBoutCount == 4 && wonBoutRate == 0) {
+      title = "カス予想師";
+    } else if (totalVoteBoutCount >= 5 && wonBoutRate == 100) {
+      title = "神予想師";
+    } else if (totalVoteBoutCount >= 5 &&
+        wonBoutRate >= 75 &&
+        wonBoutRate < 100) {
+      title = "すごく優秀な予想師";
+    } else if (totalVoteBoutCount >= 5 &&
+        wonBoutRate >= 50 &&
+        wonBoutRate < 75) {
+      title = "なかなか優秀な予想師";
+    } else if (totalVoteBoutCount >= 5 &&
+        wonBoutRate >= 25 &&
+        wonBoutRate < 50) {
+      title = "平凡な予想師";
+    } else if (totalVoteBoutCount >= 5 && wonBoutRate > 0 && wonBoutRate < 25) {
+      title = "イマイチな予想師";
+    } else if (totalVoteBoutCount >= 5 && wonBoutRate == 0) {
+      title = "ゴミクズ予想師";
+    }
+    return title;
   }
 }

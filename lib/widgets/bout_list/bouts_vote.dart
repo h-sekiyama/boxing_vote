@@ -19,7 +19,7 @@ class _MyFirestorePageState extends State<BoutVote> {
   String fighter2 = "";
   // 試合日程
   DateTime fightDate = DateTime.now();
-  // 選手1のKO勝利予想数（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 予想数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
   Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
   int myVote = 0;

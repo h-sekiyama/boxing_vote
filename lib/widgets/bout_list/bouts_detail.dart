@@ -31,8 +31,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
   int vote3 = 0;
   // 選手2の判定勝利予想数
   int vote4 = 0;
-  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち, 99: 引き分け/無効試合）
   String myVoteText = "勝敗予想していません";
+  // 試合結果
+  String resultText = "集計中";
 
   void initState() {
     fetchBoutData();
@@ -60,8 +62,19 @@ class _MyFirestorePageState extends State<BoutDetail> {
                     color: Colors.indigo[200],
                     child: Text('${vote3 + vote4}人勝ち予想'))
               ]),
+              Visibility(
+                  visible: !widget.isDetail,
+                  child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("結果："),
+                            Text(resultText,
+                                style: TextStyle(color: HexColor('ff0000'))),
+                          ]))),
               Container(
-                  margin: EdgeInsets.all(20),
+                  margin: EdgeInsets.all(8),
                   child: Column(
                       children: [Text("あなたの予想"), Text("${myVoteText}")])),
               Visibility(
@@ -87,9 +100,9 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   margin: EdgeInsets.all(20),
                   child: Column(children: [
                     Text("みんなの勝敗予想"),
-                    Text("${fighter1}のKO勝ち：${vote1}"),
+                    Text("${fighter1}のKO/TKO/一本勝ち：${vote1}"),
                     Text("${fighter1}の判定勝ち：${vote2}"),
-                    Text("${fighter2}のKO勝ち：${vote3}"),
+                    Text("${fighter2}のKO/TKO/一本勝ち：${vote3}"),
                     Text("${fighter2}の判定勝ち：${vote4}"),
                   ])),
               Visibility(
@@ -131,6 +144,21 @@ class _MyFirestorePageState extends State<BoutDetail> {
         fighter2 = ref.get("fighter2");
       });
       setState(() {
+        if (ref['result'] == 0) {
+          resultText = "結果集計中";
+        } else if (ref['result'] == 1) {
+          resultText = '${fighter1}のKO/TKO/一本勝ち';
+        } else if (ref['result'] == 2) {
+          resultText = '${fighter1}の判定勝ち';
+        } else if (ref['result'] == 3) {
+          resultText = '${fighter2}のKO/TKO/一本勝ち';
+        } else if (ref['result'] == 4) {
+          resultText = '${fighter2}の判定勝ち';
+        } else if (ref['result'] == 99) {
+          resultText = '引き分けまたは無効試合';
+        }
+      });
+      setState(() {
         vote1 = ref.get("vote1");
         vote2 = ref.get("vote2");
         vote3 = ref.get("vote3");
@@ -155,13 +183,13 @@ class _MyFirestorePageState extends State<BoutDetail> {
       setState(() {
         switch (ref.get("votes")[widget.boutId]) {
           case 1:
-            myVoteText = "${fighter1}のKO勝ち";
+            myVoteText = "${fighter1}のKO/TKO/一本勝ち";
             break;
           case 2:
             myVoteText = "${fighter1}の判定勝ち";
             break;
           case 3:
-            myVoteText = "${fighter2}のKO勝ち";
+            myVoteText = "${fighter2}のKO/TKO/一本勝ち";
             break;
           case 4:
             myVoteText = "${fighter2}の判定勝ち";

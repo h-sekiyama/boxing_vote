@@ -60,13 +60,14 @@ class _MyFirestorePageState extends State<SendBoutResult> {
           maxSentResult = key;
         }
       });
+      maxSentResultCount++; // 今回の投票分も加える
       if (maxSentResultCount > 10 ||
           maxSentResultCount > totalVotedCount / 10) {
         // 自分の投票履歴を更新
         FirebaseFirestore.instance
             .collection("bouts")
             .doc(boutId)
-            .update({"result": maxSentResult}).then((_) {
+            .update({"result": maxSentResultCount}).then((_) {
           Navigator.pop(context);
           Navigator.pop(context);
         });

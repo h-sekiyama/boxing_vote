@@ -62,7 +62,11 @@ class _MyFirestorePageState extends State<BoutsList> {
                                   !widget.isList && document['result'] == 0
                                       ? SendBoutResultScreen(document.id)
                                       : BoutDetailScreen(
-                                          document.id, widget.isList)));
+                                          document.id, widget.isList))).then(
+                          (value) {
+                        // 遷移先から戻って来た際に再度試合情報を読み込む
+                        fetchBoutData();
+                      });
                     },
                     child: Card(
                       child: Column(children: [

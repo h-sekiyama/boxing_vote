@@ -206,6 +206,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       "vote2": 0,
                       "vote3": 0,
                       "vote4": 0,
+                      "wrong_info_count": 0,
                     }))
                     .then((value) => {
                           Navigator.push(

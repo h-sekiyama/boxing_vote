@@ -36,7 +36,7 @@ class _MyFirestorePageState extends State<BoutVote> {
   @override
   Widget build(BuildContext context) {
     // 勝敗予想投票処理
-    void voteBoutForecast(int voteResult, String boutId) {
+    void voteBoutResult(int voteResult, String boutId) {
       fetchBoutData();
       // 投票数を更新
       FirebaseFirestore.instance.collection("bouts").doc(boutId).update({
@@ -88,7 +88,7 @@ class _MyFirestorePageState extends State<BoutVote> {
               ),
               FlatButton(
                 child: Text("投票する"),
-                onPressed: () => {voteBoutForecast(voteResult, boutId)},
+                onPressed: () => {voteBoutResult(voteResult, boutId)},
               ),
             ],
           );

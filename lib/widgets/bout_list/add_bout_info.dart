@@ -202,10 +202,10 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       "fighter2": _fighter2,
                       "fix": 0,
                       "result": 0,
-                      "vote1_1": 0,
-                      "vote1_2": 0,
-                      "vote2_1": 0,
-                      "vote2_2": 0,
+                      "vote1": 0,
+                      "vote2": 0,
+                      "vote3": 0,
+                      "vote4": 0,
                     }))
                     .then((value) => {
                           Navigator.push(

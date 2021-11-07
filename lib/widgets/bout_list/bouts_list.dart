@@ -55,7 +55,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                         ),
                         ListTile(
                           title: Text(
-                              '${document['fighter1']}の勝ち予想：${document['vote1_1'] + document['vote1_2']}人\n${document['fighter2']}の勝ち予想：${document['vote2_1'] + document['vote2_2']}人'),
+                              '${document['fighter1']}の勝ち予想：${document['vote1'] + document['vote2']}人\n${document['fighter2']}の勝ち予想：${document['vote3'] + document['vote4']}人'),
                         ),
                         ElevatedButton(
                           child: const Text('この試合について語る'),

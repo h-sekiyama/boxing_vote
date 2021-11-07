@@ -24,13 +24,13 @@ class _MyFirestorePageState extends State<BoutDetail> {
   // 試合日程
   DateTime fightDate = DateTime.now();
   // 選手1のKO勝利予想数
-  int vote1_1 = 0;
+  int vote1 = 0;
   // 選手1の判定勝利予想数
-  int vote1_2 = 0;
+  int vote2 = 0;
   // 選手2のKO勝利予想数
-  int vote2_1 = 0;
+  int vote3 = 0;
   // 選手2の判定勝利予想数
-  int vote2_2 = 0;
+  int vote4 = 0;
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
   String myVoteText = "勝敗予想していません";
 
@@ -54,11 +54,11 @@ class _MyFirestorePageState extends State<BoutDetail> {
                 Container(
                     width: 180,
                     color: Colors.red[100],
-                    child: Text('${vote1_1 + vote1_2}人勝ち予想')),
+                    child: Text('${vote1 + vote2}人勝ち予想')),
                 Container(
                     width: 180,
                     color: Colors.indigo[200],
-                    child: Text('${vote2_1 + vote2_2}人勝ち予想'))
+                    child: Text('${vote3 + vote4}人勝ち予想'))
               ]),
               Container(
                   margin: EdgeInsets.all(20),
@@ -87,10 +87,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   margin: EdgeInsets.all(20),
                   child: Column(children: [
                     Text("みんなの勝敗予想"),
-                    Text("${fighter1}のKO勝ち：${vote1_1}"),
-                    Text("${fighter1}の判定勝ち：${vote1_2}"),
-                    Text("${fighter2}のKO勝ち：${vote2_1}"),
-                    Text("${fighter2}の判定勝ち：${vote2_2}"),
+                    Text("${fighter1}のKO勝ち：${vote1}"),
+                    Text("${fighter1}の判定勝ち：${vote2}"),
+                    Text("${fighter2}のKO勝ち：${vote3}"),
+                    Text("${fighter2}の判定勝ち：${vote4}"),
                   ])),
               Visibility(
                 visible: widget.isDetail,
@@ -131,10 +131,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
         fighter2 = ref.get("fighter2");
       });
       setState(() {
-        vote1_1 = ref.get("vote1_1");
-        vote1_2 = ref.get("vote1_2");
-        vote2_1 = ref.get("vote2_1");
-        vote2_2 = ref.get("vote2_2");
+        vote1 = ref.get("vote1");
+        vote2 = ref.get("vote2");
+        vote3 = ref.get("vote3");
+        vote4 = ref.get("vote4");
       });
       setState(() {
         boutName = ref.get("event_name");

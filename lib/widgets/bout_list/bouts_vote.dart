@@ -19,16 +19,12 @@ class _MyFirestorePageState extends State<BoutVote> {
   String fighter2 = "";
   // 試合日程
   DateTime fightDate = DateTime.now();
-  // 選手1のKO勝利予想数
-  int vote1_1 = 0;
-  // 選手1の判定勝利予想数
-  int vote1_2 = 0;
-  // 選手2のKO勝利予想数
-  int vote2_1 = 0;
-  // 選手2の判定勝利予想数
-  int vote2_2 = 0;
+  // 選手1のKO勝利予想数（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
   int myVote = 0;
+  // 今回の予想
+  int nowVote = 0;
   // 自分の予想結果テキスト
   String myVoteText = "";
 
@@ -41,6 +37,15 @@ class _MyFirestorePageState extends State<BoutVote> {
   Widget build(BuildContext context) {
     // 勝敗予想投票処理
     void voteBoutForecast(int voteResult, String boutId) {
+      fetchBoutData();
+      // 投票数を更新
+      FirebaseFirestore.instance.collection("bouts").doc(boutId).update({
+        "vote${nowVote}": voteCount[nowVote]! + 1,
+        "vote${myVote}":
+            myVote != 0 ? voteCount[myVote]! - 1 : voteCount[myVote]
+      });
+
+      // 自分の投票履歴を更新
       FirebaseFirestore.instance
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -111,7 +116,8 @@ class _MyFirestorePageState extends State<BoutVote> {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  showConfirmDialog(1, widget.id);
+                  nowVote = 1;
+                  showConfirmDialog(nowVote, widget.id);
                 },
               ),
               ElevatedButton(
@@ -121,7 +127,8 @@ class _MyFirestorePageState extends State<BoutVote> {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  showConfirmDialog(2, widget.id);
+                  nowVote = 2;
+                  showConfirmDialog(nowVote, widget.id);
                 },
               ),
               ElevatedButton(
@@ -131,7 +138,8 @@ class _MyFirestorePageState extends State<BoutVote> {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  showConfirmDialog(3, widget.id);
+                  nowVote = 3;
+                  showConfirmDialog(nowVote, widget.id);
                 },
               ),
               ElevatedButton(
@@ -141,7 +149,8 @@ class _MyFirestorePageState extends State<BoutVote> {
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
-                  showConfirmDialog(4, widget.id);
+                  nowVote = 4;
+                  showConfirmDialog(nowVote, widget.id);
                 },
               ),
             ])
@@ -158,10 +167,10 @@ class _MyFirestorePageState extends State<BoutVote> {
         .get()
         .then((ref) {
       setState(() {
-        vote1_1 = ref.get("vote1_1");
-        vote1_2 = ref.get("vote1_2");
-        vote2_1 = ref.get("vote2_1");
-        vote2_2 = ref.get("vote2_2");
+        voteCount[1] = ref.get("vote1");
+        voteCount[2] = ref.get("vote2");
+        voteCount[3] = ref.get("vote3");
+        voteCount[4] = ref.get("vote4");
       });
       setState(() {
         boutName = ref.get("event_name");

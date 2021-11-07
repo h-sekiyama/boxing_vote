@@ -83,33 +83,33 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                         })),
             //試合日選択
             TextFormField(
-              autofocus: false,
-              style: new TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-              decoration: new InputDecoration(
-                hintText: "${_eventDate}",
-              ),
-              onChanged: (value) {
-                _eventDate = value.toString();
-                setState(() {
-                  _sportsName = value.toString();
-                });
-              },
-              onTap: () async {
-                _selectedDate = (await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year),
-                  lastDate: DateTime(DateTime.now().year + 1),
-                ))!;
-                setState(() {
-                  _eventDate = Functions.dateToString(_selectedDate);
-                });
-                FocusManager.instance.primaryFocus!.unfocus();
-              },
-            ),
+                autofocus: false,
+                style: new TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+                decoration: new InputDecoration(
+                  hintText: "${_eventDate}",
+                ),
+                onChanged: (value) {
+                  _eventDate = value.toString();
+                  setState(() {
+                    _sportsName = value.toString();
+                  });
+                },
+                onTap: () async {
+                  _selectedDate = (await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(DateTime.now().year),
+                        lastDate: DateTime(DateTime.now().year + 1),
+                      )) ??
+                      DateTime.now();
+                  setState(() {
+                    _eventDate = Functions.dateToString(_selectedDate);
+                  });
+                  FocusManager.instance.primaryFocus!.unfocus();
+                }),
             // 大会名入力
             TextFormField(
               autofocus: false,

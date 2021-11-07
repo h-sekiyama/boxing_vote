@@ -1,3 +1,6 @@
+import 'package:boxing_vote/common/Functions.dart';
+import 'package:boxing_vote/common/HexColor.dart';
+import 'package:boxing_vote/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +25,8 @@ class _MyFirestorePageState extends State<VoteResultList> {
   var votedResultList;
   // 称号
   String title = "";
+  // 試合情報を入れる箱を用意
+  List<DocumentSnapshot> boutList = [];
 
   void initState() {
     fetchBoutResultsData();
@@ -42,6 +47,99 @@ class _MyFirestorePageState extends State<VoteResultList> {
               Text(
                   '予想試合数：${totalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate}%')
             ]),
+            // ドキュメント情報を表示
+            Expanded(
+                child: ListView(
+              scrollDirection: Axis.vertical,
+              children: boutList.map((document) {
+                DateTime fight_date = DateTime.now();
+                if (document['fight_date'] is Timestamp) {
+                  fight_date = document["fight_date"].toDate();
+                }
+
+                // その試合の総投票数
+                int totalVotedCount = document["vote1"] +
+                    document["vote2"] +
+                    document["vote3"] +
+                    document["vote4"];
+
+                // その試合の自分の予想
+                String votedText = "";
+                if (votedBoutsList[document.id] == 1) {
+                  votedText = "${document['fighter1']}のKO/TKO/一本勝ち";
+                } else if (votedBoutsList[document.id] == 2) {
+                  votedText = "${document['fighter1']}の判定勝ち";
+                } else if (votedBoutsList[document.id] == 3) {
+                  votedText = "${document['fighter2']}のKO/TKO/一本勝ち";
+                } else if (votedBoutsList[document.id] == 4) {
+                  votedText = "${document['fighter2']}の判定勝ち";
+                }
+
+                // その試合の結果
+                String resultText = "";
+                if (document['result'] == 0) {
+                  resultText = "結果未集計";
+                } else if (document['result'] == 1) {
+                  resultText = "${document['fighter1']}のKO/TKO/一本勝ち";
+                } else if (document['result'] == 2) {
+                  resultText = "${document['fighter1']}の判定勝ち";
+                } else if (document['result'] == 3) {
+                  resultText = "${document['fighter2']}のKO/TKO/一本勝ち";
+                } else if (document['result'] == 4) {
+                  resultText = "${document['fighter2']}の判定勝ち";
+                } else if (document['result'] == 99) {
+                  resultText = "引き分けまたは無効試合";
+                }
+                return Visibility(
+                    // 投票数が10件以上で、間違い情報がそれより多い試合情報は表示しない
+                    visible: document["wrong_info_count"] < totalVotedCount ||
+                        totalVotedCount < 10,
+                    child: Card(
+                      child: Column(children: [
+                        ListTile(
+                          title: Text(
+                              '${document['fighter1']} VS ${document['fighter2']}'),
+                          subtitle: Text('${document['event_name']}'),
+                          trailing: Text(Functions.dateToString(fight_date)),
+                        ),
+                        ListTile(
+                            title: Text(
+                                '${document['fighter1']}の勝ち予想：${document['vote1'] + document['vote2']}人\n${document['fighter2']}の勝ち予想：${document['vote3'] + document['vote4']}人',
+                                style: TextStyle(fontSize: 14.0))),
+                        // 予想結果
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("予想："),
+                              Text(votedText,
+                                  style: TextStyle(color: HexColor('ff0000'))),
+                            ]),
+                        // 試合結果
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("結果："),
+                              Text(resultText,
+                                  style: TextStyle(color: HexColor('ff0000'))),
+                            ]),
+                        ElevatedButton(
+                          child: const Text('この試合について語る'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.orange,
+                            onPrimary: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatScreen(document.id),
+                                ));
+                          },
+                        ),
+                      ]),
+                    ));
+              }).toList(),
+            )),
           ],
         ),
       ),
@@ -61,9 +159,15 @@ class _MyFirestorePageState extends State<VoteResultList> {
                   .then((snapshot) {
                 votedBoutsList = ref["votes"];
                 snapshot.docs.forEach((docs) {
+                  // 的中数を集計
                   if (votedBoutsList.containsKey(docs.id) &&
                       docs["result"] == votedBoutsList[docs.id]) {
                     wonBoutCount++;
+                  }
+                  // そもそも予想してない試合はリストから外す
+                  if (votedBoutsList.containsKey(docs.id) &&
+                      votedBoutsList[docs.id] != -1) {
+                    boutList.add(docs);
                   }
                 });
               }),
@@ -71,64 +175,10 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 totalVoteBoutCount = votedBoutsList.length;
                 wonBoutCount = wonBoutCount;
                 wonBoutRate = wonBoutCount / totalVoteBoutCount * 100;
-                title = getTitle(totalVoteBoutCount, wonBoutCount, wonBoutRate);
+                title = Functions.getTitle(
+                    totalVoteBoutCount, wonBoutCount, wonBoutRate);
+                boutList = boutList;
               })
             });
-  }
-
-  // 称号を割り当てる処理
-  String getTitle(totalVoteBoutCount, wonBoutCount, wonBoutRate) {
-    if (totalVoteBoutCount == 0) {
-      title = "ひよっこ予想師";
-    } else if (totalVoteBoutCount == 1 && wonBoutRate == 100) {
-      title = "期待のルーキー";
-    } else if (totalVoteBoutCount == 1 && wonBoutRate == 0) {
-      title = "出だし不調な予想師";
-    } else if (totalVoteBoutCount == 2 && wonBoutRate == 50) {
-      title = "これからに期待";
-    } else if (totalVoteBoutCount == 2 && wonBoutRate == 0) {
-      title = "カス予備軍";
-    } else if (totalVoteBoutCount == 3 && wonBoutRate == 100) {
-      title = "神の予感";
-    } else if (totalVoteBoutCount == 3 && wonBoutRate > 66) {
-      title = "優秀な予想師・・・かも？";
-    } else if (totalVoteBoutCount == 3 &&
-        wonBoutRate > 33 &&
-        wonBoutRate < 66) {
-      title = "平凡な予想師";
-    } else if (totalVoteBoutCount == 3 && wonBoutRate == 0) {
-      title = "カス予想師一歩手前";
-    } else if (totalVoteBoutCount == 4 && wonBoutRate == 100) {
-      title = "神予想師予備軍";
-    } else if (totalVoteBoutCount == 4 &&
-        wonBoutRate >= 25 &&
-        wonBoutRate < 50) {
-      title = "平凡な予想師";
-    } else if (totalVoteBoutCount == 4 &&
-        wonBoutRate >= 50 &&
-        wonBoutRate < 75) {
-      title = "そこそこな予想師";
-    } else if (totalVoteBoutCount == 4 && wonBoutRate == 0) {
-      title = "カス予想師";
-    } else if (totalVoteBoutCount >= 5 && wonBoutRate == 100) {
-      title = "神予想師";
-    } else if (totalVoteBoutCount >= 5 &&
-        wonBoutRate >= 75 &&
-        wonBoutRate < 100) {
-      title = "すごく優秀な予想師";
-    } else if (totalVoteBoutCount >= 5 &&
-        wonBoutRate >= 50 &&
-        wonBoutRate < 75) {
-      title = "なかなか優秀な予想師";
-    } else if (totalVoteBoutCount >= 5 &&
-        wonBoutRate >= 25 &&
-        wonBoutRate < 50) {
-      title = "平凡な予想師";
-    } else if (totalVoteBoutCount >= 5 && wonBoutRate > 0 && wonBoutRate < 25) {
-      title = "イマイチな予想師";
-    } else if (totalVoteBoutCount >= 5 && wonBoutRate == 0) {
-      title = "ゴミクズ予想師";
-    }
-    return title;
   }
 }

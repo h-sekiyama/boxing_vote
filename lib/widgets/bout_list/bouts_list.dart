@@ -15,8 +15,8 @@ class BoutsList extends StatefulWidget {
 }
 
 class _MyFirestorePageState extends State<BoutsList> {
-  // ドキュメント情報を入れる箱を用意
-  List<DocumentSnapshot> documentList = [];
+  // 試合情報を入れる箱を用意
+  List<DocumentSnapshot> boutList = [];
   // 結果文言
   String resultText = "";
 
@@ -30,11 +30,11 @@ class _MyFirestorePageState extends State<BoutsList> {
       body: Center(
         child: Column(
           children: <Widget>[
-            // ドキュメント情報を表示
+            // 試合一覧を表示
             Expanded(
                 child: ListView(
               scrollDirection: Axis.vertical,
-              children: documentList.map((document) {
+              children: boutList.map((document) {
                 DateTime fight_date = DateTime.now();
                 if (document['fight_date'] is Timestamp) {
                   fight_date = document["fight_date"].toDate();
@@ -132,7 +132,7 @@ class _MyFirestorePageState extends State<BoutsList> {
         .orderBy('fight_date', descending: true)
         .get();
     // ドキュメント一覧を配列で格納
-    documentList = snapshot.docs;
+    boutList = snapshot.docs;
 
     var serverTime;
     var serverTimeSnapshot;
@@ -149,18 +149,18 @@ class _MyFirestorePageState extends State<BoutsList> {
                   (serverTimeSnapshot['serverTimeStamp'] as Timestamp).toDate(),
               if (widget.isList)
                 {
-                  documentList.removeWhere((document) =>
+                  boutList.removeWhere((document) =>
                       document["fight_date"].toDate().isBefore(serverTime))
                 }
               else
                 {
-                  documentList.removeWhere((document) =>
+                  boutList.removeWhere((document) =>
                       document["fight_date"].toDate().isAfter(serverTime))
                 },
 
               // ドキュメント一覧を配列で格納
               setState(() {
-                documentList = documentList;
+                boutList = boutList;
               })
             });
   }

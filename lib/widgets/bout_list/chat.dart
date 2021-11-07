@@ -1,3 +1,4 @@
+import 'package:boxing_vote/screens/vote_result_list_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,16 +52,25 @@ class _MyFirestorePageState extends State<Chat> {
                 if (document['time'] is Timestamp) {
                   time = document["time"].toDate();
                 }
-                return Card(
-                  child: Column(children: [
-                    ListTile(
-                      leading: Image.asset('images/cat.png'),
-                      title: Text('${document['user_name']}'),
-                      subtitle: Text('${document['text']}'),
-                      trailing: Text(Functions.dateToStringTime(time)),
-                    ),
-                  ]),
-                );
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                VoteResultListScreen(document['user_id']),
+                          ));
+                    },
+                    child: Card(
+                      child: Column(children: [
+                        ListTile(
+                          leading: Image.asset('images/cat.png'),
+                          title: Text('${document['user_name']}'),
+                          subtitle: Text('${document['text']}'),
+                          trailing: Text(Functions.dateToStringTime(time)),
+                        ),
+                      ]),
+                    ));
               }).toList(),
             )),
             Visibility(

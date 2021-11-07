@@ -6,13 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class VoteResultList extends StatefulWidget {
-  VoteResultList(this.isOwn);
-  bool isOwn;
+  VoteResultList(this.userId);
+  String userId;
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
 }
 
 class _MyFirestorePageState extends State<VoteResultList> {
+  // ユーザー名
+  String userName = "";
   // 累計予想試合数
   int totalVoteBoutCount = 0;
   // 的中試合数
@@ -34,6 +36,9 @@ class _MyFirestorePageState extends State<VoteResultList> {
 
   @override
   Widget build(BuildContext context) {
+    userName = (widget.userId == FirebaseAuth.instance.currentUser!.uid
+        ? FirebaseAuth.instance.currentUser!.displayName
+        : userName)!;
     return Scaffold(
       body: Center(
         child: Column(
@@ -41,8 +46,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
             Column(children: [
               ListTile(
                   leading: Image.asset('images/cat.png'),
-                  title:
-                      Text('${FirebaseAuth.instance.currentUser!.displayName}'),
+                  title: Text('${userName}'),
                   subtitle: Text('${title}')),
               Text(
                   '予想試合数：${totalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate}%')
@@ -150,7 +154,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
   void fetchBoutResultsData() {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(widget.userId)
         .get()
         .then((ref) async => {
               await FirebaseFirestore.instance
@@ -174,10 +178,13 @@ class _MyFirestorePageState extends State<VoteResultList> {
               setState(() {
                 totalVoteBoutCount = votedBoutsList.length;
                 wonBoutCount = wonBoutCount;
-                wonBoutRate = wonBoutCount / totalVoteBoutCount * 100;
+                wonBoutRate = totalVoteBoutCount != 0
+                    ? wonBoutCount / totalVoteBoutCount * 100
+                    : 0;
                 title = Functions.getTitle(
                     totalVoteBoutCount, wonBoutCount, wonBoutRate);
                 boutList = boutList;
+                userName = ref['name'];
               })
             });
   }

@@ -28,7 +28,7 @@ class _MyFirestorePageState extends State<Other> {
                 },
               ),
               ElevatedButton(
-                child: Text("予想結果一覧"),
+                child: Text("予想試合一覧"),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.orange,
                   onPrimary: Colors.white,
@@ -37,7 +37,8 @@ class _MyFirestorePageState extends State<Other> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => VoteResultListScreen(true)));
+                          builder: (context) => VoteResultListScreen(
+                              FirebaseAuth.instance.currentUser!.uid)));
                 },
               ),
               ElevatedButton(

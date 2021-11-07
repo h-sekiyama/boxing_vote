@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import '../common/Tabs.dart';
 
 class VoteResultListScreen extends StatelessWidget {
-  VoteResultListScreen(this.isOwn);
-  bool isOwn; // 自分の勝敗予想リストか
+  VoteResultListScreen(this.userId);
+  String userId; // 予想試合一覧を表示するユーザーのID
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("予想結果一覧"),
+          title: Text("予想試合一覧"),
           actions: [],
         ),
-        body: VoteResultList(isOwn),
+        body: VoteResultList(userId),
         bottomNavigationBar: Tabs());
   }
 }

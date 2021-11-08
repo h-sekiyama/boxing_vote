@@ -113,11 +113,11 @@ class _MyFirestorePageState extends State<SendBoutResult> {
             title: Text("結果報告"),
             content: Text(dialogText),
             actions: [
-              FlatButton(
+              ElevatedButton(
                 child: Text("やめる"),
                 onPressed: () => Navigator.pop(context),
               ),
-              FlatButton(
+              ElevatedButton(
                 child: Text("報告する"),
                 onPressed: () => {voteBoutForecast(sentResult, boutId)},
               ),

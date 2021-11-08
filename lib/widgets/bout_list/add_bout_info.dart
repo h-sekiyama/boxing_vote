@@ -184,11 +184,11 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
           content: Text(dialogText +
               "\n\n種目：${_sportsName}\n試合日：${_eventDate}\n大会名：${_eventName}\n${_fighter1} VS ${_fighter2}"),
           actions: [
-            FlatButton(
+            ElevatedButton(
               child: Text("やめる"),
               onPressed: () => Navigator.pop(context),
             ),
-            FlatButton(
+            ElevatedButton(
               child: Text("確定"),
               onPressed: () => {
                 FirebaseFirestore.instance

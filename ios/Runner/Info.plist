@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>このアプリはフォトライブラリにアクセスする必要があります</string>
+    <key>NSCameraUsageDescription</key>
+    <string>このアプリはカメラにファイルを追加する必要があります</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>このアプリでは、マイクのフォトライブラリにファイルを追加する必要があります</string>
 </dict>
 </plist>

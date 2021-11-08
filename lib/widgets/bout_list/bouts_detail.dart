@@ -117,11 +117,11 @@ class _MyFirestorePageState extends State<BoutDetail> {
                           title: Text("誤り報告を取り消す"),
                           content: Text("試合情報の誤り報告済みなので投票できません。誤り報告を取り消しますか？"),
                           actions: [
-                            FlatButton(
+                            ElevatedButton(
                               child: Text("取り消さない"),
                               onPressed: () => Navigator.pop(context),
                             ),
-                            FlatButton(
+                            ElevatedButton(
                               child: Text("取り消す"),
                               onPressed: () => {
                                 fetchBoutData(),
@@ -178,11 +178,11 @@ class _MyFirestorePageState extends State<BoutDetail> {
                           content: Text(
                               "この試合情報に誤った情報が含まれますか？（報告が一定数を超えると試合情報が削除されます）"),
                           actions: [
-                            FlatButton(
+                            ElevatedButton(
                               child: Text("正しい"),
                               onPressed: () => Navigator.pop(context),
                             ),
-                            FlatButton(
+                            ElevatedButton(
                               child: Text("間違っている"),
                               onPressed: () => {
                                 fetchBoutData(),

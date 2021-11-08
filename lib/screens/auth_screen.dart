@@ -16,7 +16,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               setState(() {
                 _isSignIn = true;
@@ -29,7 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ),
           ),
-          FlatButton(
+          ElevatedButton(
             onPressed: () {
               setState(() {
                 _isSignIn = false;

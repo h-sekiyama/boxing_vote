@@ -23,7 +23,7 @@ class _SignInAnonymouslyButtonState extends State<SignInAnonymouslyButton> {
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : FlatButton.icon(
+        : ElevatedButton.icon(
             onPressed: _signInAnonymously,
             icon: Icon(Icons.account_box),
             label: Text("匿名サインイン"),

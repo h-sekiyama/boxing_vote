@@ -82,11 +82,11 @@ class _MyFirestorePageState extends State<BoutVote> {
             title: Text("勝敗予想"),
             content: Text(dialogText + "\n" + "予想内容は試合前日までは変更できます"),
             actions: [
-              FlatButton(
+              ElevatedButton(
                 child: Text("やめる"),
                 onPressed: () => Navigator.pop(context),
               ),
-              FlatButton(
+              ElevatedButton(
                 child: Text("投票する"),
                 onPressed: () => {voteBoutResult(voteResult, boutId)},
               ),

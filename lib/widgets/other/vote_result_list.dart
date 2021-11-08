@@ -17,6 +17,8 @@ class _MyFirestorePageState extends State<VoteResultList> {
   String userName = "";
   // 累計予想試合数
   int totalVoteBoutCount = 0;
+  // 累計予想試合数（集計済み）
+  int endTotalVoteBoutCount = 0;
   // 的中試合数
   int wonBoutCount = 0;
   // 的中率
@@ -49,7 +51,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                   title: Text('${userName}'),
                   subtitle: Text('${title}')),
               Text(
-                  '予想試合数：${totalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate}%')
+                  '予想試合数（集計済み）：${endTotalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate.toStringAsFixed(1)}%')
             ]),
             // ドキュメント情報を表示
             Expanded(
@@ -168,7 +170,13 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       docs["result"] == votedBoutsList[docs.id]) {
                     wonBoutCount++;
                   }
-                  // そもそも予想してない試合はリストから外す
+                  // 結果の出ている予想試合数を集計
+                  if (docs['result'] != 0 &&
+                      docs['result'] != -1 &&
+                      votedBoutsList.containsKey(docs.id)) {
+                    endTotalVoteBoutCount++;
+                  }
+                  // そもそも予想してない試合（及び削除になった試合）はリストから外す
                   if (votedBoutsList.containsKey(docs.id) &&
                       votedBoutsList[docs.id] != -1) {
                     boutList.add(docs);
@@ -178,11 +186,11 @@ class _MyFirestorePageState extends State<VoteResultList> {
               setState(() {
                 totalVoteBoutCount = votedBoutsList.length;
                 wonBoutCount = wonBoutCount;
-                wonBoutRate = totalVoteBoutCount != 0
-                    ? wonBoutCount / totalVoteBoutCount * 100
+                wonBoutRate = endTotalVoteBoutCount != 0
+                    ? wonBoutCount / endTotalVoteBoutCount * 100
                     : 0;
                 title = Functions.getTitle(
-                    totalVoteBoutCount, wonBoutCount, wonBoutRate);
+                    endTotalVoteBoutCount, wonBoutCount, wonBoutRate);
                 boutList = boutList;
                 userName = ref['name'];
               })

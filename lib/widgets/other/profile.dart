@@ -24,6 +24,8 @@ class _MyFirestorePageState extends State<Profile> {
   bool isComplete = false;
   // 更新可能か否か
   bool isEnabled = false;
+  // プロフ画像のURL
+  String imageUrl = "";
 
   Future getImageFromCamera() async {
     final pickedFile = await _picker.getImage(source: ImageSource.camera);
@@ -101,11 +103,17 @@ class _MyFirestorePageState extends State<Profile> {
                             "name": userName,
                           });
                           FirebaseAuth.instance.currentUser!
-                              .updateProfile(displayName: userName);
-
-                          if (selectedImage != null) {
-                            uploadImage();
-                          }
+                              .updateProfile(displayName: userName)
+                              .then((value) => {
+                                    if (selectedImage != null)
+                                      {uploadImage()}
+                                    else
+                                      {
+                                        setState(() {
+                                          isComplete = true;
+                                        })
+                                      }
+                                  });
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -130,25 +138,36 @@ class _MyFirestorePageState extends State<Profile> {
     );
   }
 
+  // アイコン画像のダウンロード
   void downloadImage() async {
-    Reference imageRef = storage
-        .ref()
-        .child("profile")
-        .child("${FirebaseAuth.instance.currentUser!.uid}.png");
-    String imageUrl = await imageRef.getDownloadURL();
+    try {
+      Reference imageRef = storage
+          .ref()
+          .child("profile")
+          .child("${FirebaseAuth.instance.currentUser!.uid}.png");
+      imageUrl = await imageRef.getDownloadURL();
 
-    // 画面に反映
-    setState(() {
-      nowImage = Image.network(imageUrl);
-    });
+      // 画面に反映
+      setState(() {
+        nowImage = Image.network(imageUrl);
+      });
+    } catch (FirebaseException) {}
   }
 
+  // アイコン画像のアップロード
   void uploadImage() async {
     try {
       if (selectedImage != null) {
         storage
             .ref("profile/${FirebaseAuth.instance.currentUser!.uid}.png")
             .putFile(selectedImage!)
+            .whenComplete(() async => {
+                  imageUrl = await storage
+                      .ref()
+                      .child("profile")
+                      .child("${FirebaseAuth.instance.currentUser!.uid}.png")
+                      .getDownloadURL(),
+                })
             .whenComplete(() => {
                   setState(() {
                     isComplete = true;

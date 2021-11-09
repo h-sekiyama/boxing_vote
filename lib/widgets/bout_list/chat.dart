@@ -1,5 +1,6 @@
 import 'package:boxing_vote/screens/vote_result_list_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../common/Functions.dart';
@@ -26,9 +27,22 @@ class _MyFirestorePageState extends State<Chat> {
   bool isNoChatTextVisible = false;
   // チャットテキスト
   String chatText = "";
+  // FireStoreのインスタンス
+  FirebaseStorage storage = FirebaseStorage.instance;
+  // ユーザーアイコンマップ
+  Map<String, String> userImagreMap = {};
 
   void initState() {
     fetchBoutData();
+  }
+
+// アイコン画像のダウンロード
+  Future<String> downloadImage(String userId) {
+    return storage
+        .ref()
+        .child("profile")
+        .child("${userId}.png")
+        .getDownloadURL();
   }
 
   @override
@@ -64,7 +78,17 @@ class _MyFirestorePageState extends State<Chat> {
                     child: Card(
                       child: Column(children: [
                         ListTile(
-                          leading: Image.asset('images/cat.png'),
+                          leading: FutureBuilder(
+                            future: downloadImage(document['user_id']),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              if (snapshot.hasData) {
+                                return Image.network(snapshot.data!);
+                              } else {
+                                return Image.asset('images/cat.png');
+                              }
+                            },
+                          ),
                           title: Text('${document['user_name']}'),
                           subtitle: Text('${document['text']}'),
                           trailing: Text(Functions.dateToStringTime(time)),

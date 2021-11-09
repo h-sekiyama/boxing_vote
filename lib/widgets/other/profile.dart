@@ -22,6 +22,8 @@ class _MyFirestorePageState extends State<Profile> {
   Image? nowImage;
   // プロフィール更新が完了したか
   bool isComplete = false;
+  // 更新可能か否か
+  bool isEnabled = false;
 
   Future getImageFromCamera() async {
     final pickedFile = await _picker.getImage(source: ImageSource.camera);
@@ -75,20 +77,39 @@ class _MyFirestorePageState extends State<Profile> {
                       ),
                       onChanged: (value) {
                         userName = value;
+                        if (value.length == 0 ||
+                            value ==
+                                FirebaseAuth
+                                    .instance.currentUser!.displayName) {
+                          setState(() {
+                            isEnabled = false;
+                          });
+                        } else {
+                          setState(() {
+                            isEnabled = true;
+                          });
+                        }
                       },
                     )),
                 ElevatedButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({
-                      "name": userName,
-                    });
-                    FirebaseAuth.instance.currentUser!
-                        .updateProfile(displayName: userName);
-                    uploadImage();
-                  },
+                  onPressed: isEnabled
+                      ? () {
+                          FirebaseFirestore.instance
+                              .collection("users")
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({
+                            "name": userName,
+                          });
+                          FirebaseAuth.instance.currentUser!
+                              .updateProfile(displayName: userName);
+
+                          if (selectedImage != null) {
+                            uploadImage();
+                          }
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.orange, onPrimary: Colors.white),
                   child: const Text(
                     'これにする',
                     textAlign: TextAlign.center,
@@ -124,14 +145,17 @@ class _MyFirestorePageState extends State<Profile> {
 
   void uploadImage() async {
     try {
-      storage
-          .ref("profile/${FirebaseAuth.instance.currentUser!.uid}.png")
-          .putFile(selectedImage!)
-          .whenComplete(() => {
-                setState(() {
-                  isComplete = true;
-                })
-              });
+      if (selectedImage != null) {
+        storage
+            .ref("profile/${FirebaseAuth.instance.currentUser!.uid}.png")
+            .putFile(selectedImage!)
+            .whenComplete(() => {
+                  setState(() {
+                    isComplete = true;
+                    isEnabled = false;
+                  })
+                });
+      }
     } catch (e) {
       print(e);
     }
@@ -169,6 +193,7 @@ class _MyFirestorePageState extends State<Profile> {
       if (_pickedFile != null) {
         selectedImage = File(_pickedFile.path);
         nowImage = Image.file(selectedImage!);
+        isEnabled = true;
       }
     });
   }

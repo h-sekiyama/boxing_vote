@@ -167,7 +167,8 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 snapshot.docs.forEach((docs) {
                   // 的中数を集計
                   if (votedBoutsList.containsKey(docs.id) &&
-                      docs["result"] == votedBoutsList[docs.id]) {
+                      docs["result"] == votedBoutsList[docs.id] &&
+                      docs["result"] != 0) {
                     wonBoutCount++;
                   }
                   // 結果の出ている予想試合数を集計
@@ -176,7 +177,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       votedBoutsList.containsKey(docs.id)) {
                     endTotalVoteBoutCount++;
                   }
-                  // そもそも予想してない試合（及び削除になった試合）はリストから外す
+                  // 試合リスト作成（予想してない or 削除になった試合はリストから外す
                   if (votedBoutsList.containsKey(docs.id) &&
                       votedBoutsList[docs.id] != -1) {
                     boutList.add(docs);

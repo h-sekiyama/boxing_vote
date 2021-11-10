@@ -7,8 +7,9 @@ import '../../common/Functions.dart';
 import '../../screens/chat_screen.dart';
 
 class BoutsList extends StatefulWidget {
-  BoutsList(this.isList);
+  BoutsList(this.isList, this.sports);
   bool isList;
+  String sports = "";
 
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
@@ -127,10 +128,20 @@ class _MyFirestorePageState extends State<BoutsList> {
 
   void fetchBoutData() async {
     // 指定コレクションのドキュメント一覧を取得
-    final snapshot = await FirebaseFirestore.instance
-        .collection('bouts')
-        .orderBy('fight_date', descending: true)
-        .get();
+    final snapshot;
+    if (widget.sports == "") {
+      snapshot = await FirebaseFirestore.instance
+          .collection('bouts')
+          .orderBy('fight_date', descending: true)
+          .get();
+    } else {
+      snapshot = await FirebaseFirestore.instance
+          .collection('bouts')
+          .orderBy('fight_date', descending: true)
+          .where('sports', isEqualTo: widget.sports)
+          .get();
+    }
+
     // ドキュメント一覧を配列で格納
     boutList = snapshot.docs;
 

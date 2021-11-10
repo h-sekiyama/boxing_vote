@@ -30,12 +30,12 @@ class _MyFirestorePageState extends State<Tabs> {
         switch (index) {
           case 0:
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomeScreen(true)));
+                MaterialPageRoute(builder: (context) => HomeScreen(true, "")));
             currentIndex = index;
             break;
           case 1:
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomeScreen(false)));
+                MaterialPageRoute(builder: (context) => HomeScreen(false, "")));
             currentIndex = index;
             break;
           case 2:

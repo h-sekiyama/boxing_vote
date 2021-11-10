@@ -78,17 +78,20 @@ class _MyFirestorePageState extends State<Chat> {
                     child: Card(
                       child: Column(children: [
                         ListTile(
-                          leading: FutureBuilder(
-                            future: downloadImage(document['user_id']),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
-                              if (snapshot.hasData) {
-                                return Image.network(snapshot.data!);
-                              } else {
-                                return Image.asset('images/cat.png');
-                              }
-                            },
-                          ),
+                          leading: Container(
+                              width: 80,
+                              height: 80,
+                              child: FutureBuilder(
+                                future: downloadImage(document['user_id']),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<String> snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Image.network(snapshot.data!);
+                                  } else {
+                                    return Image.asset('images/cat.png');
+                                  }
+                                },
+                              )),
                           title: Text('${document['user_name']}'),
                           subtitle: Text('${document['text']}'),
                           trailing: Text(Functions.dateToStringTime(time)),

@@ -212,7 +212,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen(true)))
+                                  builder: (context) => HomeScreen(true, "")))
                         })
               },
             ),

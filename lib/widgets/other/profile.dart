@@ -96,6 +96,19 @@ class _MyFirestorePageState extends State<Profile> {
                 ElevatedButton(
                   onPressed: isEnabled
                       ? () {
+                          // 全画面プログレスダイアログ
+                          showGeneralDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              transitionDuration: Duration(milliseconds: 300),
+                              barrierColor: Colors.black.withOpacity(0.5),
+                              pageBuilder: (BuildContext context,
+                                  Animation animation,
+                                  Animation secondaryAnimation) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              });
                           FirebaseFirestore.instance
                               .collection("users")
                               .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -111,7 +124,8 @@ class _MyFirestorePageState extends State<Profile> {
                                       {
                                         setState(() {
                                           isComplete = true;
-                                        })
+                                        }),
+                                        Navigator.of(context).pop()
                                       }
                                   });
                         }
@@ -174,7 +188,8 @@ class _MyFirestorePageState extends State<Profile> {
                   setState(() {
                     isComplete = true;
                     isEnabled = false;
-                  })
+                  }),
+                  Navigator.of(context).pop()
                 });
       }
     } catch (e) {

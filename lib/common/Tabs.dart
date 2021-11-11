@@ -9,6 +9,7 @@ class Tabs extends StatefulWidget {
 
 class _MyFirestorePageState extends State<Tabs> {
   static int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -29,18 +30,27 @@ class _MyFirestorePageState extends State<Tabs> {
       onTap: (int index) {
         switch (index) {
           case 0:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomeScreen(true, "")));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(true, "全て"),
+                    fullscreenDialog: true));
             currentIndex = index;
             break;
           case 1:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomeScreen(false, "")));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(false, "全て"),
+                    fullscreenDialog: true));
             currentIndex = index;
             break;
           case 2:
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OtherScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OtherScreen(),
+                    fullscreenDialog: true));
             currentIndex = index;
             break;
         }

@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    headerText = isList ? "近日開催予定の試合" : "試合結果一覧";
+    headerText = isList ? "試合予定（${sports}）" : "試合結果（${sports}）";
     return Scaffold(
         appBar: AppBar(
           title: Text('${headerText}'),
@@ -45,9 +45,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               ListTile(
-                title: Text('すべて'),
+                title: Text('全て'),
+                tileColor:
+                    sports == "全て" ? Color(0xffaa00aa) : Color(0xffffffff),
                 onTap: () {
-                  sports = "";
+                  sports = "全て";
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -57,6 +59,8 @@ class HomeScreen extends StatelessWidget {
               ),
               ListTile(
                 title: Text('ボクシング'),
+                tileColor:
+                    sports == "ボクシング" ? Color(0xffaa00aa) : Color(0xffffffff),
                 onTap: () {
                   sports = "ボクシング";
                   Navigator.push(
@@ -68,6 +72,8 @@ class HomeScreen extends StatelessWidget {
               ),
               ListTile(
                 title: Text('K-1'),
+                tileColor:
+                    sports == "K-1" ? Color(0xffaa00aa) : Color(0xffffffff),
                 onTap: () {
                   sports = "K-1";
                   Navigator.push(
@@ -79,6 +85,8 @@ class HomeScreen extends StatelessWidget {
               ),
               ListTile(
                 title: Text('RIZIN'),
+                tileColor:
+                    sports == "RIZIN" ? Color(0xffaa00aa) : Color(0xffffffff),
                 onTap: () {
                   sports = "RIZIN";
                   Navigator.push(

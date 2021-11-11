@@ -48,10 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
         child: _isSignIn
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  EmailSignInForm(),
-                  SignInAnonymouslyButton(),
-                ],
+                children: [EmailSignInForm()],
               )
             : EmailSignUpForm(),
       ),

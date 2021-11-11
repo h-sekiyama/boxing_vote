@@ -51,7 +51,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                   title: Text('${userName}'),
                   subtitle: Text('${title}')),
               Text(
-                  '予想試合数（集計済み）：${endTotalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate.toStringAsFixed(1)}%')
+                  '全予想試合数：${totalVoteBoutCount}\n集計済み試合数：${endTotalVoteBoutCount}\n的中試合数：${wonBoutCount}\n的中率：${wonBoutRate.toStringAsFixed(1)}%')
             ]),
             // ドキュメント情報を表示
             Expanded(

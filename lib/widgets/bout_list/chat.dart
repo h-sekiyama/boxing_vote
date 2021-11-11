@@ -37,12 +37,16 @@ class _MyFirestorePageState extends State<Chat> {
   }
 
 // アイコン画像のダウンロード
-  Future<String> downloadImage(String userId) {
-    return storage
-        .ref()
-        .child("profile")
-        .child("${userId}.png")
-        .getDownloadURL();
+  Future<String> downloadImage(String userId) async {
+    try {
+      var imageUrl;
+      Reference imageRef =
+          storage.ref().child("profile").child("${userId}.png");
+      imageUrl = await imageRef.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      return Future<String>.value("no image");
+    }
   }
 
   @override
@@ -86,7 +90,11 @@ class _MyFirestorePageState extends State<Chat> {
                                 builder: (BuildContext context,
                                     AsyncSnapshot<String> snapshot) {
                                   if (snapshot.hasData) {
-                                    return Image.network(snapshot.data!);
+                                    if (snapshot.data != "no image") {
+                                      return Image.network(snapshot.data!);
+                                    } else {
+                                      return Image.asset('images/cat.png');
+                                    }
                                   } else {
                                     return Image.asset('images/cat.png');
                                   }

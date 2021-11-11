@@ -151,7 +151,9 @@ class _MyFirestorePageState extends State<Profile> {
       setState(() {
         nowImage = Image.network(imageUrl);
       });
-    } catch (FirebaseException) {}
+    } catch (FirebaseException) {
+      print(FirebaseException);
+    }
   }
 
   // アイコン画像のアップロード

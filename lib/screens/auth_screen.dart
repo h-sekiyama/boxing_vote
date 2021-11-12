@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/auth/signin_anonymously_button.dart';
 import '../widgets/auth/email_sign_up_form.dart';
 import '../widgets/auth/email_sign_in_form.dart';
 

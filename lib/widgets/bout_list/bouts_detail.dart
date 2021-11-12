@@ -21,8 +21,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
   String fighter1 = "";
   // 選手2
   String fighter2 = "";
-  // 試合日程
-  DateTime fightDate = DateTime.now();
+  // 試合日程テキスト
+  String fightDateText = "";
   // 選手1のKO勝利予想数
   int vote1 = 0;
   // 選手1の判定勝利予想数
@@ -52,8 +52,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
           children: <Widget>[
             Column(children: [
               Column(children: [
-                Text('${Functions.dateToString(fightDate)}'),
-                Text('${boutName}'),
+                Text(fightDateText),
+                Text(boutName),
                 Text('${fighter1} VS ${fighter2}'),
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -230,8 +230,6 @@ class _MyFirestorePageState extends State<BoutDetail> {
       setState(() {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
-      });
-      setState(() {
         if (ref['result'] == 0) {
           resultText = "結果集計中";
         } else if (ref['result'] == 1) {
@@ -245,20 +243,12 @@ class _MyFirestorePageState extends State<BoutDetail> {
         } else if (ref['result'] == 99) {
           resultText = '引き分けまたは無効試合';
         }
-      });
-      setState(() {
         vote1 = ref.get("vote1");
         vote2 = ref.get("vote2");
         vote3 = ref.get("vote3");
         vote4 = ref.get("vote4");
-      });
-      setState(() {
         boutName = ref.get("event_name");
-      });
-      setState(() {
-        fightDate = ref.get("fight_date");
-      });
-      setState(() {
+        fightDateText = Functions.dateToString(ref.get("fight_date").toDate());
         wrongInfoCount = ref.get("wrong_info_count");
       });
     });

@@ -248,7 +248,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         }
       });
       setState(() {
-        fightDate = ref.get("fight_date");
+        fightDate = ref.get("fight_date").toDate();
       });
     });
   }

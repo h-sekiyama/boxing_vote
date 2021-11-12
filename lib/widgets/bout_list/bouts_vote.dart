@@ -1,3 +1,4 @@
+import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +20,8 @@ class _MyFirestorePageState extends State<BoutVote> {
   String fighter2 = "";
   // 試合日程
   DateTime fightDate = DateTime.now();
+  // 試合日程テキスト
+  String fightDateText = "";
   // 予想数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
   Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
@@ -38,23 +41,73 @@ class _MyFirestorePageState extends State<BoutVote> {
     // 勝敗予想投票処理
     void voteBoutResult(int voteResult, String boutId) {
       fetchBoutData();
-      // 投票数を更新
-      FirebaseFirestore.instance.collection("bouts").doc(boutId).update({
-        "vote${nowVote}": voteCount[nowVote]! + 1,
-        "vote${myVote}":
-            myVote != 0 ? voteCount[myVote]! - 1 : voteCount[myVote]
-      });
 
-      // 自分の投票履歴を更新
+      // 改めて投票受付期間かを確認
+      var serverTime;
+      var serverTimeSnapshot;
       FirebaseFirestore.instance
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({
-        "votes.${boutId}": voteResult,
-      }).then((_) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      });
+          .collection("server_time")
+          .doc("0")
+          .set(({"serverTimeStamp": FieldValue.serverTimestamp()}))
+          .then((value) async => {
+                serverTimeSnapshot = await FirebaseFirestore.instance
+                    .collection('server_time')
+                    .doc("0")
+                    .get(),
+                serverTime =
+                    (serverTimeSnapshot['serverTimeStamp'] as Timestamp)
+                        .toDate(),
+                if (fightDate.isAfter(serverTime))
+                  {
+                    // 自分の投票履歴を更新
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update({
+                      "votes.${boutId}": voteResult,
+                    }).then((_) {
+                      // 投票数を更新
+                      FirebaseFirestore.instance
+                          .collection("bouts")
+                          .doc(boutId)
+                          .update({
+                        "vote${nowVote}": voteCount[nowVote]! + 1,
+                        "vote${myVote}": myVote != 0
+                            ? voteCount[myVote]! - 1
+                            : voteCount[myVote]
+                      }).then((value) {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      });
+                    })
+                  }
+                else
+                  {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text("投票受付終了"),
+                          content: Text("投票できる期間は試合日の前日までとなります。"),
+                          actions: [
+                            ElevatedButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomeScreen(true, "全て"),
+                                        fullscreenDialog: true));
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    )
+                  }
+              });
     }
 
     // 確認ダイアログ表示
@@ -160,6 +213,7 @@ class _MyFirestorePageState extends State<BoutVote> {
     );
   }
 
+  // 試合情報取得
   void fetchBoutData() {
     FirebaseFirestore.instance
         .collection('bouts')
@@ -167,15 +221,12 @@ class _MyFirestorePageState extends State<BoutVote> {
         .get()
         .then((ref) {
       setState(() {
+        fightDate = ref.get("fight_date").toDate();
         voteCount[1] = ref.get("vote1");
         voteCount[2] = ref.get("vote2");
         voteCount[3] = ref.get("vote3");
         voteCount[4] = ref.get("vote4");
-      });
-      setState(() {
         boutName = ref.get("event_name");
-      });
-      setState(() {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
         switch (ref.get("my_vote")) {
@@ -192,9 +243,6 @@ class _MyFirestorePageState extends State<BoutVote> {
             myVoteText = "${fighter2}の判定勝ち";
             break;
         }
-      });
-      setState(() {
-        fightDate = ref.get("fight_date");
       });
     });
   }

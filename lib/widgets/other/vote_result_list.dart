@@ -3,7 +3,9 @@ import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VoteResultList extends StatefulWidget {
   VoteResultList(this.userId);
@@ -31,9 +33,16 @@ class _MyFirestorePageState extends State<VoteResultList> {
   String title = "";
   // 試合情報を入れる箱を用意
   List<DocumentSnapshot> boutList = [];
+  // FireStoreのインスタンス
+  FirebaseStorage storage = FirebaseStorage.instance;
+  // プロフ画像のURL
+  String imageUrl = "";
+  // ユーザーアイコン
+  Image? nowImage;
 
   void initState() {
     fetchBoutResultsData();
+    downloadImage();
   }
 
   @override
@@ -47,7 +56,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
           children: <Widget>[
             Column(children: [
               ListTile(
-                  leading: Image.asset('images/cat.png'),
+                  leading: _displaySelectionImageOrGrayImage(),
                   title: Text('${userName}'),
                   subtitle: Text('${title}')),
               Text(
@@ -196,5 +205,43 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 userName = ref['name'];
               })
             });
+  }
+
+  // アイコン画像のダウンロード
+  void downloadImage() async {
+    try {
+      Reference imageRef = storage
+          .ref()
+          .child("profile")
+          .child("${FirebaseAuth.instance.currentUser!.uid}.png");
+      imageUrl = await imageRef.getDownloadURL();
+
+      // 画面に反映
+      setState(() {
+        nowImage = Image.network(imageUrl);
+      });
+    } catch (FirebaseException) {
+      print(FirebaseException);
+    }
+  }
+
+  Widget _displaySelectionImageOrGrayImage() {
+    if (nowImage != null) {
+      return Container(
+        width: 80,
+        height: 80,
+        child: ClipRRect(
+          child: nowImage,
+        ),
+      );
+    } else {
+      return Container(
+        width: 80,
+        height: 80,
+        child: ClipRRect(
+          child: Image.asset('images/cat.png'),
+        ),
+      );
+    }
   }
 }

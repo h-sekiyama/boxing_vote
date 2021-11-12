@@ -194,7 +194,7 @@ class _MyFirestorePageState extends State<Chat> {
         boutName = ref.get("event_name");
       });
       setState(() {
-        fightDate = ref.get("fight_date");
+        fightDate = ref.get("fight_date").toDate();
       });
     });
   }

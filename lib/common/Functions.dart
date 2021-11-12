@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:intl/intl.dart";
 
 class Functions {
@@ -11,6 +12,17 @@ class Functions {
     DateFormat formatter = DateFormat('yyyy年MM月dd日 HH:mm');
     String formatted = formatter.format(date);
     return formatted;
+  }
+
+  // ログインチェック
+  static bool checkLogin() {
+    final auth = FirebaseAuth.instance.currentUser;
+    if (auth != null) {
+      final isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      return isVerified;
+    } else {
+      return false;
+    }
   }
 
   // 称号を割り当てる処理

@@ -71,14 +71,16 @@ class _MyFirestorePageState extends State<Chat> {
                   time = document["time"].toDate();
                 }
                 return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                VoteResultListScreen(document['user_id']),
-                          ));
-                    },
+                    onTap: Functions.checkLogin()
+                        ? () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VoteResultListScreen(document['user_id']),
+                                ));
+                          }
+                        : null,
                     child: Card(
                       child: Column(children: [
                         ListTile(
@@ -122,56 +124,58 @@ class _MyFirestorePageState extends State<Chat> {
                           ],
                         ),
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 300)))),
-            Container(
-                padding: EdgeInsets.fromLTRB(4, 0, 2, 0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        flex: 6,
-                        child: TextFormField(
-                          autofocus: false,
-                          style: new TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black,
-                          ),
-                          decoration: new InputDecoration(
-                            hintText: 'コメントを追加',
-                          ),
-                          onChanged: (value) {
-                            chatText = value;
-                          },
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          child: const Text('送る'),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                            onPrimary: Colors.white,
-                          ),
-                          onPressed: () {
-                            FirebaseFirestore.instance
-                                .collection("chats")
-                                .doc()
-                                .set(({
-                                  "text": chatText,
-                                  "user_id":
-                                      FirebaseAuth.instance.currentUser!.uid,
-                                  "bout_id": widget.boutId,
-                                  "user_name": FirebaseAuth
-                                      .instance.currentUser!.displayName,
-                                  "time": Timestamp.fromDate(DateTime.now())
-                                }))
-                                .then((value) => {
-                                      chatText = "",
-                                      FocusScope.of(context).unfocus(),
-                                      fetchChatData()
-                                    });
-                          },
-                        )),
-                  ],
-                ))
+            Visibility(
+                visible: Functions.checkLogin(),
+                child: Container(
+                    padding: EdgeInsets.fromLTRB(4, 0, 2, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                            flex: 6,
+                            child: TextFormField(
+                              autofocus: false,
+                              style: new TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                              ),
+                              decoration: new InputDecoration(
+                                hintText: 'コメントを追加',
+                              ),
+                              onChanged: (value) {
+                                chatText = value;
+                              },
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              child: const Text('送る'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.orange,
+                                onPrimary: Colors.white,
+                              ),
+                              onPressed: () {
+                                FirebaseFirestore.instance
+                                    .collection("chats")
+                                    .doc()
+                                    .set(({
+                                      "text": chatText,
+                                      "user_id": FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      "bout_id": widget.boutId,
+                                      "user_name": FirebaseAuth
+                                          .instance.currentUser!.displayName,
+                                      "time": Timestamp.fromDate(DateTime.now())
+                                    }))
+                                    .then((value) => {
+                                          chatText = "",
+                                          FocusScope.of(context).unfocus(),
+                                          fetchChatData()
+                                        });
+                              },
+                            )),
+                      ],
+                    )))
           ],
         ),
       ),

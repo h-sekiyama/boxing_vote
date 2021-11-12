@@ -1,4 +1,6 @@
+import 'package:boxing_vote/common/Functions.dart';
 import 'package:boxing_vote/screens/add_bout_info_screen.dart';
+import 'package:boxing_vote/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import '../common/Tabs.dart';
 import '../widgets/bout_list/bouts_list.dart';
@@ -6,7 +8,7 @@ import '../widgets/bout_list/bouts_list.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen(this.isList, this.sports);
   bool isList; // 試合一覧画面か否か
-  String sports = ""; // 選択中の種目
+  String sports = "全て"; // 選択中の種目
   String headerText = "";
 
   @override
@@ -16,17 +18,32 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('${headerText}'),
           actions: [
-            Visibility(
-                visible: isList,
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddBoutInfoScreen()))
+            Row(children: [
+              Visibility(
+                  visible: isList && Functions.checkLogin(),
+                  child: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddBoutInfoScreen()))
+                    },
+                  )),
+              Visibility(
+                visible: !Functions.checkLogin(),
+                child: TextButton(
+                  child: const Text('ログイン'),
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AuthScreen()));
                   },
-                ))
+                ),
+              )
+            ])
           ],
         ),
         drawer: Drawer(

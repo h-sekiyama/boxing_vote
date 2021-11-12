@@ -1,3 +1,4 @@
+import 'package:boxing_vote/screens/auth_screen.dart';
 import 'package:boxing_vote/screens/vote_result_list_screen.dart';
 import 'package:boxing_vote/screens/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,14 +43,15 @@ class _MyFirestorePageState extends State<Other> {
                 },
               ),
               ElevatedButton(
-                child: Text("サインアウト"),
+                child: Text("ログアウト"),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.orange,
                   onPrimary: Colors.white,
                 ),
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AuthScreen()));
                 },
               ),
             ]),

@@ -1,6 +1,7 @@
 import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/screens/send_bout_result_screen.dart';
+import 'package:boxing_vote/widgets/auth/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../common/Functions.dart';
@@ -9,7 +10,7 @@ import '../../screens/chat_screen.dart';
 class BoutsList extends StatefulWidget {
   BoutsList(this.isList, this.sports);
   bool isList;
-  String sports = "";
+  String sports;
 
   @override
   _MyFirestorePageState createState() => _MyFirestorePageState();
@@ -64,21 +65,30 @@ class _MyFirestorePageState extends State<BoutsList> {
                   visible: document["wrong_info_count"] < totalVotedCount ||
                       totalVotedCount < 10,
                   child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    // 試合結果画面からの遷移でかつ試合結果がまだ集計中の場合は投票画面に遷移、それ以外は試合詳細画面に遷移
-                                    !widget.isList && document['result'] == 0
-                                        ? SendBoutResultScreen(document.id)
-                                        : BoutDetailScreen(
-                                            document.id, widget.isList))).then(
-                            (value) {
-                          // 遷移先から戻って来た際に再度試合情報を読み込む
-                          fetchBoutData();
-                        });
-                      },
+                      onTap: Functions.checkLogin()
+                          ? () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          // 試合結果画面からの遷移でかつ試合結果がまだ集計中の場合は投票画面に遷移、それ以外は試合詳細画面に遷移
+                                          !widget.isList &&
+                                                  document['result'] == 0
+                                              ? SendBoutResultScreen(
+                                                  document.id)
+                                              : BoutDetailScreen(document.id,
+                                                  widget.isList))).then(
+                                  (value) {
+                                // 遷移先から戻って来た際に再度試合情報を読み込む
+                                fetchBoutData();
+                              });
+                            }
+                          : () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AuthCheck()));
+                            },
                       child: Card(
                         child: Column(children: [
                           ListTile(

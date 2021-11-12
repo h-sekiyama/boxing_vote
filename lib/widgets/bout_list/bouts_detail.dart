@@ -23,14 +23,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
   String fighter2 = "";
   // 試合日程テキスト
   String fightDateText = "";
-  // 選手1のKO勝利予想数
-  int vote1 = 0;
-  // 選手1の判定勝利予想数
-  int vote2 = 0;
-  // 選手2のKO勝利予想数
-  int vote3 = 0;
-  // 選手2の判定勝利予想数
-  int vote4 = 0;
+  // 予想数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
+  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  int myVote = 0;
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち, 99: 引き分け/無効試合）
   String myVoteText = "勝敗予想していません";
   // 試合結果
@@ -60,11 +56,13 @@ class _MyFirestorePageState extends State<BoutDetail> {
                 Container(
                     width: 180,
                     color: Colors.red[100],
-                    child: Text('${vote1 + vote2}人勝ち予想')),
+                    child: Text(
+                        (voteCount[1]! + voteCount[2]!).toString() + "人勝ち予想")),
                 Container(
                     width: 180,
                     color: Colors.indigo[200],
-                    child: Text('${vote3 + vote4}人勝ち予想'))
+                    child: Text(
+                        (voteCount[3]! + voteCount[4]!).toString() + "人勝ち予想"))
               ]),
               Visibility(
                   visible: !widget.isDetail,
@@ -136,7 +134,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                       .doc(FirebaseAuth
                                           .instance.currentUser!.uid)
                                       .update({
-                                    "votes.${widget.boutId}": 0,
+                                    "votes.${widget.boutId}": 0
                                   }).then((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -155,10 +153,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   margin: EdgeInsets.all(20),
                   child: Column(children: [
                     Text("みんなの勝敗予想"),
-                    Text("${fighter1}のKO/TKO/一本勝ち：${vote1}"),
-                    Text("${fighter1}の判定勝ち：${vote2}"),
-                    Text("${fighter2}のKO/TKO/一本勝ち：${vote3}"),
-                    Text("${fighter2}の判定勝ち：${vote4}"),
+                    Text("${fighter1}のKO/TKO/一本勝ち：${voteCount[1]}"),
+                    Text("${fighter1}の判定勝ち：${voteCount[2]}"),
+                    Text("${fighter2}のKO/TKO/一本勝ち：${voteCount[3]}"),
+                    Text("${fighter2}の判定勝ち：${voteCount[4]}"),
                   ])),
               Visibility(
                 visible: widget.isDetail && !isSentWrongInfo,
@@ -183,28 +181,49 @@ class _MyFirestorePageState extends State<BoutDetail> {
                               onPressed: () => Navigator.pop(context),
                             ),
                             ElevatedButton(
-                              child: Text("間違っている"),
-                              onPressed: () => {
-                                fetchBoutData(),
-                                FirebaseFirestore.instance
-                                    .collection("bouts")
-                                    .doc(widget.boutId)
-                                    .update({
-                                  "wrong_info_count": wrongInfoCount + 1
-                                }).then((_) {
-                                  FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser!.uid)
-                                      .update({
-                                    "votes.${widget.boutId}": -1,
-                                  }).then((_) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  });
-                                })
-                              },
-                            ),
+                                child: Text("間違っている"),
+                                onPressed: () {
+                                  fetchBoutData();
+                                  // 投票済みなら投票情報削除
+                                  if (myVote != 0) {
+                                    FirebaseFirestore.instance
+                                        .collection("bouts")
+                                        .doc(widget.boutId)
+                                        .update({
+                                      "vote${myVote}": voteCount[myVote]! - 1,
+                                      "wrong_info_count": wrongInfoCount + 1
+                                    }).then((_) {
+                                      FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .update({
+                                        "votes.${widget.boutId}": -1,
+                                      }).then((_) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
+                                    });
+                                  } else {
+                                    FirebaseFirestore.instance
+                                        .collection("bouts")
+                                        .doc(widget.boutId)
+                                        .update({
+                                      "wrong_info_count": wrongInfoCount + 1
+                                    }).then((_) {
+                                      FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .update({
+                                        "votes.${widget.boutId}": -1,
+                                      }).then((_) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
+                                    });
+                                  }
+                                }),
                           ],
                         );
                       },
@@ -243,10 +262,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
         } else if (ref['result'] == 99) {
           resultText = '引き分けまたは無効試合';
         }
-        vote1 = ref.get("vote1");
-        vote2 = ref.get("vote2");
-        vote3 = ref.get("vote3");
-        vote4 = ref.get("vote4");
+        voteCount[1] = ref.get("vote1");
+        voteCount[2] = ref.get("vote2");
+        voteCount[3] = ref.get("vote3");
+        voteCount[4] = ref.get("vote4");
         boutName = ref.get("event_name");
         fightDateText = Functions.dateToString(ref.get("fight_date").toDate());
         wrongInfoCount = ref.get("wrong_info_count");
@@ -264,18 +283,23 @@ class _MyFirestorePageState extends State<BoutDetail> {
       setState(() {
         switch (ref.get("votes")[widget.boutId]) {
           case 1:
+            myVote = 1;
             myVoteText = "${fighter1}のKO/TKO/一本勝ち";
             break;
           case 2:
+            myVote = 2;
             myVoteText = "${fighter1}の判定勝ち";
             break;
           case 3:
+            myVote = 3;
             myVoteText = "${fighter2}のKO/TKO/一本勝ち";
             break;
           case 4:
+            myVote = 4;
             myVoteText = "${fighter2}の判定勝ち";
             break;
           case -1:
+            myVote = -1;
             myVoteText = "試合情報の誤り報告済み";
             isSentWrongInfo = true;
             break;

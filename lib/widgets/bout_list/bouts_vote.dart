@@ -67,18 +67,28 @@ class _MyFirestorePageState extends State<BoutVote> {
                       "votes.${boutId}": voteResult,
                     }).then((_) {
                       // 投票数を更新
-                      FirebaseFirestore.instance
-                          .collection("bouts")
-                          .doc(boutId)
-                          .update({
-                        "vote${nowVote}": voteCount[nowVote]! + 1,
-                        "vote${myVote}": myVote != 0
-                            ? voteCount[myVote]! - 1
-                            : voteCount[myVote]
-                      }).then((value) {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      if (myVote != 0) {
+                        FirebaseFirestore.instance
+                            .collection("bouts")
+                            .doc(boutId)
+                            .update({
+                          "vote${nowVote}": voteCount[nowVote]! + 1,
+                          "vote${myVote}": voteCount[myVote]! - 1
+                        }).then((value) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        FirebaseFirestore.instance
+                            .collection("bouts")
+                            .doc(boutId)
+                            .update({
+                          "vote${nowVote}": voteCount[nowVote]! + 1
+                        }).then((value) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
+                      }
                     })
                   }
                 else

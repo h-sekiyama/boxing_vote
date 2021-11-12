@@ -1,3 +1,4 @@
+import 'package:boxing_vote/common/Functions.dart';
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:boxing_vote/screens/other_screen.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +47,13 @@ class _MyFirestorePageState extends State<Tabs> {
             currentIndex = index;
             break;
           case 2:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OtherScreen(),
-                    fullscreenDialog: true));
+            Functions.checkLogin()
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OtherScreen(),
+                        fullscreenDialog: true))
+                : null;
             currentIndex = index;
             break;
         }

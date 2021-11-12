@@ -1,3 +1,4 @@
+import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'widgets/auth/auth_check.dart';
@@ -15,11 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Firebase CookBook',
+      title: '格闘技勝敗予想アプリ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AuthCheck(),
+      home: HomeScreen(true, "全て"),
     );
   }
 }

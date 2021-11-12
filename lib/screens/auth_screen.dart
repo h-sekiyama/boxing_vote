@@ -14,6 +14,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           ElevatedButton(
             onPressed: () {
@@ -22,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
               });
             },
             child: Text(
-              "サインイン",
+              "ログイン",
               style: TextStyle(
                 color: Colors.white,
               ),

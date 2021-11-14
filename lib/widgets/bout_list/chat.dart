@@ -31,6 +31,8 @@ class _MyFirestorePageState extends State<Chat> {
   FirebaseStorage storage = FirebaseStorage.instance;
   // ユーザーアイコンマップ
   Map<String, String> userImagreMap = {};
+  // 自分のユーザーID
+  var ownId = FirebaseAuth.instance.currentUser!.uid;
 
   void initState() {
     fetchBoutData();
@@ -81,33 +83,60 @@ class _MyFirestorePageState extends State<Chat> {
                                 ));
                           }
                         : null,
-                    child: Card(
-                      child: Column(children: [
-                        ListTile(
-                          leading: Container(
-                              width: 80,
-                              height: 80,
-                              child: FutureBuilder(
-                                future: downloadImage(document['user_id']),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<String> snapshot) {
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data != "no image") {
-                                      return Image.network(snapshot.data!);
-                                    } else {
-                                      return Image.asset('images/cat.png');
-                                    }
-                                  } else {
-                                    return Image.asset('images/cat.png');
-                                  }
-                                },
-                              )),
-                          title: Text('${document['user_name']}'),
-                          subtitle: Text('${document['text']}'),
-                          trailing: Text(Functions.dateToStringTime(time)),
-                        ),
-                      ]),
-                    ));
+                    child: Column(
+                        crossAxisAlignment: document['user_id'] == ownId
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                        children: [
+                          // 日付
+                          Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.fromLTRB(0, 8, 8, 0),
+                              child: (Text(Functions.dateToStringTime(time),
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey)))),
+                          // 吹き出し
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              child: Card(
+                                color: document['user_id'] == ownId
+                                    ? Color(0xff90BB9F)
+                                    : Color(0xffffffff),
+                                child: Column(children: [
+                                  ListTile(
+                                    leading: document['user_id'] != ownId
+                                        ? Container(
+                                            width: 80,
+                                            height: 80,
+                                            child: FutureBuilder(
+                                              future: downloadImage(
+                                                  document['user_id']),
+                                              builder: (BuildContext context,
+                                                  AsyncSnapshot<String>
+                                                      snapshot) {
+                                                if (snapshot.hasData) {
+                                                  if (snapshot.data !=
+                                                      "no image") {
+                                                    return Image.network(
+                                                        snapshot.data!);
+                                                  } else {
+                                                    return Image.asset(
+                                                        'images/cat.png');
+                                                  }
+                                                } else {
+                                                  return Image.asset(
+                                                      'images/cat.png');
+                                                }
+                                              },
+                                            ))
+                                        : null,
+                                    title: Text('${document['user_name']}'),
+                                    subtitle: Text('${document['text']}'),
+                                  ),
+                                ]),
+                              ))
+                        ]));
               }).toList(),
             )),
             Visibility(

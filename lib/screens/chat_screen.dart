@@ -16,7 +16,15 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
           actions: [],
+          title: Text("チャット", style: TextStyle(fontWeight: FontWeight.bold)),
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: Chat(boutId),
         bottomNavigationBar: Tabs());

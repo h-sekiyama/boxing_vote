@@ -10,8 +10,15 @@ class AddBoutInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("試合情報追加"),
+          elevation: 0.0,
+          title: Text("試合情報追加", style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [],
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: AddBoutInfo(),
         bottomNavigationBar: Tabs());

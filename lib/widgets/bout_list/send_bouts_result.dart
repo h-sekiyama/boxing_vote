@@ -217,16 +217,6 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         .get()
         .then((ref) {
       setState(() {
-        sentResultCount[1] = ref.get("sentResult1");
-        sentResultCount[2] = ref.get("sentResult2");
-        sentResultCount[3] = ref.get("sentResult3");
-        sentResultCount[4] = ref.get("sentResult4");
-        totalVotedCount = ref.get("vote1") +
-            ref.get("vote2") +
-            ref.get("vote3") +
-            ref.get("vote4");
-      });
-      setState(() {
         boutName = ref.get("event_name");
       });
       setState(() {
@@ -249,6 +239,16 @@ class _MyFirestorePageState extends State<SendBoutResult> {
       });
       setState(() {
         fightDate = ref.get("fight_date").toDate();
+      });
+      setState(() {
+        sentResultCount[1] = ref.get("sentResult1");
+        sentResultCount[2] = ref.get("sentResult2");
+        sentResultCount[3] = ref.get("sentResult3");
+        sentResultCount[4] = ref.get("sentResult4");
+        totalVotedCount = ref.get("vote1") +
+            ref.get("vote2") +
+            ref.get("vote3") +
+            ref.get("vote4");
       });
     });
   }

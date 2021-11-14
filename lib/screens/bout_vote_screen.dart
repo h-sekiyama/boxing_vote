@@ -17,7 +17,15 @@ class BoutVoteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
           actions: [],
+          title: Text("勝敗予想", style: TextStyle(fontWeight: FontWeight.bold)),
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: BoutVote(id),
         bottomNavigationBar: Tabs());

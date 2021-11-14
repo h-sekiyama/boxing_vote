@@ -9,8 +9,16 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("プロフィール設定"),
+          elevation: 0.0,
+          title:
+              Text("プロフィール設定", style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [],
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: Profile(),
         bottomNavigationBar: Tabs());

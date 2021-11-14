@@ -16,7 +16,9 @@ class HomeScreen extends StatelessWidget {
     headerText = isList ? "試合予定（${sports}）" : "試合結果（${sports}）";
     return Scaffold(
         appBar: AppBar(
-          title: Text('${headerText}'),
+          elevation: 0.0,
+          title: Text("${headerText}",
+              style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [
             Row(children: [
               Visibility(
@@ -45,6 +47,12 @@ class HomeScreen extends StatelessWidget {
               )
             ])
           ],
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         drawer: Drawer(
           child: ListView(

@@ -14,9 +14,16 @@ class OtherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("その他"),
+          elevation: 0.0,
+          title: Text("その他", style: TextStyle(fontWeight: FontWeight.bold)),
           automaticallyImplyLeading: false,
           actions: [],
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: Other(),
         bottomNavigationBar: Tabs());

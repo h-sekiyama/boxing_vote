@@ -11,7 +11,15 @@ class BoutDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0.0,
+          title: Text("試合詳細", style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [],
+          bottom: PreferredSize(
+              child: Container(
+                color: Colors.black,
+                height: 2.0,
+              ),
+              preferredSize: Size.fromHeight(2.0)),
         ),
         body: BoutDetail(boutId, isDetail),
         bottomNavigationBar: Tabs());

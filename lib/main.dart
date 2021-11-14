@@ -1,3 +1,4 @@
+import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,9 +19,63 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '格闘技勝敗予想アプリ',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Common.primaryColor,
+        accentColor: Common.accentColor,
+        primaryIconTheme: IconThemeData(color: Colors.black),
+        scaffoldBackgroundColor: Common.scaffoldBackgroundColor,
       ),
       home: HomeScreen(true, "全て"),
     );
   }
+}
+
+class Common {
+  static const int _primaryValue = 0xffffffff;
+  static const MaterialColor primaryColor = MaterialColor(
+    _primaryValue,
+    <int, Color>{
+      50: Color(0xFFFFFFFF),
+      100: Color(0xFFFFFFFF),
+      200: Color(0xFFFFFFFF),
+      300: Color(0xFFFFFFFF),
+      400: Color(0xFFFFFFFF),
+      500: Color(_primaryValue),
+      600: Color(0xFFFFFFFF),
+      700: Color(0xFFFFFFFF),
+      800: Color(0xFFFFFFFF),
+      900: Color(0xFFFFFFFF),
+    },
+  );
+
+  static const int _accentValue = 0xff642517;
+  static const MaterialColor accentColor =
+      MaterialColor(_accentValue, <int, Color>{
+    50: Color(0xFFFFFFFF),
+    100: Color(0xFFFFFFFF),
+    200: Color(0xFFFFFFFF),
+    300: Color(0xFFFFFFFF),
+    400: Color(0xFFFFFFFF),
+    500: Color(_accentValue),
+    600: Color(0xFFFFFFFF),
+    700: Color(0xFFFFFFFF),
+    800: Color(0xFFFFFFFF),
+    900: Color(0xFFFFFFFF),
+  });
+
+  static const int _scaffoldBackgroundValue = 0xffFFE574;
+  static const MaterialColor scaffoldBackgroundColor = MaterialColor(
+    _scaffoldBackgroundValue,
+    <int, Color>{
+      50: Color(0xFFFFFFFF),
+      100: Color(0xFFFFFFFF),
+      200: Color(0xFFFFFFFF),
+      300: Color(0xFFFFFFFF),
+      400: Color(0xFFFFFFFF),
+      500: Color(_scaffoldBackgroundValue),
+      600: Color(0xFFFFFFFF),
+      700: Color(0xFFFFFFFF),
+      800: Color(0xFFFFFFFF),
+      900: Color(0xFFFFFFFF),
+    },
+  );
 }

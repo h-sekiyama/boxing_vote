@@ -14,6 +14,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         automaticallyImplyLeading: false,
         actions: [
           ElevatedButton(
@@ -43,6 +44,12 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           )
         ],
+        bottom: PreferredSize(
+            child: Container(
+              color: Colors.black,
+              height: 2.0,
+            ),
+            preferredSize: Size.fromHeight(2.0)),
       ),
       body: Center(
         child: _isSignIn

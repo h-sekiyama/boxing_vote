@@ -47,23 +47,116 @@ class _MyFirestorePageState extends State<BoutDetail> {
         child: Column(
           children: <Widget>[
             Column(children: [
-              Column(children: [
-                Text(fightDateText),
-                Text(boutName),
-                Text('${fighter1} VS ${fighter2}'),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                Container(
-                    width: 180,
-                    color: Colors.red[100],
-                    child: Text(
-                        (voteCount[1]! + voteCount[2]!).toString() + "人勝ち予想")),
-                Container(
-                    width: 180,
-                    color: Colors.indigo[200],
-                    child: Text(
-                        (voteCount[3]! + voteCount[4]!).toString() + "人勝ち予想"))
-              ]),
+              Container(
+                margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
+                child: Text(fightDateText + " / " + boutName,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: Card(
+                  child: Column(children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(4, 30, 4, 10),
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                              child: Text('${fighter1}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      color: Color(0xffFF4B4B)))),
+                          Container(
+                              width: 50,
+                              child: Text('VS',
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                          Flexible(
+                              child: Text('${fighter2}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                      color: Color(0xff4B9EFF)))),
+                        ],
+                      ),
+                    ),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: 8,
+                        margin: EdgeInsets.fromLTRB(0, 12, 4, 4),
+                        child: LinearProgressIndicator(
+                          value: voteCount[1]!.toDouble() +
+                                      voteCount[2]!.toDouble() +
+                                      voteCount[3]!.toDouble() +
+                                      voteCount[4]!.toDouble() !=
+                                  0
+                              ? (voteCount[1]!.toDouble() +
+                                      voteCount[2]!.toDouble()) /
+                                  (voteCount[1]!.toDouble() +
+                                      voteCount[2]!.toDouble() +
+                                      voteCount[3]!.toDouble() +
+                                      voteCount[4]!.toDouble())
+                              : 0,
+                          backgroundColor: Color(0xff4B9EFF),
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.red),
+                        )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(left: 14),
+                            child: Text(
+                                (voteCount[1]! + voteCount[2]!).toString() +
+                                    "人勝ち予想",
+                                textAlign: TextAlign.left)),
+                        Container(
+                            margin: EdgeInsets.only(right: 14),
+                            child: Text(
+                                (voteCount[3]! + voteCount[4]!).toString() +
+                                    "人勝ち予想",
+                                textAlign: TextAlign.right))
+                      ],
+                    ),
+                    Visibility(
+                        visible: widget.isDetail && !isSentWrongInfo,
+                        child: SizedBox(
+                            width: 187,
+                            height: 38,
+                            child: (TextButton(
+                              child: const Text('投票する',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              style: ElevatedButton.styleFrom(
+                                primary: HexColor('000000'),
+                                onPrimary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              onPressed: () async {
+                                // 投票画面から戻ったら再度試合情報を読み込む
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BoutVoteScreen(widget.boutId),
+                                    ));
+                                fetchBoutData();
+                              },
+                            )))),
+                    Container(
+                        margin: EdgeInsets.fromLTRB(4, 8, 4, 24),
+                        child: Column(children: [
+                          Text("あなたの予想：${myVoteText}",
+                              style: TextStyle(color: Color(0xffdadada)))
+                        ])),
+                  ]),
+                ),
+              ),
               Visibility(
                   visible: !widget.isDetail,
                   child: Container(
@@ -75,29 +168,6 @@ class _MyFirestorePageState extends State<BoutDetail> {
                             Text(resultText,
                                 style: TextStyle(color: HexColor('ff0000'))),
                           ]))),
-              Container(
-                  margin: EdgeInsets.all(8),
-                  child: Column(
-                      children: [Text("あなたの予想"), Text("${myVoteText}")])),
-              Visibility(
-                visible: widget.isDetail && !isSentWrongInfo,
-                child: ElevatedButton(
-                  child: const Text('投票する'),
-                  style: ElevatedButton.styleFrom(
-                    primary: HexColor('ff0099'),
-                    onPrimary: Colors.white,
-                  ),
-                  onPressed: () async {
-                    // 投票画面から戻ったら再度試合情報を読み込む
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BoutVoteScreen(widget.boutId),
-                        ));
-                    fetchBoutData();
-                  },
-                ),
-              ),
               Visibility(
                 visible: isSentWrongInfo,
                 child: ElevatedButton(

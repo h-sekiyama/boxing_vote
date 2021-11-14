@@ -141,12 +141,12 @@ class _MyFirestorePageState extends State<BoutsList> {
     if (widget.sports == "全て") {
       snapshot = await FirebaseFirestore.instance
           .collection('bouts')
-          .orderBy('fight_date', descending: true)
+          .orderBy('fight_date', descending: !widget.isList)
           .get();
     } else {
       snapshot = await FirebaseFirestore.instance
           .collection('bouts')
-          .orderBy('fight_date', descending: true)
+          .orderBy('fight_date', descending: !widget.isList)
           .where('sports', isEqualTo: widget.sports)
           .get();
     }

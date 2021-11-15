@@ -46,7 +46,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Column(children: [
+            Expanded(
+                child: Column(children: [
               Container(
                 margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
                 child: Text(fightDateText + " / " + boutName,
@@ -55,6 +56,9 @@ class _MyFirestorePageState extends State<BoutDetail> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.95,
                 child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   child: Column(children: [
                     Container(
                       margin: EdgeInsets.fromLTRB(4, 30, 4, 10),
@@ -222,86 +226,202 @@ class _MyFirestorePageState extends State<BoutDetail> {
               Container(
                   margin: EdgeInsets.all(20),
                   child: Column(children: [
-                    Text("みんなの勝敗予想"),
-                    Text("${fighter1}のKO/TKO/一本勝ち：${voteCount[1]}"),
-                    Text("${fighter1}の判定勝ち：${voteCount[2]}"),
-                    Text("${fighter2}のKO/TKO/一本勝ち：${voteCount[3]}"),
-                    Text("${fighter2}の判定勝ち：${voteCount[4]}"),
-                  ])),
-              Visibility(
-                visible: widget.isDetail && !isSentWrongInfo,
-                child: ElevatedButton(
-                  child: const Text('試合情報が間違っている'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red[300],
-                    onPrimary: Colors.white,
-                  ),
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return AlertDialog(
-                          title: Text("試合情報の誤り報告"),
-                          content: Text(
-                              "この試合情報に誤った情報が含まれますか？（報告が一定数を超えると試合情報が削除されます）"),
-                          actions: [
-                            ElevatedButton(
-                              child: Text("正しい"),
-                              onPressed: () => Navigator.pop(context),
+                    Text("みんなの勝敗予想",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Table(
+                      defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                      children: <TableRow>[
+                        TableRow(children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                              border: const Border(
+                                right: const BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                bottom: const BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
                             ),
-                            ElevatedButton(
-                                child: Text("間違っている"),
-                                onPressed: () {
-                                  fetchBoutData();
-                                  // 投票済みなら投票情報削除
-                                  if (myVote != 0) {
-                                    FirebaseFirestore.instance
-                                        .collection("bouts")
-                                        .doc(widget.boutId)
-                                        .update({
-                                      "vote${myVote}": voteCount[myVote]! - 1,
-                                      "wrong_info_count": wrongInfoCount + 1
-                                    }).then((_) {
+                            padding: EdgeInsets.all(2),
+                            child: Center(
+                              child: Text(fighter1,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: const Border(
+                                bottom: const BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(2),
+                            child: Center(
+                              child: Text(
+                                fighter2,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                              border: const Border(
+                                right: const BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(2),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    child: Text("KO/TKO/一本勝ち "),
+                                  ),
+                                  Text(voteCount[1].toString())
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    child: Text("判定勝ち "),
+                                  ),
+                                  Text(voteCount[2].toString())
+                                ],
+                              ),
+                            ]),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(2),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    child: Text("KO/TKO/一本勝ち "),
+                                  ),
+                                  Text(
+                                    voteCount[3].toString(),
+                                    textAlign: TextAlign.right,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    width: 120,
+                                    child: Text("判定勝ち "),
+                                  ),
+                                  Text(voteCount[4].toString())
+                                ],
+                              ),
+                            ]),
+                          ),
+                        ]),
+                      ],
+                    ),
+                  ])),
+            ])),
+            Container(
+                margin: EdgeInsets.all(16),
+                child: Visibility(
+                  visible: widget.isDetail && !isSentWrongInfo,
+                  child: GestureDetector(
+                    child: Text("試合情報が間違っている",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.black)),
+                    onTap: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text("試合情報の誤り報告"),
+                            content: Text(
+                                "この試合情報に誤った情報が含まれますか？（報告が一定数を超えると試合情報が削除されます）"),
+                            actions: [
+                              ElevatedButton(
+                                child: Text("正しい"),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              ElevatedButton(
+                                  child: Text("間違っている"),
+                                  onPressed: () {
+                                    fetchBoutData();
+                                    // 投票済みなら投票情報削除
+                                    if (myVote != 0) {
                                       FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.uid)
+                                          .collection("bouts")
+                                          .doc(widget.boutId)
                                           .update({
-                                        "votes.${widget.boutId}": -1,
+                                        "vote${myVote}": voteCount[myVote]! - 1,
+                                        "wrong_info_count": wrongInfoCount + 1
                                       }).then((_) {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
+                                        FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                            .update({
+                                          "votes.${widget.boutId}": -1,
+                                        }).then((_) {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        });
                                       });
-                                    });
-                                  } else {
-                                    FirebaseFirestore.instance
-                                        .collection("bouts")
-                                        .doc(widget.boutId)
-                                        .update({
-                                      "wrong_info_count": wrongInfoCount + 1
-                                    }).then((_) {
+                                    } else {
                                       FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.uid)
+                                          .collection("bouts")
+                                          .doc(widget.boutId)
                                           .update({
-                                        "votes.${widget.boutId}": -1,
+                                        "wrong_info_count": wrongInfoCount + 1
                                       }).then((_) {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
+                                        FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                            .update({
+                                          "votes.${widget.boutId}": -1,
+                                        }).then((_) {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        });
                                       });
-                                    });
-                                  }
-                                }),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              )
-            ])
+                                    }
+                                  }),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ))
           ],
         ),
       ),

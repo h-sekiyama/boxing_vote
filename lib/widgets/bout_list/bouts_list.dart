@@ -122,7 +122,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold))),
                                 Flexible(
-                                    child: Text(document['fighter1'],
+                                    child: Text(document['fighter2'],
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24,

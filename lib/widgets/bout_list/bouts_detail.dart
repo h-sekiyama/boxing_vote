@@ -131,9 +131,13 @@ class _MyFirestorePageState extends State<BoutDetail> {
                             width: 187,
                             height: 38,
                             child: (TextButton(
-                              child: const Text('投票する',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                              child: myVote == 0
+                                  ? Text('投票する',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))
+                                  : Text('投票しなおす',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
                               style: ElevatedButton.styleFrom(
                                 primary: HexColor('000000'),
                                 onPrimary: Colors.white,

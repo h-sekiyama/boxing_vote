@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
@@ -222,15 +223,45 @@ class _MyFirestorePageState extends State<Profile> {
     }
   }
 
+  /// Crop Image
+  Future<File?> _cropImage(filePath) async {
+    File? croppedImage = await ImageCropper.cropImage(
+      sourcePath: filePath,
+      maxWidth: 1080,
+      maxHeight: 1080,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      androidUiSettings: AndroidUiSettings(
+        statusBarColor: Colors.black,
+        toolbarTitle: "",
+        toolbarColor: Colors.black,
+        toolbarWidgetColor: Colors.white,
+        backgroundColor: Colors.black,
+        cropFrameColor: Colors.transparent,
+        showCropGrid: false,
+        hideBottomControls: true,
+        initAspectRatio: CropAspectRatioPreset.square,
+      ),
+      iosUiSettings: IOSUiSettings(
+        hidesNavigationBar: true,
+        aspectRatioPickerButtonHidden: true,
+        doneButtonTitle: "切り抜き",
+        cancelButtonTitle: "戻る",
+        aspectRatioLockEnabled: true,
+      ),
+    );
+    return croppedImage;
+  }
+
   Future _getImageFromGallery() async {
     final _pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (_pickedFile != null) {
-        selectedImage = File(_pickedFile.path);
+    if (_pickedFile != null) {
+      selectedImage = await _cropImage(_pickedFile.path);
+    }
+    if (selectedImage != null) {
+      setState(() {
         nowImage = Image.file(selectedImage!);
         isEnabled = true;
-      }
-    });
+      });
+    }
   }
 }

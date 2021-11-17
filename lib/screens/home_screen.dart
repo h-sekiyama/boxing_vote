@@ -35,7 +35,11 @@ class HomeScreen extends StatelessWidget {
               Visibility(
                 visible: !Functions.checkLogin(),
                 child: TextButton(
-                  child: const Text('ログイン'),
+                  child: const Text('ログイン',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Color(0xff000000))),
                   style: TextButton.styleFrom(
                     primary: Colors.white,
                   ),

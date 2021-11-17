@@ -55,12 +55,15 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           });
 
           // ユーザー情報をDBに追加
+          var obj = {
+            "name": _name,
+            "votes": {},
+          };
           FirebaseFirestore.instance
               .collection("users")
               .doc(authResult.user!.uid)
-              .set({
-            "name": _name,
-          }).then((_) {
+              .set(obj)
+              .then((_) {
             // 表示名も更新
             FirebaseAuth.instance.currentUser!
                 .updateProfile(displayName: _name);

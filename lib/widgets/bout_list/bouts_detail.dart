@@ -30,6 +30,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
   // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち, 99: 引き分け/無効試合）
   String myVoteText = "勝敗予想していません";
   // 試合結果
+  int result = 0;
+  // 試合結果テキスト
   String resultText = "集計中";
   // 試合の間違い報告数
   int wrongInfoCount = 0;
@@ -156,26 +158,91 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                 fetchBoutData();
                               },
                             )))),
+                    // 試合結果
+                    Visibility(
+                      visible: !widget.isDetail,
+                      child: Container(
+                        width: 360,
+                        height: 82,
+                        margin: EdgeInsets.only(top: 6),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('images/bout_result_back.png'),
+                          fit: BoxFit.cover,
+                        )),
+                        child: Center(
+                          child: Container(
+                              width: 190,
+                              child: Text(
+                                resultText,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                      ),
+                    ),
                     Container(
-                        margin: EdgeInsets.fromLTRB(4, 8, 4, 24),
+                        margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
                         child: Column(children: [
                           Text("あなたの予想：${myVoteText}",
-                              style: TextStyle(color: Color(0xffdadada)))
+                              style: TextStyle(
+                                  color: Color(0xff000000),
+                                  fontWeight: FontWeight.bold))
                         ])),
+                    // 予想結果
+                    Visibility(
+                      visible: !widget.isDetail &&
+                          myVote == result &&
+                          myVote != 0 &&
+                          result != 99,
+                      child: Container(
+                        width: 300,
+                        height: 102,
+                        margin: EdgeInsets.only(top: 0),
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('images/bout_result_mark.png'),
+                          fit: BoxFit.cover,
+                        )),
+                        child: Center(
+                          child: Container(
+                              child: Text(
+                            '予想的中！',
+                            style: TextStyle(
+                                color: Color(0xff857900),
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: !widget.isDetail &&
+                          myVote != result &&
+                          myVote != 0 &&
+                          result != 99,
+                      child: Container(
+                        width: 300,
+                        height: 102,
+                        margin: EdgeInsets.only(top: 0),
+                        child: Center(
+                          child: Container(
+                              child: Text(
+                            '予想はずれ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 24))
                   ]),
                 ),
               ),
-              Visibility(
-                  visible: !widget.isDetail,
-                  child: Container(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("結果："),
-                            Text(resultText,
-                                style: TextStyle(color: HexColor('ff0000'))),
-                          ]))),
               Visibility(
                 visible: isSentWrongInfo,
                 child: ElevatedButton(
@@ -446,14 +513,19 @@ class _MyFirestorePageState extends State<BoutDetail> {
         if (ref['result'] == 0) {
           resultText = "結果集計中";
         } else if (ref['result'] == 1) {
+          result = 1;
           resultText = '${fighter1}のKO/TKO/一本勝ち';
         } else if (ref['result'] == 2) {
+          result = 2;
           resultText = '${fighter1}の判定勝ち';
         } else if (ref['result'] == 3) {
+          result = 3;
           resultText = '${fighter2}のKO/TKO/一本勝ち';
         } else if (ref['result'] == 4) {
+          result = 4;
           resultText = '${fighter2}の判定勝ち';
         } else if (ref['result'] == 99) {
+          result = 99;
           resultText = '引き分けまたは無効試合';
         }
         voteCount[1] = ref.get("vote1");

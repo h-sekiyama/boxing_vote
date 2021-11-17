@@ -239,20 +239,6 @@ class _MyFirestorePageState extends State<BoutVote> {
         boutName = ref.get("event_name");
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
-        switch (ref.get("my_vote")) {
-          case 1:
-            myVoteText = "${fighter1}のKO勝ち";
-            break;
-          case 2:
-            myVoteText = "${fighter1}の判定勝ち";
-            break;
-          case 3:
-            myVoteText = "${fighter2}のKO勝ち";
-            break;
-          case 4:
-            myVoteText = "${fighter2}の判定勝ち";
-            break;
-        }
       });
     });
   }
@@ -268,15 +254,19 @@ class _MyFirestorePageState extends State<BoutVote> {
         switch (ref.get("votes")[widget.id]) {
           case 1:
             myVote = 1;
+            myVoteText = "${fighter1}のKO勝ち";
             break;
           case 2:
             myVote = 2;
+            myVoteText = "${fighter1}の判定勝ち";
             break;
           case 3:
             myVote = 3;
+            myVoteText = "${fighter2}のKO勝ち";
             break;
           case 4:
             myVote = 4;
+            myVoteText = "${fighter2}の判定勝ち";
             break;
           default:
             myVote = 0;

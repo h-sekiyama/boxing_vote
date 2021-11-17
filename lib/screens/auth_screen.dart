@@ -26,8 +26,9 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Text(
               "ログイン",
               style: TextStyle(
-                color: Colors.white,
-              ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Color(0xff000000)),
             ),
           ),
           ElevatedButton(
@@ -39,8 +40,9 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Text(
               "登録",
               style: TextStyle(
-                color: Colors.white,
-              ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Color(0xff000000)),
             ),
           )
         ],

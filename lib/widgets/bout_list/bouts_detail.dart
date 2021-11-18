@@ -438,16 +438,34 @@ class _MyFirestorePageState extends State<BoutDetail> {
                         barrierDismissible: false,
                         builder: (_) {
                           return AlertDialog(
-                            title: Text("試合情報の誤り報告"),
+                            title: Text("試合情報の間違い報告"),
                             content: Text(
-                                "この試合情報に誤った情報が含まれますか？（報告が一定数を超えると試合情報が削除されます）"),
+                                "この試合情報の間違い報告をしますか？（報告が一定数を超えると試合情報が削除されます）"),
                             actions: [
-                              ElevatedButton(
-                                child: Text("正しい"),
+                              TextButton(
+                                child: Text("キャンセル",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.black,
+                                  onPrimary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                                 onPressed: () => Navigator.pop(context),
                               ),
-                              ElevatedButton(
-                                  child: Text("間違っている"),
+                              TextButton(
+                                  child: Text("送る",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.black,
+                                    onPrimary: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
                                   onPressed: () {
                                     fetchBoutData();
                                     // 投票済みなら投票情報削除

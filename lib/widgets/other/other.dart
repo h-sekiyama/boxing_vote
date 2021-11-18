@@ -17,43 +17,70 @@ class _MyFirestorePageState extends State<Other> {
         child: Column(
           children: <Widget>[
             Column(children: [
-              ElevatedButton(
-                child: Text("プロフィール設定"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
-                },
-              ),
-              ElevatedButton(
-                child: Text("予想試合一覧"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => VoteResultListScreen(
-                              FirebaseAuth.instance.currentUser!.uid)));
-                },
-              ),
-              ElevatedButton(
-                child: Text("ログアウト"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AuthScreen()));
-                },
-              ),
+              Container(
+                  width: 187,
+                  height: 38,
+                  margin: EdgeInsets.fromLTRB(0, 30, 0, 14),
+                  child: (TextButton(
+                    child: Text("プロフィール設定",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen()));
+                    },
+                  ))),
+              Container(
+                  width: 187,
+                  height: 38,
+                  margin: EdgeInsets.fromLTRB(0, 8, 0, 14),
+                  child: (TextButton(
+                    child: Text("予想試合一覧",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VoteResultListScreen(
+                                  FirebaseAuth.instance.currentUser!.uid)));
+                    },
+                  ))),
+              Container(
+                  width: 187,
+                  height: 38,
+                  margin: EdgeInsets.fromLTRB(0, 8, 0, 14),
+                  child: (TextButton(
+                    child: Text("ログアウト",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AuthScreen()));
+                    },
+                  ))),
             ]),
           ],
         ),

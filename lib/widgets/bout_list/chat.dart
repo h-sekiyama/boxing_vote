@@ -38,6 +38,8 @@ class _MyFirestorePageState extends State<Chat> {
       TextEditingController(text: '');
   // 予想内容
   String voteDetail = "";
+  // 送信ボタンを押せるか否か
+  bool isEnabledSendButton = false;
 
   void initState() {
     fetchBoutData();
@@ -290,6 +292,15 @@ class _MyFirestorePageState extends State<Chat> {
                               ),
                               onChanged: (value) {
                                 chatText = value;
+                                if (value.length == 0) {
+                                  setState(() {
+                                    isEnabledSendButton = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    isEnabledSendButton = true;
+                                  });
+                                }
                               },
                             )),
                         Padding(padding: EdgeInsets.only(right: 8)),
@@ -306,26 +317,33 @@ class _MyFirestorePageState extends State<Chat> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: () {
-                                FirebaseFirestore.instance
-                                    .collection("chats")
-                                    .doc()
-                                    .set(({
-                                      "text": chatText,
-                                      "user_id": FirebaseAuth
-                                          .instance.currentUser!.uid,
-                                      "bout_id": widget.boutId,
-                                      "user_name": FirebaseAuth
-                                          .instance.currentUser!.displayName,
-                                      "time": Timestamp.fromDate(DateTime.now())
-                                    }))
-                                    .then((value) => {
-                                          chatText = "",
-                                          FocusScope.of(context).unfocus(),
-                                          fetchChatData(),
-                                          commentController.clear()
-                                        });
-                              },
+                              onPressed: isEnabledSendButton
+                                  ? () {
+                                      FirebaseFirestore.instance
+                                          .collection("chats")
+                                          .doc()
+                                          .set(({
+                                            "text": chatText,
+                                            "user_id": FirebaseAuth
+                                                .instance.currentUser!.uid,
+                                            "bout_id": widget.boutId,
+                                            "user_name": FirebaseAuth.instance
+                                                .currentUser!.displayName,
+                                            "time": Timestamp.fromDate(
+                                                DateTime.now())
+                                          }))
+                                          .then((value) => {
+                                                chatText = "",
+                                                FocusScope.of(context)
+                                                    .unfocus(),
+                                                fetchChatData(),
+                                                commentController.clear(),
+                                                setState(() {
+                                                  isEnabledSendButton = false;
+                                                })
+                                              });
+                                    }
+                                  : null,
                             )),
                       ],
                     )))

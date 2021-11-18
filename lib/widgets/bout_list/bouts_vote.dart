@@ -33,7 +33,6 @@ class _MyFirestorePageState extends State<BoutVote> {
 
   void initState() {
     fetchBoutData();
-    getMyVote();
   }
 
   @override
@@ -101,8 +100,17 @@ class _MyFirestorePageState extends State<BoutVote> {
                           title: Text("投票受付終了"),
                           content: Text("投票できる期間は試合日の前日までとなります。"),
                           actions: [
-                            ElevatedButton(
-                              child: Text("OK"),
+                            TextButton(
+                              child: Text("OK",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.black,
+                                onPrimary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -145,14 +153,34 @@ class _MyFirestorePageState extends State<BoutVote> {
             title: Text("勝敗予想"),
             content: Text(dialogText + "\n" + "予想内容は試合前日までは変更できます"),
             actions: [
-              ElevatedButton(
-                child: Text("やめる"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              ElevatedButton(
-                child: Text("投票する"),
-                onPressed: () => {voteBoutResult(voteResult, boutId)},
-              ),
+              Container(
+                  width: 400,
+                  child: TextButton(
+                    child: Text("やめる",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  )),
+              Container(
+                  width: 400,
+                  child: TextButton(
+                    child: Text("投票する",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xffFF764B),
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => {voteBoutResult(voteResult, boutId)},
+                  )),
             ],
           );
         },
@@ -164,58 +192,115 @@ class _MyFirestorePageState extends State<BoutVote> {
         child: Column(
           children: <Widget>[
             Column(children: [
-              Column(children: [
-                Text('${Functions.dateToString(fightDate)}'),
-                Text('${boutName}'),
-                Text('${fighter1} VS ${fighter2}'),
-              ]),
+              Material(
+                elevation: 1.0,
+                color: Color(0xffFFF8DC),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  margin: EdgeInsets.only(bottom: 6),
+                  color: Color(0xffFFF8DC),
+                  child: Column(children: [
+                    Text(
+                        '${Functions.dateToString(fightDate)}' +
+                            ' / ' +
+                            '${boutName}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
+                    Text('${fighter1} VS ${fighter2}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
+                  ]),
+                ),
+              ),
               Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(children: [Text("予想を投票する")])),
-              ElevatedButton(
-                child: Text("${fighter1}のKO/TKO/一本勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: myVote == 1 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowVote = 1;
-                  showConfirmDialog(nowVote, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter1}の判定勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: myVote == 2 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowVote = 2;
-                  showConfirmDialog(nowVote, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter2}のKO/TKO/一本勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: myVote == 3 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowVote = 3;
-                  showConfirmDialog(nowVote, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter2}の判定勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: myVote == 4 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowVote = 4;
-                  showConfirmDialog(nowVote, widget.id);
-                },
-              ),
+                  margin: EdgeInsets.all(10),
+                  child: Column(children: [
+                    Text("予想を投票する"),
+                    Text("あなたの予想：" + myVoteText,
+                        style: TextStyle(
+                            color: Color(0xff000000),
+                            fontWeight: FontWeight.bold))
+                  ])),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter1}のKO/TKO/一本勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: myVote != 1
+                        ? () {
+                            nowVote = 1;
+                            showConfirmDialog(nowVote, widget.id);
+                          }
+                        : null,
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter1}の判定勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: myVote != 2
+                        ? () {
+                            nowVote = 2;
+                            showConfirmDialog(nowVote, widget.id);
+                          }
+                        : null,
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter2}のKO/TKO/一本勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: myVote != 3
+                        ? () {
+                            nowVote = 3;
+                            showConfirmDialog(nowVote, widget.id);
+                          }
+                        : null,
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter2}の判定勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: myVote != 4
+                        ? () {
+                            nowVote = 4;
+                            showConfirmDialog(nowVote, widget.id);
+                          }
+                        : null,
+                  )),
             ])
           ],
         ),
@@ -240,6 +325,8 @@ class _MyFirestorePageState extends State<BoutVote> {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
       });
+    }).then((value) {
+      getMyVote();
     });
   }
 

@@ -264,33 +264,55 @@ class _MyFirestorePageState extends State<BoutDetail> {
                           title: Text("誤り報告を取り消す"),
                           content: Text("試合情報の誤り報告済みなので投票できません。誤り報告を取り消しますか？"),
                           actions: [
-                            ElevatedButton(
-                              child: Text("取り消さない"),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            ElevatedButton(
-                              child: Text("取り消す"),
-                              onPressed: () => {
-                                fetchBoutData(),
-                                FirebaseFirestore.instance
-                                    .collection("bouts")
-                                    .doc(widget.boutId)
-                                    .update({
-                                  "wrong_info_count": wrongInfoCount - 1
-                                }).then((_) {
-                                  FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser!.uid)
-                                      .update({
-                                    "votes.${widget.boutId}": 0
-                                  }).then((_) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  });
-                                })
-                              },
-                            ),
+                            Container(
+                                width: 400,
+                                child: ElevatedButton(
+                                  child: Text("取り消さない",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey,
+                                    onPrimary: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                )),
+                            Container(
+                                width: 400,
+                                child: ElevatedButton(
+                                  child: Text("取り消す",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.orange,
+                                    onPrimary: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () => {
+                                    fetchBoutData(),
+                                    FirebaseFirestore.instance
+                                        .collection("bouts")
+                                        .doc(widget.boutId)
+                                        .update({
+                                      "wrong_info_count": wrongInfoCount - 1
+                                    }).then((_) {
+                                      FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .update({
+                                        "votes.${widget.boutId}": 0
+                                      }).then((_) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
+                                    })
+                                  },
+                                )),
                           ],
                         );
                       },
@@ -442,72 +464,80 @@ class _MyFirestorePageState extends State<BoutDetail> {
                             content: Text(
                                 "この試合情報の間違い報告をしますか？（報告が一定数を超えると試合情報が削除されます）"),
                             actions: [
-                              TextButton(
-                                child: Text("キャンセル",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.black,
-                                  onPrimary: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                              TextButton(
-                                  child: Text("送る",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.black,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                              Container(
+                                  width: 400,
+                                  child: TextButton(
+                                    child: Text("キャンセル",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.grey,
+                                      onPrimary: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () {
-                                    fetchBoutData();
-                                    // 投票済みなら投票情報削除
-                                    if (myVote != 0) {
-                                      FirebaseFirestore.instance
-                                          .collection("bouts")
-                                          .doc(widget.boutId)
-                                          .update({
-                                        "vote${myVote}": voteCount[myVote]! - 1,
-                                        "wrong_info_count": wrongInfoCount + 1
-                                      }).then((_) {
-                                        FirebaseFirestore.instance
-                                            .collection("users")
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                            .update({
-                                          "votes.${widget.boutId}": -1,
-                                        }).then((_) {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        });
-                                      });
-                                    } else {
-                                      FirebaseFirestore.instance
-                                          .collection("bouts")
-                                          .doc(widget.boutId)
-                                          .update({
-                                        "wrong_info_count": wrongInfoCount + 1
-                                      }).then((_) {
-                                        FirebaseFirestore.instance
-                                            .collection("users")
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                            .update({
-                                          "votes.${widget.boutId}": -1,
-                                        }).then((_) {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        });
-                                      });
-                                    }
-                                  }),
+                                    onPressed: () => Navigator.pop(context),
+                                  )),
+                              Container(
+                                  width: 400,
+                                  child: TextButton(
+                                      child: Text("送る",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.orange,
+                                        onPrimary: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        fetchBoutData();
+                                        // 投票済みなら投票情報削除
+                                        if (myVote != 0) {
+                                          FirebaseFirestore.instance
+                                              .collection("bouts")
+                                              .doc(widget.boutId)
+                                              .update({
+                                            "vote${myVote}":
+                                                voteCount[myVote]! - 1,
+                                            "wrong_info_count":
+                                                wrongInfoCount + 1
+                                          }).then((_) {
+                                            FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .update({
+                                              "votes.${widget.boutId}": -1,
+                                            }).then((_) {
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            });
+                                          });
+                                        } else {
+                                          FirebaseFirestore.instance
+                                              .collection("bouts")
+                                              .doc(widget.boutId)
+                                              .update({
+                                            "wrong_info_count":
+                                                wrongInfoCount + 1
+                                          }).then((_) {
+                                            FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .update({
+                                              "votes.${widget.boutId}": -1,
+                                            }).then((_) {
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            });
+                                          });
+                                        }
+                                      })),
                             ],
                           );
                         },

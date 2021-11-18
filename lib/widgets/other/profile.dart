@@ -94,56 +94,65 @@ class _MyFirestorePageState extends State<Profile> {
                         }
                       },
                     )),
-                ElevatedButton(
-                  onPressed: isEnabled
-                      ? () {
-                          // 全画面プログレスダイアログ
-                          showGeneralDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              transitionDuration: Duration(milliseconds: 300),
-                              barrierColor: Colors.black.withOpacity(0.5),
-                              pageBuilder: (BuildContext context,
-                                  Animation animation,
-                                  Animation secondaryAnimation) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              });
-                          FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({
-                            "name": userName,
-                          });
-                          FirebaseAuth.instance.currentUser!
-                              .updateProfile(displayName: userName)
-                              .then((value) => {
-                                    if (selectedImage != null)
-                                      {uploadImage()}
-                                    else
-                                      {
-                                        setState(() {
-                                          isComplete = true;
-                                        }),
-                                        Navigator.of(context).pop()
-                                      }
+                Container(
+                    width: 180,
+                    margin: EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      onPressed: isEnabled
+                          ? () {
+                              // 全画面プログレスダイアログ
+                              showGeneralDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  transitionDuration:
+                                      Duration(milliseconds: 300),
+                                  barrierColor: Colors.black.withOpacity(0.5),
+                                  pageBuilder: (BuildContext context,
+                                      Animation animation,
+                                      Animation secondaryAnimation) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
                                   });
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.orange, onPrimary: Colors.white),
-                  child: const Text(
-                    'これにする',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xffffffff),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
+                              FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .update({
+                                "name": userName,
+                              });
+                              FirebaseAuth.instance.currentUser!
+                                  .updateProfile(displayName: userName)
+                                  .then((value) => {
+                                        if (selectedImage != null)
+                                          {uploadImage()}
+                                        else
+                                          {
+                                            setState(() {
+                                              isComplete = true;
+                                            }),
+                                            Navigator.of(context).pop()
+                                          }
+                                      });
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'これにする',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15,
+                          height: 1.2,
+                        ),
+                      ),
+                    )),
                 Visibility(visible: isComplete, child: Text("更新しました"))
               ],
             ),

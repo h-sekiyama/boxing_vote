@@ -102,7 +102,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
           dialogText = "試合結果は${fighter2}の判定勝ちでしたか？";
           break;
         case 99:
-          dialogText = "試合結果は引き分け/無効試合でしたか？";
+          dialogText = "試合結果は引き分け、または無効試合でしたか？";
           break;
       }
       showDialog(
@@ -113,14 +113,34 @@ class _MyFirestorePageState extends State<SendBoutResult> {
             title: Text("結果報告"),
             content: Text(dialogText),
             actions: [
-              ElevatedButton(
-                child: Text("やめる"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              ElevatedButton(
-                child: Text("報告する"),
-                onPressed: () => {voteBoutForecast(sentResult, boutId)},
-              ),
+              Container(
+                  width: 400,
+                  child: ElevatedButton(
+                    child: Text("やめる",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  )),
+              Container(
+                  width: 400,
+                  child: ElevatedButton(
+                    child: Text("報告する",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.orange,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () => {voteBoutForecast(sentResult, boutId)},
+                  )),
             ],
           );
         },
@@ -132,69 +152,117 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         child: Column(
           children: <Widget>[
             Column(children: [
-              Column(children: [
-                Text('${Functions.dateToString(fightDate)}'),
-                Text('${boutName}'),
-                Text('${fighter1} VS ${fighter2}'),
-              ]),
+              Material(
+                elevation: 1.0,
+                color: Color(0xffFFF8DC),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  margin: EdgeInsets.only(bottom: 6),
+                  color: Color(0xffFFF8DC),
+                  child: Column(children: [
+                    Text(
+                        '${Functions.dateToString(fightDate)}' +
+                            ' / ' +
+                            '${boutName}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
+                    Text('${fighter1} VS ${fighter2}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
+                  ]),
+                ),
+              ),
+              Container(margin: EdgeInsets.all(10), child: Text("試合結果を報告する")),
               Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(children: [Text("試合結果を報告する")])),
-              ElevatedButton(
-                child: Text("${fighter1}のKO/TKO/一本勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: mySentResult == 1 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowSendResult = 1;
-                  showConfirmDialog(nowSendResult, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter1}の判定勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: mySentResult == 2 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowSendResult = 2;
-                  showConfirmDialog(nowSendResult, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter2}のKO/TKO/一本勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: mySentResult == 3 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowSendResult = 3;
-                  showConfirmDialog(nowSendResult, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("${fighter2}の判定勝ち"),
-                style: ElevatedButton.styleFrom(
-                  primary: mySentResult == 4 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowSendResult = 4;
-                  showConfirmDialog(nowSendResult, widget.id);
-                },
-              ),
-              ElevatedButton(
-                child: Text("引き分け、または無効試合"),
-                style: ElevatedButton.styleFrom(
-                  primary: mySentResult == 4 ? Colors.orange : Colors.grey,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  nowSendResult = 99;
-                  showConfirmDialog(nowSendResult, widget.id);
-                },
-              ),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter1}のKO/TKO/一本勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      nowSendResult = 1;
+                      showConfirmDialog(nowSendResult, widget.id);
+                    },
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter1}の判定勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      nowSendResult = 2;
+                      showConfirmDialog(nowSendResult, widget.id);
+                    },
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter2}のKO/TKO/一本勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      nowSendResult = 3;
+                      showConfirmDialog(nowSendResult, widget.id);
+                    },
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("${fighter2}の判定勝ち",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      nowSendResult = 4;
+                      showConfirmDialog(nowSendResult, widget.id);
+                    },
+                  )),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: EdgeInsets.all(8),
+                  child: ElevatedButton(
+                    child: Text("引き分け、または無効試合",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      nowSendResult = 99;
+                      showConfirmDialog(nowSendResult, widget.id);
+                    },
+                  )),
               Container(
                   margin: EdgeInsets.all(14),
                   child: Center(

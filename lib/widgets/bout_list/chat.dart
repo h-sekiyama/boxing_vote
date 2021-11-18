@@ -33,12 +33,17 @@ class _MyFirestorePageState extends State<Chat> {
   Map<String, String> userImagreMap = {};
   // 自分のユーザーID
   var ownId = FirebaseAuth.instance.currentUser!.uid;
+  // コメント入力ボックス
+  final TextEditingController commentController =
+      TextEditingController(text: '');
+  // 予想内容
+  String voteDetail = "";
 
   void initState() {
     fetchBoutData();
   }
 
-// アイコン画像のダウンロード
+  // アイコン画像のダウンロード
   Future<String> downloadImage(String userId) async {
     try {
       var imageUrl;
@@ -51,6 +56,33 @@ class _MyFirestorePageState extends State<Chat> {
     }
   }
 
+  // 予想内容ダウンロード
+  Future<String> getVotedDetail(String userId) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((ref) {
+      switch (ref.get("votes")[widget.boutId]) {
+        case 1:
+          voteDetail = "予想：${fighter1}のKO/TKO/一本勝ち";
+          break;
+        case 2:
+          voteDetail = "予想：${fighter1}の判定勝ち";
+          break;
+        case 3:
+          voteDetail = "予想：${fighter2}のKO/TKO/一本勝ち";
+          break;
+        case 4:
+          voteDetail = "予想：${fighter2}の判定勝ち";
+          break;
+        default:
+          voteDetail = "";
+      }
+    });
+    return voteDetail;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,11 +91,27 @@ class _MyFirestorePageState extends State<Chat> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: <Widget>[
-            Column(children: [
-              Text('${Functions.dateToString(fightDate)}'),
-              Text('${boutName}'),
-              Text('${fighter1} VS ${fighter2}'),
-            ]),
+            Material(
+              elevation: 1.0,
+              color: Color(0xffFFF8DC),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                margin: EdgeInsets.only(bottom: 6),
+                color: Color(0xffFFF8DC),
+                child: Column(children: [
+                  Text(
+                      '${Functions.dateToString(fightDate)}' +
+                          ' / ' +
+                          '${boutName}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  Text('${fighter1} VS ${fighter2}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                ]),
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(bottom: 8)),
             Expanded(
                 child: ListView(
               scrollDirection: Axis.vertical,
@@ -83,59 +131,104 @@ class _MyFirestorePageState extends State<Chat> {
                                 ));
                           }
                         : null,
-                    child: Column(
-                        crossAxisAlignment: document['user_id'] == ownId
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // 日付
-                          Container(
-                              width: double.infinity,
-                              margin: EdgeInsets.fromLTRB(0, 8, 8, 0),
-                              child: (Text(Functions.dateToStringTime(time),
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontSize: 10, color: Colors.grey)))),
+                          Visibility(
+                              visible: document['user_id'] != ownId,
+                              child: Container(
+                                  width: 48,
+                                  height: 48,
+                                  margin: EdgeInsets.only(
+                                      top: 4, left: 6, right: 4),
+                                  child: FutureBuilder(
+                                    future: downloadImage(document['user_id']),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data != "no image") {
+                                          return Image.network(snapshot.data!);
+                                        } else {
+                                          return Image.asset('images/cat.png');
+                                        }
+                                      } else {
+                                        return Image.asset('images/cat.png');
+                                      }
+                                    },
+                                  ))),
+
                           // 吹き出し
                           Container(
                               width: MediaQuery.of(context).size.width * 0.85,
-                              child: Card(
-                                color: document['user_id'] == ownId
-                                    ? Color(0xff90BB9F)
-                                    : Color(0xffffffff),
-                                child: Column(children: [
-                                  ListTile(
-                                    leading: document['user_id'] != ownId
-                                        ? Container(
-                                            width: 80,
-                                            height: 80,
-                                            child: FutureBuilder(
-                                              future: downloadImage(
-                                                  document['user_id']),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<String>
-                                                      snapshot) {
-                                                if (snapshot.hasData) {
-                                                  if (snapshot.data !=
-                                                      "no image") {
-                                                    return Image.network(
-                                                        snapshot.data!);
-                                                  } else {
-                                                    return Image.asset(
-                                                        'images/cat.png');
-                                                  }
-                                                } else {
-                                                  return Image.asset(
-                                                      'images/cat.png');
-                                                }
-                                              },
-                                            ))
-                                        : null,
-                                    title: Text('${document['user_name']}'),
-                                    subtitle: Text('${document['text']}'),
+                              child: Column(children: [
+                                Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                ]),
-                              ))
+                                  color: Color(0xffffffff),
+                                  child: Column(children: [
+                                    ListTile(
+                                      // leading: document['user_id'] != ownId
+                                      title: Text('${document['user_name']}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14)),
+                                      subtitle: Text('${document['text']}',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black)),
+                                    ),
+                                    FutureBuilder(
+                                      future:
+                                          getVotedDetail(document['user_id']),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<String> snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(
+                                            snapshot.data!,
+                                            style: TextStyle(
+                                                color: Color(0xffFF7A00),
+                                                fontSize: 10),
+                                          );
+                                        } else {
+                                          return Text("");
+                                        }
+                                      },
+                                    ),
+                                  ]),
+                                ),
+                                // 日付
+                                Container(
+                                    width: double.infinity,
+                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                    child: (Text(
+                                        Functions.dateToStringTime(time),
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey)))),
+                              ])),
+                          Visibility(
+                              visible: document['user_id'] == ownId,
+                              child: Container(
+                                  width: 48,
+                                  height: 48,
+                                  margin: EdgeInsets.only(top: 4, left: 6),
+                                  child: FutureBuilder(
+                                    future: downloadImage(document['user_id']),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data != "no image") {
+                                          return Image.network(snapshot.data!);
+                                        } else {
+                                          return Image.asset('images/cat.png');
+                                        }
+                                      } else {
+                                        return Image.asset('images/cat.png');
+                                      }
+                                    },
+                                  ))),
                         ]));
               }).toList(),
             )),
@@ -156,32 +249,62 @@ class _MyFirestorePageState extends State<Chat> {
             Visibility(
                 visible: Functions.checkLogin(),
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(4, 0, 2, 0),
+                    height: 120,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                            flex: 6,
+                            flex: 5,
                             child: TextFormField(
+                              controller: commentController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              cursorColor: Colors.black,
                               autofocus: false,
                               style: new TextStyle(
                                 fontSize: 20.0,
                                 color: Colors.black,
                               ),
                               decoration: new InputDecoration(
-                                hintText: 'コメントを追加',
+                                filled: true,
+                                fillColor: const Color(0xffffffff),
+                                hintText: 'コメントを書き込む',
+                                hintStyle: TextStyle(color: Color(0xffcccccc)),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xff000000),
+                                    width: 2,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xff000000),
+                                    width: 2,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
                               ),
                               onChanged: (value) {
                                 chatText = value;
                               },
                             )),
+                        Padding(padding: EdgeInsets.only(right: 8)),
                         Expanded(
                             flex: 1,
-                            child: ElevatedButton(
-                              child: const Text('送る'),
+                            child: TextButton(
+                              child: const Text('送信',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.orange,
+                                primary: Colors.black,
                                 onPrimary: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                               onPressed: () {
                                 FirebaseFirestore.instance
@@ -199,7 +322,8 @@ class _MyFirestorePageState extends State<Chat> {
                                     .then((value) => {
                                           chatText = "",
                                           FocusScope.of(context).unfocus(),
-                                          fetchChatData()
+                                          fetchChatData(),
+                                          commentController.clear()
                                         });
                               },
                             )),

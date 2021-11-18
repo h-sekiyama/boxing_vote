@@ -170,16 +170,20 @@ class _MyFirestorePageState extends State<BoutDetail> {
                           image: AssetImage('images/bout_result_back.png'),
                           fit: BoxFit.cover,
                         )),
-                        child: Center(
-                          child: Container(
-                              width: 190,
-                              child: Text(
-                                resultText,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 270,
+                                child: Text(
+                                  resultText,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
                         ),
                       ),
                     ),

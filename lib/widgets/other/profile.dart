@@ -62,13 +62,16 @@ class _MyFirestorePageState extends State<Profile> {
                     child: Container(
                         width: 100,
                         height: 100,
-                        margin: const EdgeInsets.only(top: 90),
+                        margin: const EdgeInsets.only(top: 90, bottom: 12),
                         child: _displaySelectionImageOrGrayImage())),
                 Container(
                     width: 300,
+                    height: 80,
                     margin: EdgeInsets.all(8),
                     child: TextFormField(
                       autofocus: false,
+                      cursorColor: Colors.black,
+                      maxLength: 12,
                       initialValue:
                           FirebaseAuth.instance.currentUser!.displayName,
                       style: new TextStyle(
@@ -76,7 +79,26 @@ class _MyFirestorePageState extends State<Profile> {
                         color: Colors.black,
                       ),
                       decoration: new InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                        filled: true,
+                        fillColor: const Color(0xffffffff),
                         hintText: '名前',
+                        hintStyle: TextStyle(color: Color(0xffcccccc)),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff000000),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff000000),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
                       ),
                       onChanged: (value) {
                         userName = value;

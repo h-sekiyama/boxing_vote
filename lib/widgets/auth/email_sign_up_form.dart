@@ -116,66 +116,180 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       child: Padding(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               // ユーザー名の入力フィールド
-              TextFormField(
-                key: ValueKey("name"),
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(labelText: "なまえ"),
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
+              Container(
+                  height: 80,
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("name"),
+                    keyboardType: TextInputType.name,
+                    maxLength: 12,
+                    cursorColor: Colors.black,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: '名前',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    onSaved: (value) {
+                      _name = value!;
+                    },
+                  )),
               // メールアドレスの入力フィールド
-              TextFormField(
-                key: ValueKey("email"),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "メールアドレス"),
-                validator: (value) {
-                  if (!EmailValidator.validate(value!)) {
-                    return "正しいメールアドレスを入力してください";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
+              Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("email"),
+                    keyboardType: TextInputType.emailAddress,
+                    cursorColor: Colors.black,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: 'メールアドレス',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (!EmailValidator.validate(value!)) {
+                        return "正しいメールアドレスを入力してください";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _email = value!;
+                    },
+                  )),
               // パスワード1の入力フィールド
-              TextFormField(
-                key: ValueKey("password1"),
-                decoration: InputDecoration(labelText: "パスワード"),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty || value.length < 4) {
-                    return '最低4文字以上は入力してください';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password1 = value!;
-                },
-              ),
+              Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("password1"),
+                    cursorColor: Colors.black,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: 'パスワード',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 4) {
+                        return '最低4文字以上は入力してください';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _password1 = value!;
+                    },
+                  )),
               // パスワード2の入力フィールド
-              TextFormField(
-                key: ValueKey("password2"),
-                decoration: InputDecoration(labelText: "パスワード確認"),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty || value.length < 4) {
-                    return '最低4文字以上は入力してください';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password2 = value!;
-                },
-              ),
+              Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("password2"),
+                    cursorColor: Colors.black,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: 'パスワード確認',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 4) {
+                        return '最低4文字以上は入力してください';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _password2 = value!;
+                    },
+                  )),
               SizedBox(
                 height: 12,
               ),
@@ -183,10 +297,20 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : RaisedButton(
-                      child: Text("登録"),
-                      onPressed: _signUp,
-                    )
+                  : Container(
+                      width: 180,
+                      margin: EdgeInsets.all(2),
+                      child: TextButton(
+                        child: Text("登録",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        onPressed: _signUp,
+                      ))
             ],
           ),
         ),

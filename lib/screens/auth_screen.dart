@@ -17,7 +17,7 @@ class _AuthScreenState extends State<AuthScreen> {
         elevation: 0.0,
         automaticallyImplyLeading: false,
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               setState(() {
                 _isSignIn = true;
@@ -31,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   color: Color(0xff000000)),
             ),
           ),
-          ElevatedButton(
+          TextButton(
             onPressed: () {
               setState(() {
                 _isSignIn = false;

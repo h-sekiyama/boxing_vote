@@ -75,6 +75,7 @@ class _MyFirestorePageState extends State<Other> {
                       ),
                     ),
                     onPressed: () {
+                      FirebaseAuth.instance.signOut();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

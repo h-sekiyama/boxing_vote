@@ -35,7 +35,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           // formの内容を保存
           _formKey.currentState?.save();
 
-          // 変更部分！サインインを実行
+          // サインインを実行
           UserCredential authResult = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
           Navigator.push(
@@ -79,42 +79,98 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       child: Padding(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               // メールアドレスの入力フィールド
-              TextFormField(
-                key: ValueKey("email"),
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "メールアドレス"),
-                validator: (value) {
-                  if (!EmailValidator.validate(value!)) {
-                    return "正しいメールアドレスを入力してください";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
+              Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("email"),
+                    cursorColor: Colors.black,
+                    keyboardType: TextInputType.emailAddress,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: 'メールアドレス',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (!EmailValidator.validate(value!)) {
+                        return "正しいメールアドレスを入力してください";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _email = value!;
+                    },
+                  )),
               // パスワード1の入力フィールド
-              TextFormField(
-                key: ValueKey("password"),
-                decoration: InputDecoration(labelText: "パスワード"),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty || value.length < 4) {
-                    return '最低4文字以上は入力してください';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password = value!;
-                },
-              ),
+              Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: ValueKey("password"),
+                    cursorColor: Colors.black,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: 'パスワード',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 4) {
+                        return '最低4文字以上は入力してください';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _password = value!;
+                    },
+                  )),
               SizedBox(
                 height: 12,
               ),
@@ -122,10 +178,20 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : RaisedButton(
-                      child: Text("サインイン"),
-                      onPressed: _signIn,
-                    )
+                  : Container(
+                      width: 180,
+                      margin: EdgeInsets.all(2),
+                      child: TextButton(
+                        child: Text("ログイン",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        onPressed: _signIn,
+                      ))
             ],
           ),
         ),

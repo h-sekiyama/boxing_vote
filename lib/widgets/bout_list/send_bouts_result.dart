@@ -26,8 +26,6 @@ class _MyFirestorePageState extends State<SendBoutResult> {
   int mySentResult = 0;
   // 今回の報告
   int nowSendResult = 0;
-  // 自分の報告結果テキスト
-  String mySentResultText = "";
   // 合計予想数
   int totalVotedCount = 0;
   // 一番報告の多い結果
@@ -52,7 +50,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
             {"sentResult${mySentResult}": sentResultCount[mySentResult]! - 1});
       }
 
-      // 報告数が勝敗予想者数の1割を超えたら or 報告数が5を超えたら結果を確定する
+      // 報告数が勝敗予想者数の1割を超えたら or 報告数が一定数を超えたら結果を確定する
       var maxSentResultCount = 0;
       sentResultCount.forEach((key, value) {
         if (maxSentResultCount < value) {
@@ -67,7 +65,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         FirebaseFirestore.instance
             .collection("bouts")
             .doc(boutId)
-            .update({"result": maxSentResultCount}).then((_) {
+            .update({"result": maxSentResult}).then((_) {
           Navigator.pop(context);
           Navigator.pop(context);
         });
@@ -172,7 +170,9 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                   ]),
                 ),
               ),
-              Container(margin: EdgeInsets.all(10), child: Text("試合結果を報告する")),
+              Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text("試合結果集計中です\n宜しければ試合結果を報告して下さい")),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.all(8),
@@ -186,10 +186,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      nowSendResult = 1;
-                      showConfirmDialog(nowSendResult, widget.id);
-                    },
+                    onPressed: mySentResult == 0
+                        ? () {
+                            nowSendResult = 1;
+                            showConfirmDialog(nowSendResult, widget.id);
+                          }
+                        : null,
                   )),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -204,10 +206,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      nowSendResult = 2;
-                      showConfirmDialog(nowSendResult, widget.id);
-                    },
+                    onPressed: mySentResult == 0
+                        ? () {
+                            nowSendResult = 2;
+                            showConfirmDialog(nowSendResult, widget.id);
+                          }
+                        : null,
                   )),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -222,10 +226,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      nowSendResult = 3;
-                      showConfirmDialog(nowSendResult, widget.id);
-                    },
+                    onPressed: mySentResult == 0
+                        ? () {
+                            nowSendResult = 3;
+                            showConfirmDialog(nowSendResult, widget.id);
+                          }
+                        : null,
                   )),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -240,10 +246,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      nowSendResult = 4;
-                      showConfirmDialog(nowSendResult, widget.id);
-                    },
+                    onPressed: mySentResult == 0
+                        ? () {
+                            nowSendResult = 4;
+                            showConfirmDialog(nowSendResult, widget.id);
+                          }
+                        : null,
                   )),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -258,10 +266,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      nowSendResult = 99;
-                      showConfirmDialog(nowSendResult, widget.id);
-                    },
+                    onPressed: mySentResult == 0
+                        ? () {
+                            nowSendResult = 99;
+                            showConfirmDialog(nowSendResult, widget.id);
+                          }
+                        : null,
                   )),
               Container(
                   margin: EdgeInsets.all(14),
@@ -286,38 +296,19 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         .then((ref) {
       setState(() {
         boutName = ref.get("event_name");
-      });
-      setState(() {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
-        switch (ref.get("my_vote")) {
-          case 1:
-            mySentResultText = "${fighter1}のKO勝ち";
-            break;
-          case 2:
-            mySentResultText = "${fighter1}の判定勝ち";
-            break;
-          case 3:
-            mySentResultText = "${fighter2}のKO勝ち";
-            break;
-          case 4:
-            mySentResultText = "${fighter2}の判定勝ち";
-            break;
-        }
-      });
-      setState(() {
         fightDate = ref.get("fight_date").toDate();
-      });
-      setState(() {
-        sentResultCount[1] = ref.get("sentResult1");
-        sentResultCount[2] = ref.get("sentResult2");
-        sentResultCount[3] = ref.get("sentResult3");
-        sentResultCount[4] = ref.get("sentResult4");
         totalVotedCount = ref.get("vote1") +
             ref.get("vote2") +
             ref.get("vote3") +
             ref.get("vote4");
       });
+      sentResultCount[1] = ref.get("sentResult1");
+      sentResultCount[2] = ref.get("sentResult2");
+      sentResultCount[3] = ref.get("sentResult3");
+      sentResultCount[4] = ref.get("sentResult4");
+      sentResultCount[99] = ref.get("sentResult99");
     });
   }
 

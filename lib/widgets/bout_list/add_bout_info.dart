@@ -206,6 +206,11 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       "vote2": 0,
                       "vote3": 0,
                       "vote4": 0,
+                      "sentResult1": 0,
+                      "sentResult2": 0,
+                      "sentResult3": 0,
+                      "sentResult4": 0,
+                      "sentResult99": 0,
                       "wrong_info_count": 0,
                     }))
                     .then((value) => {

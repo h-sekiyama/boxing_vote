@@ -61,24 +61,39 @@ class HomeScreen extends StatelessWidget {
               preferredSize: Size.fromHeight(2.0)),
         ),
         drawer: Drawer(
+            child: Container(
+          color: Colors.white,
           child: ListView(
             children: <Widget>[
-              DrawerHeader(
-                child: Text(
-                  '競技を選ぶ',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
+              Container(
+                  height: 200,
+                  child: DrawerHeader(
+                    child: Column(children: [
+                      Container(
+                          margin: EdgeInsets.only(top: 12, bottom: 12),
+                          child: Center(
+                            child: Text("ボクシング・K-1・RIZINの\n勝敗予想投票アプリ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          )),
+                      Image(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        image: AssetImage('images/logo.png'),
+                      ),
+                    ]),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                  )),
+              Container(
+                color: Colors.black,
+                child: Text("競技を選ぶ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white)),
               ),
               ListTile(
                 title: Text('全て'),
                 tileColor:
-                    sports == "全て" ? Color(0xffaa00aa) : Color(0xffffffff),
+                    sports == "全て" ? Color(0xffFFF9B5) : Color(0xffffffff),
                 onTap: () {
                   sports = "全て";
                   Navigator.push(
@@ -88,10 +103,14 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
               ),
+              Container(
+                height: 1,
+                color: Colors.black,
+              ),
               ListTile(
                 title: Text('ボクシング'),
                 tileColor:
-                    sports == "ボクシング" ? Color(0xffaa00aa) : Color(0xffffffff),
+                    sports == "ボクシング" ? Color(0xffFFF9B5) : Color(0xffffffff),
                 onTap: () {
                   sports = "ボクシング";
                   Navigator.push(
@@ -101,10 +120,14 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
               ),
+              Container(
+                height: 1,
+                color: Colors.black,
+              ),
               ListTile(
                 title: Text('K-1'),
                 tileColor:
-                    sports == "K-1" ? Color(0xffaa00aa) : Color(0xffffffff),
+                    sports == "K-1" ? Color(0xffFFF9B5) : Color(0xffffffff),
                 onTap: () {
                   sports = "K-1";
                   Navigator.push(
@@ -114,10 +137,14 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
               ),
+              Container(
+                height: 1,
+                color: Colors.black,
+              ),
               ListTile(
                 title: Text('RIZIN'),
                 tileColor:
-                    sports == "RIZIN" ? Color(0xffaa00aa) : Color(0xffffffff),
+                    sports == "RIZIN" ? Color(0xffFFF9B5) : Color(0xffffffff),
                 onTap: () {
                   sports = "RIZIN";
                   Navigator.push(
@@ -127,9 +154,13 @@ class HomeScreen extends StatelessWidget {
                       ));
                 },
               ),
+              Container(
+                height: 1,
+                color: Colors.black,
+              ),
             ],
           ),
-        ),
+        )),
         body: BoutsList(isList, sports),
         bottomNavigationBar: Tabs());
   }

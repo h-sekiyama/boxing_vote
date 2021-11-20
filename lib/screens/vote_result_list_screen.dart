@@ -12,7 +12,8 @@ class VoteResultListScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          title: Text("予想試合一覧", style: TextStyle(fontWeight: FontWeight.bold)),
+          title:
+              Text("予想試合結果一覧", style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [],
           bottom: PreferredSize(
               child: Container(

@@ -79,7 +79,7 @@ class _MyFirestorePageState extends State<Other> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AuthScreen()));
+                              builder: (context) => AuthScreen(false)));
                     },
                   ))),
             ]),

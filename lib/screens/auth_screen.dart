@@ -3,49 +3,21 @@ import '../widgets/auth/email_sign_up_form.dart';
 import '../widgets/auth/email_sign_in_form.dart';
 
 class AuthScreen extends StatefulWidget {
+  AuthScreen(this.isRegister);
+  bool isRegister;
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  var _isSignIn = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: widget.isRegister ? Text("新規登録") : Text("ログイン"),
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _isSignIn = true;
-              });
-            },
-            child: Text(
-              "ログイン",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Color(0xff000000)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _isSignIn = false;
-              });
-            },
-            child: Text(
-              "登録",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Color(0xff000000)),
-            ),
-          )
-        ],
         bottom: PreferredSize(
             child: Container(
               color: Colors.black,
@@ -54,12 +26,12 @@ class _AuthScreenState extends State<AuthScreen> {
             preferredSize: Size.fromHeight(2.0)),
       ),
       body: Center(
-        child: _isSignIn
+        child: widget.isRegister
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [EmailSignInForm()],
+                children: [EmailSignUpForm()],
               )
-            : EmailSignUpForm(),
+            : EmailSignInForm(),
       ),
     );
   }

@@ -44,8 +44,10 @@ class HomeScreen extends StatelessWidget {
                     primary: Colors.white,
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AuthScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AuthScreen(false)));
                   },
                 ),
               )

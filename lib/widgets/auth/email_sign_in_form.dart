@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:boxing_vote/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
@@ -85,9 +86,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           key: _formKey,
           child: Column(
             children: [
+              // ロゴ
+              Image(
+                width: MediaQuery.of(context).size.width * 0.85,
+                image: AssetImage('images/logo.png'),
+              ),
               // メールアドレスの入力フィールド
               Container(
-                  margin: EdgeInsets.all(8),
+                  margin:
+                      EdgeInsets.only(top: 30, bottom: 10, left: 8, right: 8),
                   child: TextFormField(
                     key: ValueKey("email"),
                     cursorColor: Colors.black,
@@ -188,10 +195,22 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                             primary: Colors.black,
                             onPrimary: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(30),
                             )),
                         onPressed: _signIn,
-                      ))
+                      )),
+              GestureDetector(
+                  child: Text("アカウント登録はこちら",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black)),
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AuthScreen(true),
+                            fullscreenDialog: true));
+                  })
             ],
           ),
         ),

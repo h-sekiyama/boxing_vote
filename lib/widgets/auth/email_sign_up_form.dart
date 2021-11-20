@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:boxing_vote/screens/auth_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -122,6 +123,18 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           key: _formKey,
           child: Column(
             children: [
+              // ロゴ
+              Image(
+                width: MediaQuery.of(context).size.width * 0.85,
+                image: AssetImage('images/logo.png'),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  margin: EdgeInsets.only(top: 20, bottom: 20),
+                  child: Text(
+                    "アカウント登録すると勝敗予想したり試合についてチャットで語り合ったりできるよ！\nカクットで格闘技観戦をより楽しもう！",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
               // ユーザー名の入力フィールド
               Container(
                   height: 80,
@@ -301,16 +314,28 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
                       width: 180,
                       margin: EdgeInsets.all(2),
                       child: TextButton(
-                        child: Text("登録",
+                        child: Text("ユーザー登録する",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         style: ElevatedButton.styleFrom(
                             primary: Colors.black,
                             onPrimary: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(30),
                             )),
                         onPressed: _signUp,
-                      ))
+                      )),
+              GestureDetector(
+                  child: Text("ログインはこちら",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black)),
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AuthScreen(false),
+                            fullscreenDialog: true));
+                  })
             ],
           ),
         ),

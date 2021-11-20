@@ -22,10 +22,10 @@ class AuthCheck extends StatelessWidget {
       if (isVerified) {
         return HomeScreen(true, "全て");
       } else {
-        return AuthScreen();
+        return AuthScreen(true);
       }
     } else {
-      return AuthScreen();
+      return AuthScreen(true);
     }
   }
 }

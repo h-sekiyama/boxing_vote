@@ -61,18 +61,42 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Text("試合予定を追加する事ができます。皆さんが勝敗予想を楽しめる様、正しい試合情報を投稿して頂けます様にお願い致します。"),
+            Container(
+                margin: EdgeInsets.all(8),
+                child: Text(
+                  "試合予定を追加する事ができます。\n皆さんが勝敗予想を楽しめる様、正しい試合情報を投稿して頂けます様にお願い致します。",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )),
             // 種目選択
             Container(
+                margin: EdgeInsets.only(top: 10, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                child: DropdownButton<String>(
+                child: DropdownButtonFormField(
                     isExpanded: true,
                     icon: Icon(Icons.arrow_drop_down),
                     iconSize: 30,
                     style: TextStyle(fontSize: 20, color: Colors.black),
-                    underline: Container(
-                      height: 0.5,
-                      color: Colors.black,
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: '種目',
+                      hintStyle: TextStyle(color: Color(0xffcccccc)),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
                     ),
                     items: _items,
                     value: _sportsName,
@@ -82,106 +106,200 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                           })
                         })),
             //試合日選択
-            TextFormField(
-                autofocus: false,
-                style: new TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-                ),
-                decoration: new InputDecoration(
-                  hintText: "${_eventDate}",
-                ),
-                onChanged: (value) {
-                  _eventDate = value.toString();
-                  setState(() {
-                    _sportsName = value.toString();
-                  });
-                },
-                onTap: () async {
-                  _selectedDate = (await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(DateTime.now().year),
-                        lastDate: DateTime(DateTime.now().year + 1),
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              colorScheme: ColorScheme.light(
-                                primary: Color(0xffE6D200), // ヘッダー背景色
-                                onPrimary: Colors.black, // ヘッダーテキストカラー
-                                onSurface: Colors.green, // カレンダーのテキストカラー
-                              ),
-                              textButtonTheme: TextButtonThemeData(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.black, // ボタンのテキストカラー
+            Container(
+                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                child: TextFormField(
+                    autofocus: false,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: "${_eventDate}",
+                      hintStyle: TextStyle(color: Colors.black),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      _eventDate = value.toString();
+                      setState(() {
+                        _sportsName = value.toString();
+                      });
+                    },
+                    onTap: () async {
+                      _selectedDate = (await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(DateTime.now().year),
+                            lastDate: DateTime(DateTime.now().year + 1),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: Color(0xffE6D200), // ヘッダー背景色
+                                    onPrimary: Colors.black, // ヘッダーテキストカラー
+                                    onSurface: Colors.green, // カレンダーのテキストカラー
+                                  ),
+                                  textButtonTheme: TextButtonThemeData(
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.black, // ボタンのテキストカラー
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            child: child!,
-                          );
-                        },
-                      )) ??
-                      DateTime.now();
-                  setState(() {
-                    _eventDate = Functions.dateToString(_selectedDate);
-                  });
-                  FocusManager.instance.primaryFocus!.unfocus();
-                }),
+                                child: child!,
+                              );
+                            },
+                          )) ??
+                          DateTime.now();
+                      setState(() {
+                        _eventDate = Functions.dateToString(_selectedDate);
+                      });
+                      FocusManager.instance.primaryFocus!.unfocus();
+                    })),
             // 大会名入力
-            TextFormField(
-              autofocus: false,
-              style: new TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-              decoration: new InputDecoration(
-                hintText: '大会名',
-              ),
-              onChanged: (value) {
-                _eventName = value;
-              },
-            ),
+            Container(
+                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                child: TextFormField(
+                  autofocus: false,
+                  cursorColor: Colors.black,
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  decoration: new InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                    filled: true,
+                    fillColor: const Color(0xffffffff),
+                    hintText: "大会名",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _eventName = value;
+                  },
+                )),
             // 選手1氏名入力
-            TextFormField(
-              autofocus: false,
-              style: new TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-              decoration: new InputDecoration(
-                hintText: '選手1氏名',
-              ),
-              onChanged: (value) {
-                _fighter1 = value;
-              },
-            ),
+            Container(
+                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                child: TextFormField(
+                  autofocus: false,
+                  cursorColor: Colors.black,
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  decoration: new InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                    filled: true,
+                    fillColor: const Color(0xffffffff),
+                    hintText: "選手1氏名",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _fighter1 = value;
+                  },
+                )),
             // 選手2氏名入力
-            TextFormField(
-              autofocus: false,
-              style: new TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-              ),
-              decoration: new InputDecoration(
-                hintText: '選手2氏名',
-              ),
-              onChanged: (value) {
-                _fighter2 = value;
-              },
-            ),
+            Container(
+                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                child: TextFormField(
+                  autofocus: false,
+                  cursorColor: Colors.black,
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  decoration: new InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                    filled: true,
+                    fillColor: const Color(0xffffffff),
+                    hintText: "選手2氏名",
+                    hintStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xff000000),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    _fighter2 = value;
+                  },
+                )),
             // 試合追加ボタン
-            Column(children: [
-              ElevatedButton(
-                child: Text("追加する"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                  onPrimary: Colors.white,
-                ),
-                onPressed: () {
-                  showConfirmDialog();
-                },
-              )
-            ]),
+            Container(
+                width: 180,
+                child: ElevatedButton(
+                  child: Text("追加する",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      )),
+                  onPressed: () {
+                    showConfirmDialog();
+                  },
+                )),
           ],
         ),
       ),

@@ -60,6 +60,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           print(err);
           if (err.toString().contains("no user record")) {
             _showErrorFlash("ユーザー情報が見つかりません");
+          } else if (err.toString().contains("The password is invalid")) {
+            _showErrorFlash("パスワードが違います");
           }
           setState(() {
             _isLoading = false;

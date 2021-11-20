@@ -142,7 +142,7 @@ class _MyFirestorePageState extends State<Chat> {
                                   width: 48,
                                   height: 48,
                                   margin: EdgeInsets.only(
-                                      top: 4, left: 6, right: 4),
+                                      top: 4, left: 12, right: 0),
                                   child: FutureBuilder(
                                     future: downloadImage(document['user_id']),
                                     builder: (BuildContext context,
@@ -162,6 +162,7 @@ class _MyFirestorePageState extends State<Chat> {
                           // 吹き出し
                           Container(
                               width: MediaQuery.of(context).size.width * 0.85,
+                              padding: EdgeInsets.only(left: 8, right: 8),
                               child: Column(children: [
                                 Card(
                                   shape: RoundedRectangleBorder(
@@ -215,7 +216,7 @@ class _MyFirestorePageState extends State<Chat> {
                               child: Container(
                                   width: 48,
                                   height: 48,
-                                  margin: EdgeInsets.only(top: 4, left: 6),
+                                  margin: EdgeInsets.only(top: 4, left: 0),
                                   child: FutureBuilder(
                                     future: downloadImage(document['user_id']),
                                     builder: (BuildContext context,

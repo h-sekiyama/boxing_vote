@@ -103,6 +103,23 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                         initialDate: DateTime.now(),
                         firstDate: DateTime(DateTime.now().year),
                         lastDate: DateTime(DateTime.now().year + 1),
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: Color(0xffE6D200), // ヘッダー背景色
+                                onPrimary: Colors.black, // ヘッダーテキストカラー
+                                onSurface: Colors.green, // カレンダーのテキストカラー
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.black, // ボタンのテキストカラー
+                                ),
+                              ),
+                            ),
+                            child: child!,
+                          );
+                        },
                       )) ??
                       DateTime.now();
                   setState(() {

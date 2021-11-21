@@ -20,9 +20,9 @@ class _MyFirestorePageState extends State<SendBoutResult> {
   String fighter2 = "";
   // 試合日程
   DateTime fightDate = DateTime.now();
-  // 結果報告数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 結果報告数Map（1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   Map<int, int> sentResultCount = {1: 0, 2: 0, 3: 0, 4: 0, 99: 0};
-  // 自分の報告内容（0：未報告、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 自分の報告内容（0：未報告、1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   int mySentResult = 0;
   // 今回の報告
   int nowSendResult = 0;
@@ -88,13 +88,13 @@ class _MyFirestorePageState extends State<SendBoutResult> {
       String dialogText = "";
       switch (sentResult) {
         case 1:
-          dialogText = "試合結果は${fighter1}のKO勝ちでしたか？";
+          dialogText = "試合結果は${fighter1}のKO/TKO/一本勝ちでしたか？";
           break;
         case 2:
           dialogText = "試合結果は${fighter1}の判定勝ちでしたか？";
           break;
         case 3:
-          dialogText = "試合結果は${fighter2}のKO勝ちでしたか？";
+          dialogText = "試合結果は${fighter2}のKO/TKO/一本勝ちでしたか？";
           break;
         case 4:
           dialogText = "試合結果は${fighter2}の判定勝ちでしたか？";
@@ -131,7 +131,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                     child: Text("報告する",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      primary: Colors.black,
                       onPrimary: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -257,7 +257,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.all(8),
                   child: ElevatedButton(
-                    child: Text("引き分け、または無効試合",
+                    child: Text("引き分け/無効試合/反則",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,

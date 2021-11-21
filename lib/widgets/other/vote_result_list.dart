@@ -266,7 +266,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 } else if (document['result'] == 4) {
                   resultText = "${document['fighter2']}の判定勝ち";
                 } else if (document['result'] == 99) {
-                  resultText = "引き分けまたは無効試合";
+                  resultText = "引き分け/無効試合/反則";
                 }
                 return Visibility(
                   // 投票数が10件以上で、間違い情報がそれより多い試合情報は表示しない

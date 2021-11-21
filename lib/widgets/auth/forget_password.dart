@@ -1,34 +1,30 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:boxing_vote/screens/auth_screen.dart';
-import 'package:boxing_vote/screens/forget_password_screen.dart';
-import 'package:boxing_vote/widgets/auth/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/services.dart';
-
 import 'auth_check.dart';
 
-class EmailSignInForm extends StatefulWidget {
+class ForgetPassword extends StatefulWidget {
   @override
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  _ForgetPasswordState createState() => _ForgetPasswordState();
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
+class _ForgetPasswordState extends State<ForgetPassword> {
   final _formKey = GlobalKey<FormState>();
 
   var _isLoading = false;
   var _email = "";
-  var _password = "";
 
-  Future<void> _signIn() async {
+  Future<void> _sendPasswordResetMail() async {
     // 登録結果を格納する
     // バリデーションを実行
     var isValid = _formKey.currentState?.validate();
     // キーボードを閉じる
     FocusScope.of(context).unfocus();
 
-    // バリデーションに問題がなければ登録
+    // バリデーションに問題がなければパスワードリセットメール送信
     if (isValid != null) {
       if (isValid) {
         try {
@@ -39,13 +35,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           _formKey.currentState?.save();
 
           // サインインを実行
-          UserCredential authResult = await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: _email, password: _password);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AuthCheck(),
-              ));
+          await FirebaseAuth.instance
+              .sendPasswordResetEmail(email: _email)
+              .then((value) {
+            _showMessageFlash("パスワードリセットメールを送りました。");
+          });
           setState(() {
             _isLoading = false;
           });
@@ -62,8 +56,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           print(err);
           if (err.toString().contains("no user record")) {
             _showErrorFlash("ユーザー情報が見つかりません");
-          } else if (err.toString().contains("The password is invalid")) {
-            _showErrorFlash("パスワードが違います");
           }
           setState(() {
             _isLoading = false;
@@ -71,6 +63,15 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         }
       }
     }
+  }
+
+  void _showMessageFlash(String message) {
+    Flushbar(
+      message: message,
+      backgroundColor: Colors.blue,
+      margin: EdgeInsets.all(8),
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 
   void _showErrorFlash(String message) {
@@ -139,49 +140,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                       _email = value!;
                     },
                   )),
-              // パスワード1の入力フィールド
-              Container(
-                  margin: EdgeInsets.all(8),
-                  child: TextFormField(
-                    key: ValueKey("password"),
-                    cursorColor: Colors.black,
-                    style: new TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                    decoration: new InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                      filled: true,
-                      fillColor: const Color(0xffffffff),
-                      hintText: 'パスワード',
-                      hintStyle: TextStyle(color: Color(0xffcccccc)),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xff000000),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xff000000),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 4) {
-                        return '最低4文字以上は入力してください';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _password = value!;
-                    },
-                  )),
+
               SizedBox(
                 height: 12,
               ),
@@ -193,7 +152,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                       width: 180,
                       margin: EdgeInsets.all(2),
                       child: TextButton(
-                        child: Text("ログイン",
+                        child: Text("パスワードリセット",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         style: ElevatedButton.styleFrom(
                             primary: Colors.black,
@@ -201,34 +160,18 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             )),
-                        onPressed: _signIn,
+                        onPressed: _sendPasswordResetMail,
                       )),
               GestureDetector(
-                  child: Container(
-                      margin: EdgeInsets.all(8),
-                      child: Text("アカウント登録はこちら",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.black))),
+                  child: Text("ログインはこちら",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black)),
                   onTap: () async {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AuthScreen(true),
-                            fullscreenDialog: true));
-                  }),
-              GestureDetector(
-                  child: Container(
-                      margin: EdgeInsets.all(8),
-                      child: Text("パスワードを忘れた方はこちら",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.black))),
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgetPasswordScreen(),
+                            builder: (context) => AuthScreen(false),
                             fullscreenDialog: true));
                   })
             ],

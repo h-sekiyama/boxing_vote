@@ -22,9 +22,9 @@ class _MyFirestorePageState extends State<BoutVote> {
   DateTime fightDate = DateTime.now();
   // 試合日程テキスト
   String fightDateText = "";
-  // 予想数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 予想数Map（1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
-  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 自分の予想（0：未投票、1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   int myVote = 0;
   // 今回の予想
   int nowVote = 0;
@@ -133,13 +133,13 @@ class _MyFirestorePageState extends State<BoutVote> {
       String dialogText = "";
       switch (voteResult) {
         case 1:
-          dialogText = "${fighter1}のKO勝ちで宜しいですか？";
+          dialogText = "${fighter1}のKO/TKO/一本勝ちで宜しいですか？";
           break;
         case 2:
           dialogText = "${fighter1}の判定勝ちで宜しいですか？";
           break;
         case 3:
-          dialogText = "${fighter2}のKO勝ちで宜しいですか？";
+          dialogText = "${fighter2}のKO/TKO/一本勝ちで宜しいですか？";
           break;
         case 4:
           dialogText = "${fighter2}の判定勝ちで宜しいですか？";
@@ -341,7 +341,7 @@ class _MyFirestorePageState extends State<BoutVote> {
         switch (ref.get("votes")[widget.id]) {
           case 1:
             myVote = 1;
-            myVoteText = "${fighter1}のKO勝ち";
+            myVoteText = "${fighter1}のKO/TKO/一本勝ち";
             break;
           case 2:
             myVote = 2;
@@ -349,7 +349,7 @@ class _MyFirestorePageState extends State<BoutVote> {
             break;
           case 3:
             myVote = 3;
-            myVoteText = "${fighter2}のKO勝ち";
+            myVoteText = "${fighter2}のKO/TKO/一本勝ち";
             break;
           case 4:
             myVote = 4;

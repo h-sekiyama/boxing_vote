@@ -23,11 +23,11 @@ class _MyFirestorePageState extends State<BoutDetail> {
   String fighter2 = "";
   // 試合日程テキスト
   String fightDateText = "";
-  // 予想数Map（1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 予想数Map（1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   Map<int, int> voteCount = {1: 0, 2: 0, 3: 0, 4: 0};
-  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち）
+  // 自分の予想（0：未投票、1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
   int myVote = 0;
-  // 自分の予想（0：未投票、1：選手1のKO勝ち、2：選手1の判定勝ち、3：選手2のKO勝ち、4：選手2の判定勝ち, 99: 引き分け/無効試合）
+  // 自分の予想（0：未投票、1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち, 99: 引き分け/無効試合/反則）
   String myVoteText = "勝敗予想していません";
   // 試合結果
   int result = 0;
@@ -286,7 +286,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.orange,
+                                    primary: Colors.black,
                                     onPrimary: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -486,7 +486,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold)),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.orange,
+                                        primary: Colors.black,
                                         onPrimary: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -578,7 +578,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
           resultText = '${fighter2}の判定勝ち';
         } else if (ref['result'] == 99) {
           result = 99;
-          resultText = '引き分けまたは無効試合';
+          resultText = '引き分け/無効試合/反則';
         }
         voteCount[1] = ref.get("vote1");
         voteCount[2] = ref.get("vote2");

@@ -52,7 +52,7 @@ class _MyFirestorePageState extends State<BoutsList> {
               } else if (document['result'] == 4) {
                 resultText = '${document['fighter2']}の判定勝ち';
               } else if (document['result'] == 99) {
-                resultText = '引き分けまたは無効試合';
+                resultText = '引き分け/無効試合/反則';
               }
 
               // その試合の総投票数

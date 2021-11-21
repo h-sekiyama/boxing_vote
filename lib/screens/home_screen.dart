@@ -62,10 +62,10 @@ class HomeScreen extends StatelessWidget {
         ),
         drawer: Drawer(
             child: Container(
-          color: Colors.white,
           child: ListView(
             children: <Widget>[
               Container(
+                  color: Colors.white,
                   height: 200,
                   child: DrawerHeader(
                     child: Column(children: [

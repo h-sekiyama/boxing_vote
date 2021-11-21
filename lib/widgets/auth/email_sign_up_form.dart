@@ -50,7 +50,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           UserCredential authResult = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                   email: _email, password: _password1);
-          _showMessageFlash("認証メールを送りました");
+          _showMessageFlash("認証メールを送りました。承認して下さい。");
           setState(() {
             _isLoading = false;
           });

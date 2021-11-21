@@ -12,6 +12,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
   // 種目リスト
   List<DropdownMenuItem<String>> _items = [];
   String _sportsName = "";
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -55,10 +56,29 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
   // 選手2氏名
   String _fighter2 = "";
 
+  Future<void> addBoutInfo() async {
+    // 登録結果を格納する
+    // バリデーションを実行
+    final isValid = _formKey.currentState!.validate();
+    // キーボードを閉じる
+    FocusScope.of(context).unfocus();
+
+    // バリデーションに問題がなければ登録
+    if (isValid) {
+      // formの内容を保存
+      _formKey.currentState!.save();
+
+      // 試合情報追加を実行
+      showConfirmDialog();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
+          child: Form(
+        key: _formKey,
         child: Column(
           children: <Widget>[
             Container(
@@ -137,11 +157,14 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
                     ),
+                    validator: (value) {
+                      if (_eventDate == "試合日") {
+                        return '試合日は必須項目です';
+                      }
+                      return null;
+                    },
                     onChanged: (value) {
-                      _eventDate = value.toString();
-                      setState(() {
-                        _sportsName = value.toString();
-                      });
+                      _eventDate = value;
                     },
                     onTap: () async {
                       _selectedDate = (await showDatePicker(
@@ -206,6 +229,12 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value!.length == 0) {
+                      return '大会名は必須項目です';
+                    }
+                    return null;
+                  },
                   onChanged: (value) {
                     _eventName = value;
                   },
@@ -243,6 +272,12 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value!.length == 0) {
+                      return '選手1氏名は必須項目です';
+                    }
+                    return null;
+                  },
                   onChanged: (value) {
                     _fighter1 = value;
                   },
@@ -280,6 +315,12 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
                   ),
+                  validator: (value) {
+                    if (value!.length == 0) {
+                      return '選手2氏名は必須項目です';
+                    }
+                    return null;
+                  },
                   onChanged: (value) {
                     _fighter2 = value;
                   },
@@ -297,12 +338,12 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                         borderRadius: BorderRadius.circular(30),
                       )),
                   onPressed: () {
-                    showConfirmDialog();
+                    addBoutInfo();
                   },
                 )),
           ],
         ),
-      ),
+      )),
     );
   }
 

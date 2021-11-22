@@ -61,8 +61,8 @@ class _MyFirestorePageState extends State<BoutsList> {
                   document["vote3"] +
                   document["vote4"];
               return Visibility(
-                  // 投票数が10件以上で、間違い情報がそれより多い試合情報は表示しない
-                  visible: document["wrong_info_count"] < totalVotedCount ||
+                  // 投票数が10件以上、または間違い情報が投票数＋５より少ない場合のみ表示
+                  visible: document["wrong_info_count"] < totalVotedCount + 5 ||
                       totalVotedCount > 10,
                   child: GestureDetector(
                     onTap: Functions.checkLogin()
@@ -146,7 +146,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                                             document['vote2']!.toDouble() +
                                             document['vote3']!.toDouble() +
                                             document['vote4']!.toDouble())
-                                    : 0,
+                                    : 0.5,
                                 backgroundColor: Color(0xff4B9EFF),
                                 valueColor: new AlwaysStoppedAnimation<Color>(
                                     Colors.red),
@@ -201,6 +201,9 @@ class _MyFirestorePageState extends State<BoutsList> {
                   ));
             }).toList(),
           )),
+          Visibility(
+              visible: boutList.length == 0,
+              child: Expanded(child: Text("試合予定がありません")))
         ],
       ),
     ));

@@ -105,7 +105,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                       voteCount[2]!.toDouble() +
                                       voteCount[3]!.toDouble() +
                                       voteCount[4]!.toDouble())
-                              : 0,
+                              : 0.5,
                           backgroundColor: Color(0xff4B9EFF),
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.red),

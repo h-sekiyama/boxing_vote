@@ -237,18 +237,11 @@ class _MyFirestorePageState extends State<Chat> {
             )),
             Visibility(
                 visible: isNoChatTextVisible,
-                child: Center(
-                    child: Padding(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              "まだ書き込みがありません",
-                              style: TextStyle(fontSize: 14.0),
-                            )
-                          ],
-                        ),
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 300)))),
+                child: Expanded(
+                    child: Text(
+                  "まだ書き込みがありません",
+                  style: TextStyle(fontSize: 14.0),
+                ))),
             Visibility(
                 visible: Functions.checkLogin(),
                 child: Container(

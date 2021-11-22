@@ -245,6 +245,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                 child: TextFormField(
                   autofocus: false,
+                  maxLength: 20,
                   cursorColor: Colors.black,
                   style: new TextStyle(
                     fontSize: 20.0,
@@ -287,6 +288,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                 margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                 child: TextFormField(
+                  maxLength: 20,
                   autofocus: false,
                   cursorColor: Colors.black,
                   style: new TextStyle(

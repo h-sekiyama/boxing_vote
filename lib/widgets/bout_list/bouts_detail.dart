@@ -49,14 +49,15 @@ class _MyFirestorePageState extends State<BoutDetail> {
         child: Column(
           children: <Widget>[
             Expanded(
-                child: Column(children: [
+                child: ListView(scrollDirection: Axis.vertical, children: [
               Container(
+                alignment: Alignment.center,
                 margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
                 child: Text(fightDateText + " / " + boutName,
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.95,
+                margin: EdgeInsets.only(left: 8, right: 8),
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -330,6 +331,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                       children: <TableRow>[
                         TableRow(children: <Widget>[
                           Container(
+                            height: 53,
                             decoration: BoxDecoration(
                               border: const Border(
                                 right: const BorderSide(
@@ -353,6 +355,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                             ),
                           ),
                           Container(
+                            height: 53,
                             decoration: BoxDecoration(
                               border: const Border(
                                 bottom: const BorderSide(

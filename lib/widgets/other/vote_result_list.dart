@@ -61,7 +61,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
             Container(
               width: MediaQuery.of(context).size.width * 0.94,
               margin: EdgeInsets.all(8),
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.only(top: 12, left: 12, bottom: 12, right: 8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   color: Color(0xffFFF9B5)),
@@ -74,9 +74,9 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       child: _displaySelectionImageOrGrayImage()),
                   Column(children: [
                     Container(
-                        width: 300,
+                        width: 280,
                         height: 30,
-                        padding: EdgeInsets.only(left: 6),
+                        padding: EdgeInsets.only(left: 6, right: 20),
                         alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
@@ -85,7 +85,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16))),
                     Container(
-                        width: 300,
+                        width: 280,
                         alignment: Alignment.centerLeft,
                         child: Text('${title}',
                             style:

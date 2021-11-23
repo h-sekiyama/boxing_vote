@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:boxing_vote/screens/vote_result_list_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -88,8 +89,8 @@ class _MyFirestorePageState extends State<Chat> {
     return voteDetail;
   }
 
-  // 確認ダイアログ表示
-  void showConfirmDialog(String userId) {
+  // ブロック確認ダイアログ表示
+  void showBlockConfirmDialog(String userId) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -116,6 +117,48 @@ class _MyFirestorePageState extends State<Chat> {
                           Navigator.pop(context),
                           Navigator.pop(context),
                           fetchBlockList()
+                        })
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ブロック確認ダイアログ表示
+  void showViolationConfirmDialog(String chatId, String userId) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          content: Text("このメッセージを違反報告しますか？"),
+          actions: [
+            ElevatedButton(
+              child: Text("やめる"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text("違反報告する"),
+              onPressed: () => {
+                FirebaseFirestore.instance
+                    .collection("chats")
+                    .doc(chatId)
+                    .update({
+                  "violation_list.${userId}": true,
+                }).then((value) => {
+                          Navigator.pop(context),
+                          Navigator.pop(context),
+                          Flushbar(
+                            message: "違反報告しました",
+                            backgroundColor: Colors.red,
+                            margin: EdgeInsets.all(8),
+                            duration: Duration(seconds: 3),
+                          )..show(context)
                         })
               },
             ),
@@ -239,17 +282,20 @@ class _MyFirestorePageState extends State<Chat> {
                                                               // コンテンツ領域
                                                               SimpleDialogOption(
                                                                 onPressed: () {
-                                                                  launch(
-                                                                      "mailto:sekky.mitchan@gmail.com?subject=カクット違反報告&body=ユーザーID：${document["user_id"]}");
-                                                                  Navigator.pop(
-                                                                      context);
+                                                                  showViolationConfirmDialog(
+                                                                      document
+                                                                          .id,
+                                                                      FirebaseAuth
+                                                                          .instance
+                                                                          .currentUser!
+                                                                          .uid);
                                                                 },
                                                                 child: Text(
                                                                     "このメッセージを違反報告する"),
                                                               ),
                                                               SimpleDialogOption(
                                                                 onPressed: () {
-                                                                  showConfirmDialog(
+                                                                  showBlockConfirmDialog(
                                                                       document[
                                                                           'user_id']);
                                                                 },

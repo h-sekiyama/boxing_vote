@@ -11,17 +11,28 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>カクット-ボクシング・K-1・ライジンの勝敗予想アプリ-</string>
+	<string>カクット</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にカメラにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>このアプリはユーザーアイコンに設定する画像を端末から取得する為に、マイクのフォトライブラリにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にフォトライブラリにアクセスする必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,16 +52,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にフォトライブラリにアクセスする必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
-    <key>NSCameraUsageDescription</key>
-    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にカメラにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為に、マイクのフォトライブラリにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-     <string>https</string>
-     <string>http</string>
-    </array>
 </dict>
 </plist>

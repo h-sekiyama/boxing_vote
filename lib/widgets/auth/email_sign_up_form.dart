@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmailSignUpForm extends StatefulWidget {
   @override
@@ -306,15 +307,27 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
               SizedBox(
                 height: 12,
               ),
+              Container(
+                child: Text("アプリのご利用には「利用規約」に同意して頂く必要があります。"),
+              ),
+              GestureDetector(
+                  child: Text("利用規約を読む",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black)),
+                  onTap: () {
+                    final url = "https://boxing-vote.web.app/Terms.html";
+                    launch(url);
+                  }),
               _isLoading
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
                   : Container(
-                      width: 180,
+                      width: 200,
                       margin: EdgeInsets.all(2),
                       child: TextButton(
-                        child: Text("ユーザー登録する",
+                        child: Text("規約に同意して登録する",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         style: ElevatedButton.styleFrom(
                             primary: Colors.black,

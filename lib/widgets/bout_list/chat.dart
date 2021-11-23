@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../common/Functions.dart';
 
 class Chat extends StatefulWidget {
@@ -40,6 +41,8 @@ class _MyFirestorePageState extends State<Chat> {
   String voteDetail = "";
   // 送信ボタンを押せるか否か
   bool isEnabledSendButton = false;
+  // ブロックリスト
+  var blockList = {};
 
   void initState() {
     fetchBoutData();
@@ -85,6 +88,43 @@ class _MyFirestorePageState extends State<Chat> {
     return voteDetail;
   }
 
+  // 確認ダイアログ表示
+  void showConfirmDialog(String userId) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          content: Text("このユーザーをブロックしますか？"),
+          actions: [
+            ElevatedButton(
+              child: Text("やめる"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text("ブロックする"),
+              onPressed: () => {
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .update({
+                  "block_list.${userId}": true,
+                }).then((value) => {
+                          Navigator.pop(context),
+                          Navigator.pop(context),
+                          fetchBlockList()
+                        })
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,42 +162,49 @@ class _MyFirestorePageState extends State<Chat> {
                 if (document['time'] is Timestamp) {
                   time = document["time"].toDate();
                 }
-                return GestureDetector(
-                    onTap: Functions.checkLogin()
-                        ? () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      VoteResultListScreen(document['user_id']),
-                                ));
-                          }
-                        : null,
+                return Visibility(
+                    visible: !blockList.containsKey(document['user_id']),
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Visibility(
                               visible: document['user_id'] != ownId,
-                              child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  margin: EdgeInsets.only(
-                                      top: 4, left: 12, right: 0),
-                                  child: FutureBuilder(
-                                    future: downloadImage(document['user_id']),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<String> snapshot) {
-                                      if (snapshot.hasData) {
-                                        if (snapshot.data != "no image") {
-                                          return Image.network(snapshot.data!);
-                                        } else {
-                                          return Image.asset('images/cat.png');
+                              child: GestureDetector(
+                                  onTap: Functions.checkLogin()
+                                      ? () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VoteResultListScreen(
+                                                        document['user_id']),
+                                              ));
                                         }
-                                      } else {
-                                        return Image.asset('images/cat.png');
-                                      }
-                                    },
-                                  ))),
+                                      : null,
+                                  child: Container(
+                                      width: 48,
+                                      height: 48,
+                                      margin: EdgeInsets.only(
+                                          top: 4, left: 12, right: 0),
+                                      child: FutureBuilder(
+                                        future:
+                                            downloadImage(document['user_id']),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<String> snapshot) {
+                                          if (snapshot.hasData) {
+                                            if (snapshot.data != "no image") {
+                                              return Image.network(
+                                                  snapshot.data!);
+                                            } else {
+                                              return Image.asset(
+                                                  'images/cat.png');
+                                            }
+                                          } else {
+                                            return Image.asset(
+                                                'images/cat.png');
+                                          }
+                                        },
+                                      )))),
 
                           // 吹き出し
                           Container(
@@ -180,6 +227,43 @@ class _MyFirestorePageState extends State<Chat> {
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.black)),
+                                      trailing: document['user_id'] != ownId
+                                          ? GestureDetector(
+                                              onTap: Functions.checkLogin()
+                                                  ? () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return SimpleDialog(
+                                                            children: <Widget>[
+                                                              // コンテンツ領域
+                                                              SimpleDialogOption(
+                                                                onPressed: () {
+                                                                  launch(
+                                                                      "mailto:sekky.mitchan@gmail.com?subject=カクット違反報告&body=ユーザーID：${document["user_id"]}");
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: Text(
+                                                                    "このメッセージを違反報告する"),
+                                                              ),
+                                                              SimpleDialogOption(
+                                                                onPressed: () {
+                                                                  showConfirmDialog(
+                                                                      document[
+                                                                          'user_id']);
+                                                                },
+                                                                child: Text(
+                                                                    "このユーザーをブロックする"),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                  : null,
+                                              child: Icon(Icons.more_vert))
+                                          : null,
                                     ),
                                     FutureBuilder(
                                       future:
@@ -212,26 +296,42 @@ class _MyFirestorePageState extends State<Chat> {
                                             color: Colors.grey)))),
                               ])),
                           Visibility(
-                              visible: document['user_id'] == ownId,
-                              child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  margin: EdgeInsets.only(top: 4, left: 0),
-                                  child: FutureBuilder(
-                                    future: downloadImage(document['user_id']),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<String> snapshot) {
-                                      if (snapshot.hasData) {
-                                        if (snapshot.data != "no image") {
-                                          return Image.network(snapshot.data!);
+                            visible: document['user_id'] == ownId,
+                            child: GestureDetector(
+                                onTap: Functions.checkLogin()
+                                    ? () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  VoteResultListScreen(
+                                                      document['user_id']),
+                                            ));
+                                      }
+                                    : null,
+                                child: Container(
+                                    width: 48,
+                                    height: 48,
+                                    margin: EdgeInsets.only(top: 4, left: 0),
+                                    child: FutureBuilder(
+                                      future:
+                                          downloadImage(document['user_id']),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<String> snapshot) {
+                                        if (snapshot.hasData) {
+                                          if (snapshot.data != "no image") {
+                                            return Image.network(
+                                                snapshot.data!);
+                                          } else {
+                                            return Image.asset(
+                                                'images/cat.png');
+                                          }
                                         } else {
                                           return Image.asset('images/cat.png');
                                         }
-                                      } else {
-                                        return Image.asset('images/cat.png');
-                                      }
-                                    },
-                                  ))),
+                                      },
+                                    ))),
+                          )
                         ]));
               }).toList(),
             )),
@@ -354,7 +454,7 @@ class _MyFirestorePageState extends State<Chat> {
         .doc(widget.boutId)
         .get()
         .then((ref) {
-      fetchChatData();
+      fetchBlockList();
       setState(() {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
@@ -368,6 +468,21 @@ class _MyFirestorePageState extends State<Chat> {
     });
   }
 
+  // ブロックリスト取得
+  void fetchBlockList() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((ref) {
+      fetchChatData();
+      setState(() {
+        blockList = ref.get("block_list");
+      });
+    });
+  }
+
+  // チャット情報取得
   void fetchChatData() async {
     // 指定コレクションのドキュメント一覧を取得
     final snapshot = await FirebaseFirestore.instance

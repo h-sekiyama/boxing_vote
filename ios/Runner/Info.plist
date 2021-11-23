@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>boxing_vote</string>
+	<string>カクット-ボクシング・K-1・ライジンの勝敗予想アプリ-</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -42,10 +42,15 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>このアプリはフォトライブラリにアクセスする必要があります</string>
+    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にフォトライブラリにアクセスする必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
     <key>NSCameraUsageDescription</key>
-    <string>このアプリはカメラにファイルを追加する必要があります</string>
+    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為にカメラにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>このアプリでは、マイクのフォトライブラリにファイルを追加する必要があります</string>
+    <string>このアプリはユーザーアイコンに設定する画像を端末から取得する為に、マイクのフォトライブラリにファイルを追加する必要があります。画像はチャット画面などアプリ内でのみ利用されます。</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+     <string>https</string>
+     <string>http</string>
+    </array>
 </dict>
 </plist>

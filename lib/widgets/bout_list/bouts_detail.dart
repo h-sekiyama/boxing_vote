@@ -258,7 +258,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                         primary: Colors.black,
                         onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       onPressed: () {

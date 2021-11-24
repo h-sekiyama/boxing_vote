@@ -34,7 +34,9 @@ class _MyFirestorePageState extends State<Chat> {
   // ユーザーアイコンマップ
   Map<String, String> userImagreMap = {};
   // 自分のユーザーID
-  var ownId = FirebaseAuth.instance.currentUser!.uid;
+  var ownId = FirebaseAuth.instance.currentUser != null
+      ? FirebaseAuth.instance.currentUser!.uid
+      : "noUser";
   // コメント入力ボックス
   final TextEditingController commentController =
       TextEditingController(text: '');
@@ -110,7 +112,7 @@ class _MyFirestorePageState extends State<Chat> {
               onPressed: () => {
                 FirebaseFirestore.instance
                     .collection("users")
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .doc(ownId)
                     .update({
                   "block_list.${userId}": true,
                 }).then((value) => {
@@ -517,11 +519,7 @@ class _MyFirestorePageState extends State<Chat> {
 
   // ブロックリスト取得
   void fetchBlockList() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((ref) {
+    FirebaseFirestore.instance.collection('users').doc(ownId).get().then((ref) {
       fetchChatData();
       setState(() {
         blockList = ref.get("block_list");

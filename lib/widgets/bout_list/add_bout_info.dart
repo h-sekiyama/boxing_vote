@@ -1,5 +1,6 @@
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../common/Functions.dart';
 
@@ -49,7 +50,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
   // 試合日
   String _eventDate = "試合日";
   DateTime _selectedDate = DateTime.now();
-  // 大会名
+  // 試合詳細
   String _eventName = "";
   // 選手1氏名
   String _fighter1 = "";
@@ -82,9 +83,16 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
         child: Column(
           children: <Widget>[
             Container(
-                margin: EdgeInsets.all(8),
+                margin: EdgeInsets.only(left: 8, top: 8, right: 8),
                 child: Text(
-                  "試合予定を追加する事ができます。\n皆さんが勝敗予想を楽しめる様、正しい試合情報を投稿して頂けます様にお願い致します。",
+                  "試合情報は全ユーザーに公開されます。公序良俗に反する文章などを入力するとアカウントを凍結させて頂く場合がございますので、ご注意下さい。",
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                )),
+            Container(
+                margin: EdgeInsets.only(left: 8, bottom: 8, right: 8),
+                child: Text(
+                  "皆さんが勝敗予想を楽しめる様、正しい試合情報を投稿して頂けます様にお願い致します。",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )),
             // 種目選択
@@ -127,7 +135,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                         })),
             //試合日選択
             Container(
-                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                margin: EdgeInsets.only(top: 0, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                 child: TextFormField(
                     autofocus: false,
@@ -169,8 +177,8 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                     onTap: () async {
                       _selectedDate = (await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year),
+                            initialDate: DateTime.now().add(Duration(days: 1)),
+                            firstDate: DateTime.now().add(Duration(days: 1)),
                             lastDate: DateTime(DateTime.now().year + 1),
                             builder: (context, child) {
                               return Theme(
@@ -196,52 +204,61 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       });
                       FocusManager.instance.primaryFocus!.unfocus();
                     })),
-            // 大会名入力
+            // 試合詳細入力
             Container(
-                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                margin: EdgeInsets.only(top: 0, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                child: TextFormField(
-                  autofocus: false,
-                  cursorColor: Colors.black,
-                  style: new TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  decoration: new InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                    filled: true,
-                    fillColor: const Color(0xffffffff),
-                    hintText: "大会名",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff000000),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: Column(children: [
+                  Container(
+                      width: double.infinity,
+                      child: Text(
+                        "例：WBA世界ライト級タイトルマッチ",
+                        textAlign: TextAlign.left,
+                      )),
+                  TextFormField(
+                    autofocus: false,
+                    cursorColor: Colors.black,
+                    maxLength: 40,
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
                     ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff000000),
-                        width: 2,
+                    decoration: new InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                      filled: true,
+                      fillColor: const Color(0xffffffff),
+                      hintText: "試合詳細",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
                     ),
-                  ),
-                  validator: (value) {
-                    if (value!.length == 0) {
-                      return '大会名は必須項目です';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    _eventName = value;
-                  },
-                )),
+                    validator: (value) {
+                      if (value!.length == 0) {
+                        return '試合詳細は必須項目です';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _eventName = value;
+                    },
+                  )
+                ])),
             // 選手1氏名入力
             Container(
-                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                margin: EdgeInsets.only(top: 0, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                 child: TextFormField(
                   autofocus: false,
@@ -285,7 +302,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                 )),
             // 選手2氏名入力
             Container(
-                margin: EdgeInsets.only(top: 00, bottom: 10, left: 8, right: 8),
+                margin: EdgeInsets.only(top: 0, bottom: 10, left: 8, right: 8),
                 padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                 child: TextFormField(
                   maxLength: 20,
@@ -351,16 +368,14 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
 
   // 確認ダイアログ表示
   void showConfirmDialog() {
-    String dialogText = "以下の試合情報を追加して宜しいですか？";
-
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
           title: Text("試合情報追加"),
-          content: Text(dialogText +
-              "\n\n種目：${_sportsName}\n試合日：${_eventDate}\n大会名：${_eventName}\n${_fighter1} VS ${_fighter2}"),
+          content: Text("以下の試合情報を追加して宜しいですか？" +
+              "\n\n種目：${_sportsName}\n試合日：${_eventDate}\n試合詳細：${_eventName}\n${_fighter1} VS ${_fighter2}"),
           actions: [
             ElevatedButton(
               child: Text("やめる"),
@@ -390,6 +405,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                       "sentResult4": 0,
                       "sentResult99": 0,
                       "wrong_info_count": 0,
+                      "addUserId": FirebaseAuth.instance.currentUser!.uid
                     }))
                     .then((value) => {
                           Navigator.push(

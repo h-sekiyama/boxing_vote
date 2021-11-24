@@ -97,6 +97,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                   children: <TableRow>[
                     TableRow(children: <Widget>[
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             top: const BorderSide(
@@ -118,9 +119,10 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text("全予想試合数：${totalVoteBoutCount}",
                             textAlign: TextAlign.left,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 12.0)),
+                                TextStyle(color: Colors.black, fontSize: 10.0)),
                       ),
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             top: const BorderSide(
@@ -138,12 +140,13 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text(
                           "集計済み予想試合数：${endTotalVoteBoutCount}",
                           textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.black, fontSize: 12.0),
+                          style: TextStyle(color: Colors.black, fontSize: 10.0),
                         ),
                       ),
                     ]),
                     TableRow(children: <Widget>[
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             right: const BorderSide(
@@ -161,9 +164,10 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text("的中試合数（勝ち方含む）：${wonBoutCount}",
                             textAlign: TextAlign.left,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 12.0)),
+                                TextStyle(color: Colors.black, fontSize: 10.0)),
                       ),
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             bottom: const BorderSide(
@@ -177,12 +181,13 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text(
                           "的中率（勝ち方含む）：${wonBoutRate.toStringAsFixed(1)}%",
                           textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.black, fontSize: 12.0),
+                          style: TextStyle(color: Colors.black, fontSize: 10.0),
                         ),
                       ),
                     ]),
                     TableRow(children: <Widget>[
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             right: const BorderSide(
@@ -200,9 +205,10 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text("的中試合数（勝敗のみ）：${wonResultCount}",
                             textAlign: TextAlign.left,
                             style:
-                                TextStyle(color: Colors.black, fontSize: 12.0)),
+                                TextStyle(color: Colors.black, fontSize: 10.0)),
                       ),
                       Container(
+                        height: 21,
                         decoration: BoxDecoration(
                           border: const Border(
                             bottom: const BorderSide(
@@ -216,7 +222,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         child: Text(
                           "的中率（勝敗のみ）：${wonResultRate.toStringAsFixed(1)}%",
                           textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.black, fontSize: 12.0),
+                          style: TextStyle(color: Colors.black, fontSize: 10.0),
                         ),
                       ),
                     ]),
@@ -280,7 +286,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       ),
                       child: Column(children: [
                         Container(
-                          margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
+                          margin: EdgeInsets.fromLTRB(8, 12, 8, 6),
                           child: Text(
                               Functions.dateToString(fight_date) +
                                   " / " +
@@ -288,7 +294,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(4, 8, 4, 10),
+                          margin: EdgeInsets.fromLTRB(8, 8, 8, 10),
                           width: MediaQuery.of(context).size.width * 1,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

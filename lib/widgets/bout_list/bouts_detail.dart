@@ -52,7 +52,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                 child: ListView(scrollDirection: Axis.vertical, children: [
               Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
+                margin: EdgeInsets.fromLTRB(8, 12, 8, 6),
                 child: Text(fightDateText + " / " + boutName,
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ),
@@ -64,7 +64,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   ),
                   child: Column(children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(4, 30, 4, 10),
+                      margin: EdgeInsets.fromLTRB(8, 30, 8, 10),
                       width: MediaQuery.of(context).size.width * 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -249,78 +249,86 @@ class _MyFirestorePageState extends State<BoutDetail> {
                 ),
               ),
               Visibility(
-                visible: isSentWrongInfo,
-                child: ElevatedButton(
-                  child: const Text('誤り報告を取り消す'),
-                  style: ElevatedButton.styleFrom(
-                    primary: HexColor('999999'),
-                    onPrimary: Colors.white,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return AlertDialog(
-                          title: Text("誤り報告を取り消す"),
-                          content: Text("試合情報の誤り報告済みなので投票できません。誤り報告を取り消しますか？"),
-                          actions: [
-                            Container(
-                                width: 400,
-                                child: ElevatedButton(
-                                  child: Text("取り消さない",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () => Navigator.pop(context),
-                                )),
-                            Container(
-                                width: 400,
-                                child: ElevatedButton(
-                                  child: Text("取り消す",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.black,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () => {
-                                    fetchBoutData(),
-                                    FirebaseFirestore.instance
-                                        .collection("bouts")
-                                        .doc(widget.boutId)
-                                        .update({
-                                      "wrong_info_count": wrongInfoCount - 1
-                                    }).then((_) {
-                                      FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                          .update({
-                                        "votes.${widget.boutId}": 0
-                                      }).then((_) {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      });
-                                    })
-                                  },
-                                )),
-                          ],
+                  visible: isSentWrongInfo,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 100, right: 100, top: 10),
+                    child: ElevatedButton(
+                      child: const Text('誤り報告を取り消す'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text("誤り報告を取り消す"),
+                              content:
+                                  Text("試合情報の誤り報告済みなので投票できません。誤り報告を取り消しますか？"),
+                              actions: [
+                                Container(
+                                    width: 400,
+                                    child: ElevatedButton(
+                                      child: Text("取り消さない",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.grey,
+                                        onPrimary: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                    )),
+                                Container(
+                                    width: 400,
+                                    child: ElevatedButton(
+                                      child: Text("取り消す",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.black,
+                                        onPrimary: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () => {
+                                        fetchBoutData(),
+                                        FirebaseFirestore.instance
+                                            .collection("bouts")
+                                            .doc(widget.boutId)
+                                            .update({
+                                          "wrong_info_count": wrongInfoCount - 1
+                                        }).then((_) {
+                                          FirebaseFirestore.instance
+                                              .collection("users")
+                                              .doc(FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                              .update({
+                                            "votes.${widget.boutId}": 0
+                                          }).then((_) {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          });
+                                        })
+                                      },
+                                    )),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
-              ),
+                    ),
+                  )),
               Container(
                   margin: EdgeInsets.all(20),
                   child: Column(children: [

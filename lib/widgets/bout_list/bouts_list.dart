@@ -96,7 +96,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                         ),
                         child: Column(children: [
                           Container(
-                            margin: EdgeInsets.fromLTRB(4, 12, 4, 6),
+                            margin: EdgeInsets.fromLTRB(8, 12, 8, 6),
                             child: Text(
                                 Functions.dateToString(fight_date) +
                                     " / " +
@@ -104,13 +104,16 @@ class _MyFirestorePageState extends State<BoutsList> {
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
                           Container(
-                            margin: EdgeInsets.fromLTRB(4, 8, 4, 10),
-                            width: MediaQuery.of(context).size.width * 1,
+                            margin: EdgeInsets.fromLTRB(8, 8, 8, 10),
+                            width: MediaQuery.of(context).size.width * 0.95,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Flexible(
+                                Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.37,
                                     child: Text(document['fighter1'],
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24,
@@ -121,8 +124,11 @@ class _MyFirestorePageState extends State<BoutsList> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold))),
-                                Flexible(
+                                Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.37,
                                     child: Text(document['fighter2'],
+                                        textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 24,
@@ -203,7 +209,7 @@ class _MyFirestorePageState extends State<BoutsList> {
           )),
           Visibility(
               visible: boutList.length == 0,
-              child: Expanded(child: Text("試合予定がありません")))
+              child: Expanded(child: Text("試合情報がありません")))
         ],
       ),
     ));

@@ -181,6 +181,7 @@ class _MyFirestorePageState extends State<Chat> {
               color: Color(0xffFFF8DC),
               child: Container(
                 width: MediaQuery.of(context).size.width * 1,
+                padding: EdgeInsets.only(left: 8, right: 8),
                 margin: EdgeInsets.only(bottom: 6),
                 color: Color(0xffFFF8DC),
                 child: Column(children: [
@@ -391,7 +392,7 @@ class _MyFirestorePageState extends State<Chat> {
             Visibility(
                 visible: Functions.checkLogin(),
                 child: Container(
-                    height: 120,
+                    height: 100,
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

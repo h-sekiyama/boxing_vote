@@ -156,6 +156,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1,
                   margin: EdgeInsets.only(bottom: 6),
+                  padding: EdgeInsets.only(left: 8, right: 8),
                   color: Color(0xffFFF8DC),
                   child: Column(children: [
                     Text(

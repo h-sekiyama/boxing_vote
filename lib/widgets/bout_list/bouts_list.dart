@@ -164,7 +164,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                                   child: Flexible(
                                       flex: 1,
                                       child: Container(
-                                          width: 174,
+                                          width: 164,
                                           height: 38,
                                           margin: EdgeInsets.only(right: 8),
                                           child: (TextButton(
@@ -213,7 +213,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                               Flexible(
                                 flex: 1,
                                 child: Container(
-                                    width: 174,
+                                    width: 164,
                                     height: 38,
                                     child: (TextButton(
                                       child: const Text('この試合について語る',

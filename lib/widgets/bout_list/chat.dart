@@ -253,97 +253,102 @@ class _MyFirestorePageState extends State<Chat> {
                                       )))),
 
                           // 吹き出し
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.85,
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              child: Column(children: [
-                                Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  color: Color(0xffffffff),
+                          Expanded(
+                              child: Container(
+                                  padding: EdgeInsets.only(left: 8, right: 8),
                                   child: Column(children: [
-                                    ListTile(
-                                      // leading: document['user_id'] != ownId
-                                      title: Text('${document['user_name']}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14)),
-                                      subtitle: Text('${document['text']}',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black)),
-                                      trailing: document['user_id'] != ownId
-                                          ? GestureDetector(
-                                              onTap: Functions.checkLogin()
-                                                  ? () {
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return SimpleDialog(
-                                                            children: <Widget>[
-                                                              // コンテンツ領域
-                                                              SimpleDialogOption(
-                                                                onPressed: () {
-                                                                  showViolationConfirmDialog(
-                                                                      document
-                                                                          .id,
-                                                                      FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser!
-                                                                          .uid);
-                                                                },
-                                                                child: Text(
-                                                                    "このメッセージを違反報告する"),
-                                                              ),
-                                                              SimpleDialogOption(
-                                                                onPressed: () {
-                                                                  showBlockConfirmDialog(
-                                                                      document[
-                                                                          'user_id']);
-                                                                },
-                                                                child: Text(
-                                                                    "このユーザーをブロックする"),
-                                                              ),
-                                                            ],
+                                    Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      color: Color(0xffffffff),
+                                      child: Column(children: [
+                                        ListTile(
+                                          // leading: document['user_id'] != ownId
+                                          title: Text(
+                                              '${document['user_name']}',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14)),
+                                          subtitle: Text('${document['text']}',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black)),
+                                          trailing: document['user_id'] != ownId
+                                              ? GestureDetector(
+                                                  onTap: Functions.checkLogin()
+                                                      ? () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return SimpleDialog(
+                                                                children: <
+                                                                    Widget>[
+                                                                  // コンテンツ領域
+                                                                  SimpleDialogOption(
+                                                                    onPressed:
+                                                                        () {
+                                                                      showViolationConfirmDialog(
+                                                                          document
+                                                                              .id,
+                                                                          FirebaseAuth
+                                                                              .instance
+                                                                              .currentUser!
+                                                                              .uid);
+                                                                    },
+                                                                    child: Text(
+                                                                        "このメッセージを違反報告する"),
+                                                                  ),
+                                                                  SimpleDialogOption(
+                                                                    onPressed:
+                                                                        () {
+                                                                      showBlockConfirmDialog(
+                                                                          document[
+                                                                              'user_id']);
+                                                                    },
+                                                                    child: Text(
+                                                                        "このユーザーをブロックする"),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
                                                           );
-                                                        },
-                                                      );
-                                                    }
-                                                  : null,
-                                              child: Icon(Icons.more_vert))
-                                          : null,
+                                                        }
+                                                      : null,
+                                                  child: Icon(Icons.more_vert))
+                                              : null,
+                                        ),
+                                        FutureBuilder(
+                                          future: getVotedDetail(
+                                              document['user_id']),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<String> snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(
+                                                snapshot.data!,
+                                                style: TextStyle(
+                                                    color: Color(0xffFF7A00),
+                                                    fontSize: 10),
+                                              );
+                                            } else {
+                                              return Text("");
+                                            }
+                                          },
+                                        ),
+                                      ]),
                                     ),
-                                    FutureBuilder(
-                                      future:
-                                          getVotedDetail(document['user_id']),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<String> snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                            snapshot.data!,
+                                    // 日付
+                                    Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                        child: (Text(
+                                            Functions.dateToStringTime(time),
+                                            textAlign: TextAlign.right,
                                             style: TextStyle(
-                                                color: Color(0xffFF7A00),
-                                                fontSize: 10),
-                                          );
-                                        } else {
-                                          return Text("");
-                                        }
-                                      },
-                                    ),
-                                  ]),
-                                ),
-                                // 日付
-                                Container(
-                                    width: double.infinity,
-                                    margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                    child: (Text(
-                                        Functions.dateToStringTime(time),
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.grey)))),
-                              ])),
+                                                fontSize: 10,
+                                                color: Colors.grey)))),
+                                  ]))),
                           Visibility(
                             visible: document['user_id'] == ownId,
                             child: GestureDetector(
@@ -361,7 +366,8 @@ class _MyFirestorePageState extends State<Chat> {
                                 child: Container(
                                     width: 48,
                                     height: 48,
-                                    margin: EdgeInsets.only(top: 4, left: 0),
+                                    margin: EdgeInsets.only(
+                                        top: 4, left: 0, right: 12),
                                     child: FutureBuilder(
                                       future:
                                           downloadImage(document['user_id']),

@@ -64,13 +64,15 @@ class _MyFirestorePageState extends State<BoutDetail> {
                   ),
                   child: Column(children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(8, 30, 8, 10),
-                      width: MediaQuery.of(context).size.width * 1,
+                      margin: EdgeInsets.fromLTRB(8, 14, 8, 10),
+                      width: MediaQuery.of(context).size.width * 0.95,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Flexible(
-                              child: Text('${fighter1}',
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.37,
+                              child: Text(fighter1,
+                                  textAlign: TextAlign.right,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
@@ -81,8 +83,10 @@ class _MyFirestorePageState extends State<BoutDetail> {
                                   textAlign: TextAlign.center,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold))),
-                          Flexible(
-                              child: Text('${fighter2}',
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.37,
+                              child: Text(fighter2,
+                                  textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24,
@@ -161,33 +165,37 @@ class _MyFirestorePageState extends State<BoutDetail> {
                             )))),
                     // 試合結果
                     Visibility(
-                      visible: !widget.isDetail,
-                      child: Container(
-                        width: 360,
-                        height: 82,
-                        margin: EdgeInsets.only(top: 6),
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                          image: AssetImage('images/bout_result_back.png'),
-                          fit: BoxFit.cover,
+                        visible: !widget.isDetail,
+                        child: AspectRatio(
+                          aspectRatio: 360 / 82,
+                          child: Container(
+                            width: double.infinity,
+                            margin:
+                                EdgeInsets.only(top: 6, left: 12, right: 12),
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                              image: AssetImage('images/bout_result_back.png'),
+                              fit: BoxFit.cover,
+                            )),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.65,
+                                    margin: EdgeInsets.only(right: 12, left: 6),
+                                    child: Text(
+                                      resultText,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                              ],
+                            ),
+                          ),
                         )),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                                width: 270,
-                                child: Text(
-                                  resultText,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ))
-                          ],
-                        ),
-                      ),
-                    ),
                     Container(
                         margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
                         child: Column(children: [

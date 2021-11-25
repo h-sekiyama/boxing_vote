@@ -32,6 +32,11 @@ class _MyFirestorePageState extends State<BoutsList> {
         body: Center(
       child: Column(
         children: <Widget>[
+          Container(
+              margin: EdgeInsets.only(top: 4, bottom: 4),
+              child: widget.isList
+                  ? Text("勝敗予想受付中の試合（試合前日まで）")
+                  : Text("勝敗予想受付期間が終了した試合")),
           // 試合一覧を表示
           Expanded(
               child: ListView(
@@ -65,7 +70,7 @@ class _MyFirestorePageState extends State<BoutsList> {
                 visible: document["wrong_info_count"] < totalVotedCount + 5 ||
                     totalVotedCount > 10,
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                  margin: EdgeInsets.fromLTRB(8, 4, 8, 10),
                   width: MediaQuery.of(context).size.width * 0.95,
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -154,62 +159,59 @@ class _MyFirestorePageState extends State<BoutsList> {
                       Container(
                         alignment: Alignment.center,
                         width: double.infinity,
-                        margin: EdgeInsets.only(top: 8, bottom: 8),
+                        margin: EdgeInsets.only(top: 8, bottom: 12),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Visibility(
-                                  visible:
-                                      Functions.checkLogin() && widget.isList,
-                                  child: Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                          width: 164,
-                                          height: 38,
-                                          margin: EdgeInsets.only(right: 8),
-                                          child: (TextButton(
-                                            child: Text('投票する',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 13)),
-                                            style: ElevatedButton.styleFrom(
-                                              primary: HexColor('000000'),
-                                              onPrimary: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                              ),
-                                            ),
-                                            onPressed: Functions.checkLogin()
-                                                ? () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    // 試合結果画面からの遷移でかつ試合結果がまだ集計中の場合は投票画面に遷移、それ以外は試合詳細画面に遷移
-                                                                    !widget.isList &&
-                                                                            document['result'] ==
-                                                                                0
-                                                                        ? SendBoutResultScreen(document
-                                                                            .id)
-                                                                        : BoutDetailScreen(
-                                                                            document
-                                                                                .id,
-                                                                            widget.isList))).then(
-                                                        (value) {
-                                                      // 遷移先から戻って来た際に再度試合情報を読み込む
-                                                      fetchBoutData();
-                                                    });
-                                                  }
-                                                : () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AuthCheck()));
-                                                  },
-                                          ))))),
+                              Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                      width: 164,
+                                      height: 38,
+                                      margin: EdgeInsets.only(right: 8),
+                                      child: (TextButton(
+                                        child: Text('詳細を見る',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13)),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: HexColor('000000'),
+                                          onPrimary: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                        ),
+                                        onPressed: Functions.checkLogin()
+                                            ? () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            // 試合結果画面からの遷移でかつ試合結果がまだ集計中の場合は投票画面に遷移、それ以外は試合詳細画面に遷移
+                                                            !widget.isList &&
+                                                                    document[
+                                                                            'result'] ==
+                                                                        0
+                                                                ? SendBoutResultScreen(
+                                                                    document.id)
+                                                                : BoutDetailScreen(
+                                                                    document.id,
+                                                                    widget
+                                                                        .isList))).then(
+                                                    (value) {
+                                                  // 遷移先から戻って来た際に再度試合情報を読み込む
+                                                  fetchBoutData();
+                                                });
+                                              }
+                                            : () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AuthCheck()));
+                                              },
+                                      )))),
                               Flexible(
                                 flex: 1,
                                 child: Container(

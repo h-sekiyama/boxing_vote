@@ -296,12 +296,15 @@ class _MyFirestorePageState extends State<VoteResultList> {
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(8, 8, 8, 10),
-                          width: MediaQuery.of(context).size.width * 1,
+                          width: MediaQuery.of(context).size.width * 0.95,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Flexible(
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.37,
                                   child: Text(document['fighter1'],
+                                      textAlign: TextAlign.right,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 24,
@@ -312,8 +315,11 @@ class _MyFirestorePageState extends State<VoteResultList> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
-                              Flexible(
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.37,
                                   child: Text(document['fighter2'],
+                                      textAlign: TextAlign.left,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 24,

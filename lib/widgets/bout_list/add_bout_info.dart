@@ -177,6 +177,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                     onTap: () async {
                       _selectedDate = (await showDatePicker(
                             context: context,
+                            locale: const Locale("ja"),
                             initialDate: DateTime.now().add(Duration(days: 1)),
                             firstDate: DateTime.now().add(Duration(days: 1)),
                             lastDate: DateTime(DateTime.now().year + 1),
@@ -347,6 +348,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
             // 試合追加ボタン
             Container(
                 width: 180,
+                height: 38,
                 child: ElevatedButton(
                   child: Text("追加する",
                       style: TextStyle(fontWeight: FontWeight.bold)),

@@ -42,7 +42,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
   // プロフ画像のURL
   String imageUrl = "";
   // ユーザーアイコン
-  Image? nowImage;
+  Image? userImage;
 
   void initState() {
     fetchBoutResultsData();
@@ -480,15 +480,13 @@ class _MyFirestorePageState extends State<VoteResultList> {
   // アイコン画像のダウンロード
   void downloadImage() async {
     try {
-      Reference imageRef = storage
-          .ref()
-          .child("profile")
-          .child("${FirebaseAuth.instance.currentUser!.uid}.png");
+      Reference imageRef =
+          storage.ref().child("profile").child("${widget.userId}.png");
       imageUrl = await imageRef.getDownloadURL();
 
       // 画面に反映
       setState(() {
-        nowImage = Image.network(imageUrl);
+        userImage = Image.network(imageUrl);
       });
     } catch (FirebaseException) {
       print(FirebaseException);
@@ -496,12 +494,12 @@ class _MyFirestorePageState extends State<VoteResultList> {
   }
 
   Widget _displaySelectionImageOrGrayImage() {
-    if (nowImage != null) {
+    if (userImage != null) {
       return Container(
         width: 60,
         height: 80,
         child: ClipRRect(
-          child: nowImage,
+          child: userImage,
         ),
       );
     } else {

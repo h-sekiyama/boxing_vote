@@ -170,8 +170,8 @@ class _MyFirestorePageState extends State<BoutsList> {
                                           child: (TextButton(
                                             child: Text('投票する',
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13)),
                                             style: ElevatedButton.styleFrom(
                                               primary: HexColor('000000'),
                                               onPrimary: Colors.white,
@@ -218,7 +218,8 @@ class _MyFirestorePageState extends State<BoutsList> {
                                     child: (TextButton(
                                       child: const Text('この試合について語る',
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13)),
                                       style: ElevatedButton.styleFrom(
                                         primary: HexColor('000000'),
                                         onPrimary: Colors.white,

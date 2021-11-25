@@ -2,6 +2,7 @@ import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'widgets/auth/auth_check.dart';
 
 void main() async {
@@ -25,6 +26,14 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Common.scaffoldBackgroundColor,
       ),
       home: HomeScreen(true, "全て"),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale("en"),
+        const Locale("ja"),
+      ],
     );
   }
 }

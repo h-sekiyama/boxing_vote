@@ -219,7 +219,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                   TextFormField(
                     autofocus: false,
                     cursorColor: Colors.black,
-                    maxLength: 40,
+                    maxLength: 60,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.black,

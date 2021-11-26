@@ -265,7 +265,6 @@ class _MyFirestorePageState extends State<Chat> {
                                       color: Color(0xffffffff),
                                       child: Column(children: [
                                         ListTile(
-                                          // leading: document['user_id'] != ownId
                                           title: Text(
                                               '${document['user_name']}',
                                               style: TextStyle(
@@ -319,23 +318,27 @@ class _MyFirestorePageState extends State<Chat> {
                                                   child: Icon(Icons.more_vert))
                                               : null,
                                         ),
-                                        FutureBuilder(
-                                          future: getVotedDetail(
-                                              document['user_id']),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<String> snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Text(
-                                                snapshot.data!,
-                                                style: TextStyle(
-                                                    color: Color(0xffFF7A00),
-                                                    fontSize: 10),
-                                              );
-                                            } else {
-                                              return Text("");
-                                            }
-                                          },
-                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(bottom: 2),
+                                          child: FutureBuilder(
+                                            future: getVotedDetail(
+                                                document['user_id']),
+                                            builder: (BuildContext context,
+                                                AsyncSnapshot<String>
+                                                    snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(
+                                                  snapshot.data!,
+                                                  style: TextStyle(
+                                                      color: Color(0xffFF7A00),
+                                                      fontSize: 10),
+                                                );
+                                              } else {
+                                                return Text("");
+                                              }
+                                            },
+                                          ),
+                                        )
                                       ]),
                                     ),
                                     // 日付

@@ -99,6 +99,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                     TableRow(children: <Widget>[
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             top: const BorderSide(
@@ -124,6 +125,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       ),
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             top: const BorderSide(
@@ -148,6 +150,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                     TableRow(children: <Widget>[
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             right: const BorderSide(
@@ -169,6 +172,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       ),
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             bottom: const BorderSide(
@@ -189,6 +193,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                     TableRow(children: <Widget>[
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             right: const BorderSide(
@@ -210,6 +215,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                       ),
                       Container(
                         height: 21,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           border: const Border(
                             bottom: const BorderSide(
@@ -249,7 +255,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                     document["vote4"];
 
                 // その試合の自分の予想
-                String votedText = "";
+                String votedText = "勝敗予想していません";
                 if (votedBoutsList[document.id] == 1) {
                   votedText = "${document['fighter1']}のKO/TKO/一本勝ち";
                 } else if (votedBoutsList[document.id] == 2) {

@@ -356,8 +356,13 @@ class _MyFirestorePageState extends State<BoutVote> {
             myVote = 4;
             myVoteText = "${fighter2}の判定勝ち";
             break;
+          case null:
+            myVote = 0;
+            myVoteText = "勝敗予想していません";
+            break;
           default:
             myVote = 0;
+            myVoteText = "勝敗予想していません";
             break;
         }
       });

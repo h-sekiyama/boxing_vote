@@ -3,6 +3,7 @@ import 'package:boxing_vote/screens/bout_vote_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../common/Functions.dart';
 
 class BoutDetail extends StatefulWidget {
@@ -21,6 +22,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
   String fighter1 = "";
   // 選手2
   String fighter2 = "";
+  // 競技名
+  String sports = "";
   // 試合日程テキスト
   String fightDateText = "";
   // 予想数Map（1：選手1のKO/TKO/一本勝ち、2：選手1の判定勝ち、3：選手2のKO/TKO/一本勝ち、4：選手2の判定勝ち）
@@ -69,28 +72,44 @@ class _MyFirestorePageState extends State<BoutDetail> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.37,
-                              child: Text(fighter1,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                      color: Color(0xffFF4B4B)))),
+                          GestureDetector(
+                              child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.37,
+                                  child: Text(fighter1,
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                          decoration: TextDecoration.underline,
+                                          color: Color(0xffFF4B4B)))),
+                              onTap: () {
+                                final url =
+                                    "https://www.google.com/search?q=${fighter1}+${sports}";
+                                launch(url);
+                              }),
                           Container(
                               width: 50,
                               child: Text('VS',
                                   textAlign: TextAlign.center,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold))),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.37,
-                              child: Text(fighter2,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
-                                      color: Color(0xff4B9EFF)))),
+                          GestureDetector(
+                              child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.37,
+                                  child: Text(fighter2,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
+                                          decoration: TextDecoration.underline,
+                                          color: Color(0xff4B9EFF)))),
+                              onTap: () {
+                                final url =
+                                    "https://www.google.com/search?q=${fighter2}+${sports}";
+                                launch(url);
+                              }),
                         ],
                       ),
                     ),
@@ -581,6 +600,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
       setState(() {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
+        sports = ref.get("sports");
         if (ref['result'] == 0) {
           resultText = "結果集計中";
         } else if (ref['result'] == 1) {

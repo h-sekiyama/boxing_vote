@@ -86,7 +86,8 @@ class _MyFirestorePageState extends State<BoutDetail> {
                               onTap: () {
                                 final url =
                                     "https://www.google.com/search?q=${fighter1}+${sports}";
-                                launch(url);
+                                String _encoded = Uri.encodeFull(url);
+                                launch(_encoded);
                               }),
                           Container(
                               width: 50,
@@ -108,10 +109,15 @@ class _MyFirestorePageState extends State<BoutDetail> {
                               onTap: () {
                                 final url =
                                     "https://www.google.com/search?q=${fighter2}+${sports}";
-                                launch(url);
+                                String _encoded = Uri.encodeFull(url);
+                                launch(_encoded);
                               }),
                         ],
                       ),
+                    ),
+                    Text(
+                      "選手名タップで検索",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     Container(
                         width: MediaQuery.of(context).size.width * 0.85,

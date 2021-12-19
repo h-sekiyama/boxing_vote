@@ -284,7 +284,7 @@ class _MyFirestorePageState extends State<Profile> {
   }
 
   Future _getImageFromGallery() async {
-    final _pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    final _pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (_pickedFile != null) {
       selectedImage = await _cropImage(_pickedFile.path);
     }

@@ -173,7 +173,12 @@ class _MyFirestorePageState extends State<SendBoutResult> {
               ),
               Container(
                   margin: EdgeInsets.all(10),
-                  child: Text("試合結果集計中です\n宜しければ試合結果を報告して下さい")),
+                  child: Column(children: [
+                    Text("試合結果集計中です"),
+                    Visibility(
+                        visible: mySentResult == 0,
+                        child: Text("宜しければ試合結果を報告して下さい"))
+                  ])),
               Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.all(8),

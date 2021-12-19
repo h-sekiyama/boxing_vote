@@ -6,45 +6,93 @@
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css"/>
   <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <title>カクット管理画面</title>
 
   <script>
-  let firebaseConfig = {
+
+  // 本番
+  const firebaseConfig = {
     apiKey: "AIzaSyDqQKs84hdtks2cDvnsbLkkHPzc-EDFLjs",
-      authDomain: "boxing-vote.firebaseapp.com",
-      projectId: "boxing-vote",
-      storageBucket: "boxing-vote.appspot.com",
-      messagingSenderId: "702604275167",
-      appId: "1:702604275167:web:0c0010fc62136a1d5d686a",
-      measurementId: "G-0KWE8H9BT5"
-        };
+    authDomain: "boxing-vote.firebaseapp.com",
+    projectId: "boxing-vote",
+    storageBucket: "boxing-vote.appspot.com",
+    messagingSenderId: "702604275167",
+    appId: "1:702604275167:web:0c0010fc62136a1d5d686a",
+    measurementId: "G-0KWE8H9BT5"
+  };
 
-        $(function(){
-          firebase.initializeApp(firebaseConfig);
- 
-          let uiConfig = {
-              callbacks: {
-                  signInSuccessWithAuthResult: function () {
-                    var mail = $(".mdl-textfield__input").val();
-                    console.log("ログイン成功")
+  // 検証
+    // const firebaseConfig = {
+    //   apiKey: "AIzaSyDPjA2PwVV4TA4kfwgmSCULFcLmmG1y_sI",
+    //   authDomain: "boxing-vote-debug.firebaseapp.com",
+    //   projectId: "boxing-vote-debug",
+    //   storageBucket: "boxing-vote-debug.appspot.com",
+    //   messagingSenderId: "914856248829",
+    //   appId: "1:914856248829:web:d8d650f2d56ec053df8594"
+    // };
 
-                    if(mail == "hidemitsu.sekiyama@gmail.com") {
-                      $("#add_bouts_info").show();
-                      $("#firebaseui-auth-container").hide();
-                    }
-                    return true;
-                  },
-              },
-              signInOptions: [
-                  firebase.auth.EmailAuthProvider.PROVIDER_ID,
-              ],
-          };
+  $(function(){
+    firebase.initializeApp(firebaseConfig);
 
-          let ui = new firebaseui.auth.AuthUI(firebase.auth());
-          ui.start('#firebaseui-auth-container', uiConfig);
-          });
+    // 認証
+    let uiConfig = {
+        callbacks: {
+            signInSuccessWithAuthResult: function () {
+              var mail = $(".mdl-textfield__input").val();
+              console.log("ログイン成功")
+
+              if(mail == "hidemitsu.sekiyama@gmail.com") {
+                $("#add_bouts_info").show();
+                $("#firebaseui-auth-container").hide();
+              }
+              return true;
+            },
+        },
+        signInOptions: [
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        ],
+    };
+    let ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui.start('#firebaseui-auth-container', uiConfig);
+
+    $("#add_bouts_info_button").click(function sendBoutInfo() {
+      var db = firebase.firestore();
+
+      for (var i = 0; i< 10; i++) {
+        var eventDate = $("#bout"+i+" .event_date").val() + " 00:00:00";
+        var sports = $("#bout"+i+" .sports").val();
+        var boutDetail = $("#bout"+i+" .bout_detail").val();
+        var fighter1 = $("#bout"+i+" .fighter1").val();
+        var fighter2 = $("#bout"+i+" .fighter2").val();
+
+        if(eventDate != "" && sports != "" && boutDetail != "" && fighter1 != "" && fighter2 != "") {
+          db.collection("bouts").add({
+            event_name: boutDetail,
+            fight_date: firebase.firestore.Timestamp.fromDate(new Date(eventDate)),
+            fighter1: fighter1,
+            fighter2: fighter2,
+            result: 0,
+            sentResults1: 0,
+            sentResults2: 0,
+            sentResults3: 0,
+            sentResults4: 0,
+            sentResults99: 0,
+            sports: sports,
+            vote1: 0,
+            vote2: 0,
+            vote3: 0,
+            vote4: 0,
+            wrong_info_count: 0
+          }).then((valude) => {
+            $("#add_bout_info_complete_text").show();
+          })
+        }
+      }
+    });
+  });
 </script>
 
 </head>
@@ -54,6 +102,78 @@
 
 <div id="add_bouts_info" style="display: none;">
   <div style="font-size: large;">試合情報追加</div>
+  <div id="bout0">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout1">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout2">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout3">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout4">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout5">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout6">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout7">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout8">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <div id="bout9">
+    <input type="text" class="event_date" placeholder="試合日（yyyy/MM/dd）">
+    <input type="text" class="sports" placeholder="競技">
+    <input type="text" class="bout_detail" placeholder="試合詳細" style="width: 500px;">
+    <input type="text" class="fighter1" placeholder="選手名1">
+    <input type="text" class="fighter2" placeholder="選手名2">
+  </div>
+  <button id="add_bouts_info_button">試合情報を追加</button>
+  <div id="add_bout_info_complete_text" style="display: none;">追加したよ！</div>
 </div>
 
 </body>

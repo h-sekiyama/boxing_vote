@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../common/Functions.dart';
 import '../../screens/chat_screen.dart';
+import 'package:badges/badges.dart';
 
 class BoutsList extends StatefulWidget {
   BoutsList(this.isList, this.sports);
@@ -21,9 +22,12 @@ class _MyFirestorePageState extends State<BoutsList> {
   List<DocumentSnapshot> boutList = [];
   // 結果文言
   String resultText = "";
+  // 各チャット画面のチャット投稿数
+  Map<String, int> chatCount = {};
 
   void initState() {
     fetchBoutData();
+    fetchChatData();
   }
 
   @override
@@ -213,34 +217,65 @@ class _MyFirestorePageState extends State<BoutsList> {
                                               },
                                       )))),
                               Flexible(
-                                flex: 1,
-                                child: Container(
-                                    width: 164,
-                                    height: 38,
-                                    child: (TextButton(
-                                      child: const Text('この試合について語る',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13)),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: HexColor('000000'),
-                                        onPrimary: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChatScreen(document.id),
-                                            ));
-                                        fetchBoutData();
-                                      },
-                                    ))),
-                              )
+                                  flex: 1,
+                                  child: Container(
+                                    child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                              width: 164,
+                                              height: 38,
+                                              child: (TextButton(
+                                                child: const Text("試合について語る",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 13)),
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: HexColor('000000'),
+                                                  onPrimary: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ChatScreen(
+                                                                document.id),
+                                                      ));
+                                                  fetchBoutData();
+                                                },
+                                              ))),
+                                          Positioned(
+                                              top: -3.0,
+                                              right: 0.0,
+                                              child: Visibility(
+                                                visible:
+                                                    chatCount[document.id] !=
+                                                        null,
+                                                child: Badge(
+                                                  badgeContent: Text(
+                                                    chatCount[document.id] !=
+                                                            null
+                                                        ? chatCount[document.id]
+                                                            .toString()
+                                                        : "",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 11),
+                                                  ),
+
+                                                  badgeColor:
+                                                      Colors.red, //バッジの背景色
+                                                ),
+                                              )),
+                                        ]),
+                                  ))
                             ]),
                       )
                     ]),
@@ -278,6 +313,20 @@ class _MyFirestorePageState extends State<BoutsList> {
 
     var serverTime;
     var serverTimeSnapshot;
+
+    // 全画面プログレスダイアログ
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        transitionDuration: Duration(milliseconds: 300),
+        barrierColor: Colors.black.withOpacity(0.5),
+        pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
     FirebaseFirestore.instance
         .collection("server_time")
         .doc("0")
@@ -303,7 +352,23 @@ class _MyFirestorePageState extends State<BoutsList> {
               // ドキュメント一覧を配列で格納
               setState(() {
                 boutList = boutList;
-              })
+              }),
+              Navigator.of(context).pop()
             });
+  }
+
+  // チャット情報取得
+  void fetchChatData() async {
+    // 指定コレクションのドキュメント一覧を取得
+    final snapshot = await FirebaseFirestore.instance.collection('chats').get();
+    for (var item in snapshot.docs) {
+      if (chatCount[item["bout_id"]] != null) {
+        chatCount[item["bout_id"]] = chatCount[item["bout_id"]]! + 1;
+      } else {
+        chatCount[item["bout_id"]] = 1;
+      }
+    }
+    // ドキュメント一覧を配列で格納
+    setState(() {});
   }
 }

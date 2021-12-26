@@ -60,7 +60,9 @@ class _MyFirestorePageState extends State<SendBoutResult> {
       });
       maxSentResultCount++; // 今回の投票分も加える
       if (maxSentResultCount > 10 ||
-          maxSentResultCount > totalVotedCount / 10) {
+          maxSentResultCount > totalVotedCount / 10 ||
+          FirebaseAuth.instance.currentUser!.email ==
+              "hidemitsu.sekiyama@gmail.com") {
         // 自分の投票履歴を更新
         FirebaseFirestore.instance
             .collection("bouts")

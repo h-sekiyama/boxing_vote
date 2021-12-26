@@ -66,7 +66,7 @@ class _MyFirestorePageState extends State<BoutVote> {
                       "votes.${boutId}": voteResult,
                     }).then((_) {
                       // 投票数を更新
-                      if (myVote != 0) {
+                      if (myVote != 0 && voteCount[myVote]! > 0) {
                         FirebaseFirestore.instance
                             .collection("bouts")
                             .doc(boutId)
@@ -326,6 +326,18 @@ class _MyFirestorePageState extends State<BoutVote> {
         fighter1 = ref.get("fighter1");
         fighter2 = ref.get("fighter2");
       });
+      // 全画面プログレスダイアログ
+      showGeneralDialog(
+          context: context,
+          barrierDismissible: false,
+          transitionDuration: Duration(milliseconds: 300),
+          barrierColor: Colors.black.withOpacity(0.5),
+          pageBuilder: (BuildContext context, Animation animation,
+              Animation secondaryAnimation) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
     }).then((value) {
       getMyVote();
     });
@@ -366,6 +378,7 @@ class _MyFirestorePageState extends State<BoutVote> {
             break;
         }
       });
+      Navigator.of(context).pop();
     });
   }
 }

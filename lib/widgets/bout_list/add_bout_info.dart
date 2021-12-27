@@ -180,7 +180,7 @@ class _MyFirestorePageState extends State<AddBoutInfo> {
                             locale: const Locale("ja"),
                             initialDate: DateTime.now().add(Duration(days: 1)),
                             firstDate: DateTime.now().add(Duration(days: 1)),
-                            lastDate: DateTime(DateTime.now().year + 1),
+                            lastDate: DateTime(DateTime.now().year + 2),
                             builder: (context, child) {
                               return Theme(
                                 data: Theme.of(context).copyWith(

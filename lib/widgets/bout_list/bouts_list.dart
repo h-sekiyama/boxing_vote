@@ -2,6 +2,7 @@ import 'package:boxing_vote/common/HexColor.dart';
 import 'package:boxing_vote/screens/bout_detail_screen.dart';
 import 'package:boxing_vote/screens/send_bout_result_screen.dart';
 import 'package:boxing_vote/widgets/auth/auth_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../common/Functions.dart';
@@ -20,14 +21,19 @@ class BoutsList extends StatefulWidget {
 class _MyFirestorePageState extends State<BoutsList> {
   // 試合情報を入れる箱を用意
   List<DocumentSnapshot> boutList = [];
+  // 予想文言
+  String votedText = "";
   // 結果文言
   String resultText = "";
   // 各チャット画面のチャット投稿数
   Map<String, int> chatCount = {};
+  // 自分の勝敗予想リスト
+  var myVotes = {};
 
   void initState() {
     fetchBoutData();
     fetchChatData();
+    getMyVote();
   }
 
   @override
@@ -50,6 +56,21 @@ class _MyFirestorePageState extends State<BoutsList> {
               if (document['fight_date'] is Timestamp) {
                 fight_date = document["fight_date"].toDate();
               }
+              // 予想内容のテキストを作成
+              if (myVotes[document.id] != null) {
+                if (myVotes[document.id] == 0 || myVotes[document.id] == 99) {
+                  votedText = "勝敗予想していません";
+                } else if (myVotes[document.id] == 1) {
+                  votedText = '${document['fighter1']}のKO/TKO/一本勝ち';
+                } else if (myVotes[document.id] == 2) {
+                  votedText = '${document['fighter1']}の判定勝ち';
+                } else if (myVotes[document.id] == 3) {
+                  votedText = '${document['fighter2']}のKO/TKO/一本勝ち';
+                } else if (myVotes[document.id] == 4) {
+                  votedText = '${document['fighter2']}の判定勝ち';
+                }
+              }
+              // 試合結果のテキストを作成
               if (document['result'] == 0) {
                 resultText = "結果集計中";
               } else if (document['result'] == 1) {
@@ -61,7 +82,7 @@ class _MyFirestorePageState extends State<BoutsList> {
               } else if (document['result'] == 4) {
                 resultText = '${document['fighter2']}の判定勝ち';
               } else if (document['result'] == 99) {
-                resultText = '引き分け/無効試合/反則';
+                resultText = '引き分け/無効試合/反則/中止';
               }
 
               // その試合の総投票数
@@ -159,6 +180,25 @@ class _MyFirestorePageState extends State<BoutsList> {
                                       "人勝ち予想",
                                   textAlign: TextAlign.right))
                         ],
+                      ),
+                      // 予想結果
+                      Container(
+                          padding: EdgeInsets.only(left: 4, right: 4),
+                          child: Wrap(children: [
+                            Text("予想：" + votedText,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ])),
+                      // 試合結果
+                      Visibility(
+                        visible: !widget.isList,
+                        child: Container(
+                            padding: EdgeInsets.only(left: 4, right: 4),
+                            child: Wrap(children: [
+                              Text("結果：" + resultText,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xffFF7A00))),
+                            ])),
                       ),
                       Container(
                         alignment: Alignment.center,
@@ -368,7 +408,18 @@ class _MyFirestorePageState extends State<BoutsList> {
         chatCount[item["bout_id"]] = 1;
       }
     }
-    // ドキュメント一覧を配列で格納
-    setState(() {});
+  }
+
+  // 自分の勝敗予想を取得する処理
+  void getMyVote() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      setState(() {
+        myVotes = value.get("votes");
+      });
+    });
   }
 }

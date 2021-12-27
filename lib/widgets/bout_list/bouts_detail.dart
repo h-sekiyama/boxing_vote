@@ -623,7 +623,7 @@ class _MyFirestorePageState extends State<BoutDetail> {
           resultText = '${fighter2}の判定勝ち';
         } else if (ref['result'] == 99) {
           result = 99;
-          resultText = '引き分け/無効試合/反則';
+          resultText = '引き分け/無効試合/反則/中止';
         }
         voteCount[1] = ref.get("vote1");
         voteCount[2] = ref.get("vote2");

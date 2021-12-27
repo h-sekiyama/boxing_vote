@@ -59,11 +59,19 @@ class _MyFirestorePageState extends State<SendBoutResult> {
         }
       });
       maxSentResultCount++; // 今回の投票分も加える
-      if (maxSentResultCount > 10 ||
-          maxSentResultCount > totalVotedCount / 10 ||
-          FirebaseAuth.instance.currentUser!.email ==
-              "hidemitsu.sekiyama@gmail.com") {
-        // 自分の投票履歴を更新
+      if (FirebaseAuth.instance.currentUser!.email ==
+          "hidemitsu.sekiyama@gmail.com") {
+        // 結果を更新
+        FirebaseFirestore.instance
+            .collection("bouts")
+            .doc(boutId)
+            .update({"result": sentResult}).then((_) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
+      } else if (maxSentResultCount > 10 ||
+          maxSentResultCount > totalVotedCount / 10) {
+        // 結果を更新
         FirebaseFirestore.instance
             .collection("bouts")
             .doc(boutId)
@@ -265,7 +273,7 @@ class _MyFirestorePageState extends State<SendBoutResult> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   margin: EdgeInsets.all(8),
                   child: ElevatedButton(
-                    child: Text("引き分け/無効試合/反則",
+                    child: Text("引き分け/無効試合/反則/中止",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,

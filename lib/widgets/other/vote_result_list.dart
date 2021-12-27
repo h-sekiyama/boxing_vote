@@ -279,7 +279,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
                 } else if (document['result'] == 4) {
                   resultText = "${document['fighter2']}の判定勝ち";
                 } else if (document['result'] == 99) {
-                  resultText = "引き分け/無効試合/反則";
+                  resultText = "引き分け/無効試合/反則/中止";
                 }
                 return Visibility(
                   // 投票数が10件以上で、間違い情報がそれより多い試合情報は表示しない
@@ -374,22 +374,22 @@ class _MyFirestorePageState extends State<VoteResultList> {
                           ],
                         ),
                         // 予想結果
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 4, right: 4),
+                            child: Wrap(children: [
                               Text("予想：" + votedText,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
-                            ]),
+                            ])),
                         // 試合結果
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 4, right: 4),
+                            child: Wrap(children: [
                               Text("結果：" + resultText,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xffFF7A00))),
-                            ]),
+                            ])),
                         Container(
                             width: 187,
                             height: 38,
@@ -435,6 +435,7 @@ class _MyFirestorePageState extends State<VoteResultList> {
         .then((ref) async => {
               await FirebaseFirestore.instance
                   .collection('bouts')
+                  .orderBy('fight_date', descending: true)
                   .get()
                   .then((snapshot) {
                 votedBoutsList = ref["votes"];

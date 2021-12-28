@@ -182,12 +182,15 @@ class _MyFirestorePageState extends State<BoutsList> {
                         ],
                       ),
                       // 予想結果
-                      Container(
-                          padding: EdgeInsets.only(left: 4, right: 4),
-                          child: Wrap(children: [
-                            Text("予想：" + votedText,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ])),
+                      Visibility(
+                          visible: votedText != "",
+                          child: Container(
+                              padding: EdgeInsets.only(left: 4, right: 4),
+                              child: Wrap(children: [
+                                Text("予想：" + votedText,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ]))),
                       // 試合結果
                       Visibility(
                         visible: !widget.isList,
@@ -412,14 +415,16 @@ class _MyFirestorePageState extends State<BoutsList> {
 
   // 自分の勝敗予想を取得する処理
   void getMyVote() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        myVotes = value.get("votes");
+    if (FirebaseAuth.instance.currentUser != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((value) {
+        setState(() {
+          myVotes = value.get("votes");
+        });
       });
-    });
+    }
   }
 }

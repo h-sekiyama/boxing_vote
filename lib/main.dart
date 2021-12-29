@@ -26,9 +26,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Common.scaffoldBackgroundColor,
       ),
       home: HomeScreen(true, "全て"),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale("en"),
